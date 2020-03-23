@@ -3,8 +3,9 @@ package com.advcourse.conferenceassistant.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -14,17 +15,35 @@ public class Question {
     private Long id;
 
     private String question;
-    private Date time;
-    private int likes;
+    private LocalDateTime time;
+    private boolean isAnswered;
 
-    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
-    private Set<Visitor> author;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne
+    private Visitor author;
+
+    @ManyToOne
+    private Topic topic;
+
+    @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "question_likes",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "guest_id"))
-    private Set<Visitor> user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Topic topic;
+    private Set<Visitor> likes;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return id.equals(question.id) &&
+                question.equals(question.question) &&
+                author.equals(question.author) &&
+                topic.equals(question.topic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, question, author, topic);
+    }
 }
