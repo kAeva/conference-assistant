@@ -53,7 +53,7 @@ public class DatabaseInitials {
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
             topic1.setStart(LocalDateTime.of(2020, 5, 14, 10, 15));
-            topic1.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
+            topic1.setEnd(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic1 = topicRepository.save(topic1);
             topic1.setConf(conf1);
 
@@ -86,8 +86,8 @@ public class DatabaseInitials {
 
 
             Visitor visitor6 = new Visitor();
-            visitor6.setEmail("yasscleverone@gmail.com");
-            visitor6.setName("Chloe");
+            visitor6.setEmail("andrewtetcher@gmail.com");
+            visitor6.setName("Loony");
             visitor6 = visitorRepository.save(visitor6);
 
 
@@ -104,7 +104,7 @@ public class DatabaseInitials {
             topic2.setTheme("You can AI like an Expert");
             topic2.setSpeaker("Jon McLoone");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
-            topic2.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
+            topic2.setEnd(LocalDateTime.of(2020, 5, 14, 12, 30));
             topic2.setConf(conf1);
             topic2 = topicRepository.save(topic2);
 
@@ -121,7 +121,7 @@ public class DatabaseInitials {
             topic3.setTheme("Deep Learning for Lazy People... Neural Architecture Search with Automated Machine Learning");
             topic3.setSpeaker("Diego Hueltes");
             topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
-            topic3.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setEnd(LocalDateTime.of(2020, 5, 14, 13, 00));
             topic3 = topicRepository.save(topic3);
             topic3.setConf(conf1);
 
@@ -137,7 +137,7 @@ public class DatabaseInitials {
             topic4.setTheme("Predicting the Moment of Birth using Sensor Data in Dairy Cows");
             topic4.setSpeaker("Miel Hostens");
             topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
-            topic4.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
+            topic4.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
             topic4 = topicRepository.save(topic4);
             topic4.setConf(conf1);
 
@@ -154,7 +154,7 @@ public class DatabaseInitials {
             topic5.setTheme("Knowledge and AI Powering Microsoft & Office 365 Products");
             topic5.setSpeaker("David Gorena Elizondo");
             topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
-            topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 30));
+            topic5.setEnd(LocalDateTime.of(2020, 5, 14, 14, 30));
             topic5 = topicRepository.save(topic5);
             topic5.setConf(conf1);
 
