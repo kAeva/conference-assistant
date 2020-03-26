@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -15,14 +16,11 @@ public class Topic {
 
     private String theme;
     private String description;
-    private Date start;
-    private Date end;
+    private String speaker;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Conference conf;
 
-    @OneToMany(mappedBy = "topic",cascade = CascadeType.ALL)
-    private Set<Question> questions;
-    @OneToMany(mappedBy = "topic",cascade = CascadeType.ALL)
-    private Set<User> user;
 }

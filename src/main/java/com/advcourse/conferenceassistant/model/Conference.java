@@ -3,11 +3,10 @@ package com.advcourse.conferenceassistant.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.Set;
+import java.time.LocalDateTime;
 
-@Entity
 @Data
+@Entity
 public class Conference {
     @Id
     @GeneratedValue
@@ -15,12 +14,9 @@ public class Conference {
 
     private String theme;
     private String description;
-    private Date start;
-    private Date end;
-    private String adress;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private String address;
 
-    @OneToMany(mappedBy = "conf", cascade = CascadeType.ALL)
-    private Set<Topic> topics;
-    @OneToMany(mappedBy = "conf",cascade = CascadeType.ALL)
-    private Set<User> user;
+
 }
