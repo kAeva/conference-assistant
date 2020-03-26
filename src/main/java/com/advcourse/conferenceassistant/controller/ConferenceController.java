@@ -39,7 +39,8 @@ public class ConferenceController {
         Cookie[] cookies = request.getCookies();
         String result;
 
-        if (cookies!=null  ){
+        if (cookies!=null && !"no_cookie".equals(cookies[0].getValue())){
+            System.out.println( result=cookies[0].getValue());
             result=cookies[0].getValue();
         } else{
             System.out.println("no cookies");
@@ -78,6 +79,17 @@ public class ConferenceController {
             return null;
         }*/
         return registered;
+    }
+
+    @PostMapping("/logout")
+    String signOut(HttpServletRequest request,
+                   HttpServletResponse response){
+
+
+        Cookie newCookie = new Cookie("testCookie", "no_cookie");
+        newCookie.setMaxAge(24 * 60 * 60);
+        response.addCookie(newCookie);
+        return "redirect:/";
     }
 
 }
