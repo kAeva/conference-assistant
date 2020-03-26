@@ -4,7 +4,10 @@ import com.advcourse.conferenceassistant.model.Visitor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface VisitorRepository extends JpaRepository<Visitor, Long> {
     Visitor findByEmail(String email);
+    List<Visitor> findAll();
 }
