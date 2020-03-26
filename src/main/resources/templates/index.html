@@ -9,8 +9,12 @@
 <div class="container-fluid mx-auto mt-5 align-middle">
 
             <div class="col-md-10 d-flex justify-content-center mx-auto ">
-            <form  action="POST" class="form-inline py-5 justify-content-center "  style="width: 80%; margin-top: 20%">
-                <input type="email" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+
+            <form  action="/registration-visitor" th:object="${visitor}" method="POST" class="form-inline py-5 justify-content-center "  style="width: 80%; margin-top: 20%">
+
+
+                <input type="email" th:field="*{email}" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+
                 <button type="submit" class="btn btn-dark">Go</button>
             </form>
             </div>
