@@ -17,6 +17,8 @@ public class Topic {
     private String theme;
     private String description;
     private String speaker;
+    private String speakerimg;
+    private String speakerdesc;
     private LocalDateTime start;
     private LocalDateTime end;
 
