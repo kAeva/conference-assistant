@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Moderator {
+public class Staff {
     @Id
     @GeneratedValue
     private Long id;
@@ -15,5 +15,8 @@ public class Moderator {
     private String pass;
     private String name;
     private String surname;
+
+    @ManyToOne
+    private Conference colab;
 
 }
