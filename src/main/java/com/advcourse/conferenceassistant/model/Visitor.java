@@ -17,6 +17,9 @@ public class Visitor {
     private String email;
     private String name;
 
+    @ManyToOne
+    private Conference visit;
+
     @ManyToMany(mappedBy = "likes")
     private Set<Question> liked;
 
