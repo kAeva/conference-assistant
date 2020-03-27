@@ -18,5 +18,4 @@ public class Conference {
     private LocalDateTime end;
     private String address;
 
-
 }

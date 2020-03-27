@@ -34,12 +34,12 @@ public class DatabaseInitials {
     public CommandLineRunner commandLineRunner(ApplicationContext cntx) {
         return args -> {
 
-            Moderator moderator1 = new Moderator();
-            moderator1.setName("Barbara");
-            moderator1.setSurname("Liskov");
-            moderator1.setEmail("liskovbrbr@mail.com");
-            moderator1.setPass("super34secret9pass");
-            moderator1 = moderatorRepository.save(moderator1);
+            Staff staff1 = new Staff();
+            staff1.setName("Barbara");
+            staff1.setSurname("Liskov");
+            staff1.setEmail("liskovbrbr@mail.com");
+            staff1.setPass("super34secret9pass");
+            staff1 = moderatorRepository.save(staff1);
 
             Conference conf1 = new Conference();
             conf1.setTheme("Dig Data Conference");
