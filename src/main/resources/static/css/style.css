@@ -1,0 +1,10 @@
+.all-questions-block table tbody tr {
+    line-height: 0.6;
+}
+.all-questions-block .table td {
+    padding: 7px;
+}
+.all-questions-block table th {
+    padding: 7px;
+
+}

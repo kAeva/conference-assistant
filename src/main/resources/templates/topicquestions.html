@@ -2,73 +2,166 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Live NOW: Conference name</title>
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/style.css" rel="stylesheet" th:href="@{/css/style.css}"/>
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
 <nav class="nav py-3 justify-content-center">
     <ul class="nav">
-        <li class="nav-item text-success h4">Current Topic Name</li>
+        <h1>Cinference</h1>
+        <p>conf desc</p>
+        <li class="nav-item h4"><span style="color: green"><i class="fab fa-rocketchat"></i></span> NOW: Current Topic Name</li>
     </ul>
+    <p>Topic desc</p>
     <button type="button" class="btn btn-secondary float-right ml-5">Schedule</button>
 </nav>
-<div class="container-fluid px-5 py-3">
-<div class="border border-info col-sm-6 mx-auto">
-    <h2 class="h2 text-center">Top questions</h2>
-    <table class="table table-borderless">
+<div class="container-fluid py-2">
+    <h3 class="h3 text-center pt-2">Top questions</h3>
+    <p class="text-center">for current topic</p>
+<div class="border bg-light col-sm-6 mx-auto">
+
+    <div class="table-responsive text-nowrap">
+        <table class="table table-borderless">
         <thead>
         <tr>
-            <th scope="col">Likes</th>
-            <th scope="col">Question</th>
-            <th scope="col">UserName</th>
-            <th scope="col">Date (sort)</th>
+            <th scope="col" style="width: 10%">Likes</th>
+            <th scope="col" style="width: 50%">Question</th>
+            <th scope="col" style="width: 20%">UserName</th>
+            <th scope="col" style="width: 20%">Date (sort)</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <th scope="row">7 <span><3</span></th>
+            <th scope="row"><i class="far fa-heart"></i> 51</th>
             <td>Question first text</td>
             <td>Otto</td>
             <td>18:36 01-02-2019</td>
         </tr>
         <tr>
-            <th scope="row">2 <span><3</span></th>
+            <th scope="row"><i class="far fa-heart"></i> 30</th>
             <td>Question 2 text</td>
             <td>Thornton</td>
             <td>18:38 01-02-2019</td>
         </tr>
         <tr>
-            <th scope="row">5 <span><3</span></th>
+            <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 22</th>
             <td>Question 3 text</td>
             <td>the Bird</td>
             <td>18:41 01-02-2019</td>
         </tr>
         </tbody>
     </table>
+    </div>
 </div>
 
 </div>
-<div class="container-fluid px-5 py-3">
-    <div class="border border-info col-sm-6 mx-auto py-3" style="height: 300px; overflow-y: scroll; overflow-x: hidden;">
-    <p>What is Lorem Ipsum?
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        Where does it come from?
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+<div class="container-fluid py-3 all-questions-block">
+    <h3 class="h3 text-center pt-2">All questions</h3>
+    <p class="text-center">for current topic</p>
+    <div class="border col-sm-6 mx-auto py-1" style="height: 300px; overflow-y: scroll; overflow-x: hidden;">
 
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-        Where does it come from?
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+        <div class="table-responsive text-nowrap">
+            <table class="table table-borderless table-fixed">
+                <thead>
+                <tr class="table-info">
+                    <th scope="col" style="width: 10%">Likes</th>
+                    <th scope="col" style="width: 50%">Question</th>
+                    <th scope="col" style="width: 20%">UserName</th>
+                    <th scope="col" style="width: 20%">Date (sort)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 7</th>
+                    <td>Question first text</td>
+                    <td>Otto</td>
+                    <td>18:36 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 9</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 5</th>
+                    <td>Question 3 text</td>
+                    <td>the Bird</td>
+                    <td>18:41 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 10</th>
+                    <td>Question 3 text</td>
+                    <td>the Bird</td>
+                    <td>18:57 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 11</th>
+                    <td>Question 3 text</td>
+                    <td>the Bird</td>
+                    <td>18:45 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 2</th>
+                    <td>Question 3 text</td>
+                    <td>the Bird</td>
+                    <td>18:51 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 5</th>
+                    <td>Question 3 text</td>
+                    <td>the Bird</td>
+                    <td>18:56 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 13</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 8</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 8</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 8</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                <tr>
+                    <th scope="row"><i class="far fa-heart"></i> 8</th>
+                    <td>Question 2 text</td>
+                    <td>Thornton</td>
+                    <td>18:38 01-02-2019</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-    </p>
 
     </div>
 </div>
-<div class="container-fluid px-5 py-3">
+<div class="container-fluid py-5">
+    <p class="text-center"><i class="fab fa-napster"></i></p>
+</div>
+<div class="container-fluid py-1 fixed-bottom bg-light">
     <div class=" col-sm-6 mx-auto py-3">
-        <form action="POST" class="form-inline justify-content-center mx-auto"  style="width: 100%;">
-        <textarea class="form-control" rows="4" style="width: 80%;"></textarea>
-        <button type="submit" class="btn btn-dark px-2 mx-1" style="height: 100px">Add</button>
+        <form action="POST" class="form-inline mx-auto" >
+        <textarea class="form-control" rows="2" style="float: left; width: 80%"></textarea>
+        <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%"><i class="fas fa-chevron-right"></i></button>
         </form>
     </div>
 </div>

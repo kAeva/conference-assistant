@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Welcome to CONFERENCENAME</title>
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#"> Back to live chat <i class="far fa-caret-square-right"></i></a>
+    <a class="navbar-brand" href="#"><i class="far fa-sad-tear"></i> Leave</a>
+
+</nav>
+<div class="container-fluid py-5">
+    <h3 class="text-center h3 py-3">CONFERENCE NAME</h3>
+
+
+    <div class="col-sm-8 mx-auto py-3">
+        <div class="row py-3 flex-column topic">
+        <div class="col mx-auto">
+        <figure class="figure">
+
+            <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+            <figcaption class="figure-caption">Speaker picture</figcaption>
+        </figure>
+        </div>
+        <div class="col mx-auto">
+            <h4 class="h4">First topic name</h4>
+            <p>Time: 11:00 - 11:45</p>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+        </div>
+        </div>
+
+        <div class="row py-3 flex-column topic">
+            <div class="col mx-auto">
+                <figure class="figure">
+
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption">Speaker picture</figcaption>
+                </figure>
+            </div>
+            <div class="col mx-auto">
+                <span class="text-danger">NOW!!!</span><h4 class="h4 text-success">Second topic name</h4>
+                <p class="text-success">Time: 11:45 - 12:30</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+        </div>
+
+        <div class="row py-3 flex-column topic">
+            <div class="col mx-auto">
+                <figure class="figure">
+
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption">Speaker picture</figcaption>
+                </figure>
+            </div>
+            <div class="col mx-auto">
+                <h4 class="h4">Third topic name</h4>
+                <p>Time: 12:40 - 11:20</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>
