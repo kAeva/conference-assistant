@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.*;
 
 
@@ -34,12 +35,26 @@ public class DatabaseInitials {
     public CommandLineRunner commandLineRunner(ApplicationContext cntx) {
         return args -> {
 
+            Set<Role> rolesAll = Set.of(Role.ADMIN, Role.MODERATOR);
+            Set<Role> rolesModerator = Set.of( Role.MODERATOR);
+
+
             Staff staff1 = new Staff();
             staff1.setName("Barbara");
             staff1.setSurname("Liskov");
             staff1.setEmail("liskovbrbr@mail.com");
             staff1.setPass("super34secret9pass");
-            staff1 = moderatorRepository.save(staff1);
+            staff1.setRoles(rolesModerator);
+
+
+            Staff staff2 = new Staff();
+            staff2.setName("Darth");
+            staff2.setSurname("Vader");
+            staff2.setEmail("dark_lord@sith.com");
+            staff2.setPass("darkforce");
+            staff2.setRoles(rolesAll);
+
+
 
             Conference conf1 = new Conference();
             conf1.setTheme("Dig Data Conference");
@@ -48,6 +63,11 @@ public class DatabaseInitials {
             conf1.setEnd(LocalDateTime.of(2020, 5, 14, 16, 00));
             conf1.setAddress("Crowne Plaza Vilnius M. K. Čiurlionio str. 84, Vilnius, Lithuania");
             conf1 = conferenceRepository.save(conf1);
+
+            staff1.setColab(conf1);
+            staff2.setColab(conf1);
+            staff1 = moderatorRepository.save(staff1);
+            staff2 = moderatorRepository.save(staff2);
 
             Topic topic1 = new Topic();
             topic1.setTheme("Deconstructing Deep Learning");
