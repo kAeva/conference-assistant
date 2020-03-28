@@ -17,7 +17,7 @@ public class StaffMapper {
         staff.setPass(dto.getPass());
         staff.setName(dto.getName());
         staff.setSurname(dto.getSurname());
-        staff.setColab(dto.getColabid());
+        staff.setColab(dto.getColab_id());
         return staff;
     }
 }

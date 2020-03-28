@@ -8,6 +8,9 @@ import com.advcourse.conferenceassistant.service.dto.mapper.StaffMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
+import java.util.List;
+
 @Service
 public class StaffService implements StaffServiceImpl {
     @Autowired
@@ -25,9 +28,7 @@ public class StaffService implements StaffServiceImpl {
         if (staffByEmail != null && staffByPass != null) {
             return dto;
         }
-
-        return StaffMapper.toDto(staffRepository.save(staff));
-
+            return StaffMapper.toDto(staffRepository.save(staff));
 
     }
 

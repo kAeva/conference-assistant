@@ -27,5 +27,4 @@ public class TempControler {
     public String topicEditPage() {
         return "topic-add";
     }
-
 }
