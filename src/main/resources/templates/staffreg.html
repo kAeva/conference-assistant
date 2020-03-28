@@ -17,6 +17,9 @@
 
 
                 <input type="email" th:field="*{email}"  style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputEmail1" aria-describedby="Email" placeholder="Enter email">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                <input th:field="*{name}" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputName" aria-describedby="Name" placeholder="Enter name">
+                <input th:field="*{surname}" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputSurname" aria-describedby="Surname" placeholder="Enter surname">
                 <input type="password" th:field="*{pass}" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputPass" aria-describedby="Password" placeholder="Enter password">
 
 

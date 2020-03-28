@@ -19,11 +19,11 @@ public class StaffController {
     @Autowired
     private StaffServiceImpl service;
 
-    @GetMapping("/stafflogin")
+    @GetMapping("/staffreg")
     public String stafflogin(Model model) {
         Staff staff = new Staff();
         model.addAttribute(staff);
-        return "stafflogin";
+        return "staffreg";
     }
 
     @PostMapping("/registration-staff")
@@ -31,11 +31,18 @@ public class StaffController {
             @ModelAttribute("staff") @Valid StaffDto accountStaff,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "stafflogin";
+            return "staffreg";
         }
         StaffDto registered = service.registerNewStaffDtoAccount(accountStaff);
-        return "redirect:dashboard";
+        return "redirect:login-staff";
 
 
     }
+    @PostMapping("/login-staff")
+    public String registerStaffAccount(
+            @ModelAttribute("staff") StaffDto accountStaff) {
+        StaffDto logedin = service.loginStaffDtoAccount(accountStaff);
+        return "redirect:dashboard";
+    }
+
 }

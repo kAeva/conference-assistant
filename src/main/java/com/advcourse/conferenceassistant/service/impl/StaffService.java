@@ -27,15 +27,14 @@ public class StaffService implements StaffServiceImpl {
     @Override
     public StaffDto registerNewStaffDtoAccount(StaffDto dto) {
         Staff staff = StaffMapper.fromDto(dto);
-        Staff staffByEmail = staffRepository.findByEmailAndPass(dto.getEmail(),dto.getPass());
-        //Staff staffByEmail = staffRepository.findByEmail(dto.getEmail());
-        //Staff staffByPass = staffRepository.findByPass(dto.getPass());
-        if (staffByEmail != null ) {
+        Staff staffByEP = staffRepository.findByEmailAndPass(dto.getEmail(),dto.getPass());
+        if (staffByEP != null ) {
             return dto;
         }
         return StaffMapper.toDto(staffRepository.save(staff));
 
     }
+
 
 
 
