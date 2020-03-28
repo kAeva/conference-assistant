@@ -26,7 +26,7 @@ public class DatabaseInitials {
     private TopicRepository topicRepository;
 
     @Autowired
-    private ModeratorRepository moderatorRepository;
+    private StaffRepository moderatorRepository;
 
     @Autowired
     private VisitorRepository visitorRepository;
