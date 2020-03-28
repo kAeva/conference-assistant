@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <title>Conferences Admin Panel</title>
+</head>
+<body>
+
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div class="col-md-8"></div>
+    <div class="col-6 col-md-4">
+        <a class="btn btn-light my-2" href="#">Statistics</a>
+        <a class="btn btn-light my-2" href="#">Manage Users</a>
+        <a class="btn btn-light my-2" href="">Log out</a>
+    </div>
+</nav>
+
+<div class="container-fluid mx-auto mt-5">
+    <h1 class="text-center">Conferences</h1>
+
+</div>
+
+
+<div class="container mx-auto mt-5" style="">
+    <table class="table">
+
+        <thead class="thead">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Details</th>
+            <th scope="col">Topics</th>
+            <th scope="col">Date</th>
+
+            <th></th>
+            <th><a class="btn btn-primary btn-sm" href="/conference-add">Add more</a></th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <th scope="row">Conf name</th>
+                <td>Super popular and informative description</td>
+                <td>10</td>
+                <td>10 Apr</td>
+
+                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
+                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
+
+            </tr>
+
+
+        </tbody>
+    </table>
+
+</div>
+
+
+<footer>
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href=""> JA Course [team 1]</a>
+    </div>
+</footer>
+
+</body>
+</html>
