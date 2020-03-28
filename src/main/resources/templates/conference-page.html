@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Conference page</title>
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/dashboard"><i class="fas fa-crown"></i> Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="">Manage Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Statistics</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Log out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid py-5">
+    <div class="col-sm-8 mx-auto py-3">
+        <div class="row py-3 flex-column">
+    <h3 class="text-center h3 py-3 text-uppercase">Conference name<a class="btn btn-sm btn-info mx-3" href="/conference-edit">Edit</a></h3>
+            <p class="text-center py-2"><b>10 Apr 2020</b> 11:00 - 17:30</p>
+            <p class="px-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+    </div>
+    </div>
+<hr>
+    <div class="col-sm-8 mx-auto py-3">
+        <h2 class="h2 text-center py-3">List Of Topics <a class="btn btn-success" href="/topic-add">Add topic</a></h2>
+
+        <div class="row py-3 topic">
+
+            <div class="col-sm-3 mx-auto">
+                <figure class="figure">
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption">Speaker picture above, the name and descr here</figcaption>
+                </figure>
+            </div>
+            <div class="col-sm-8 mx-auto">
+                <h4 class="h4">First topic name</h4>
+                <a class="btn btn-info btn-sm" href="/topic-edit">Edit</a><a class="btn btn-danger btn-sm mx-3" href="/topic-delete" value="" name=""><i class="fas fa-skull-crossbones"></i></a>
+                <p class="py-2">Time: 11:00 - 11:45</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+        </div>
+<hr>
+        <div class="row py-3 topic">
+            <div class="col-sm-3 mx-auto">
+                <figure class="figure">
+
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption">Speaker picture</figcaption>
+                </figure>
+            </div>
+            <div class="col-sm-8 mx-auto">
+                <span class="text-danger"></span><h4 class="h4">Second topic name</h4>
+                <a class="btn btn-info btn-sm" href="/topic-edit">Edit</a><a class="btn btn-danger btn-sm mx-3" href="/topic-delete" value="" name=""><i class="fas fa-skull-crossbones"></i></a>
+                <p class="p py-2">Time: 11:45 - 12:30</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+        </div>
+<hr>
+        <div class="row py-3 topic">
+            <div class="col-sm-3 mx-auto">
+                <figure class="figure">
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption">Speaker picture</figcaption>
+                </figure>
+            </div>
+            <div class="col-sm-8 mx-auto">
+                <h4 class="h4">Third topic name</h4>
+                <a class="btn btn-info btn-sm" href="/topic-edit">Edit</a><a class="btn btn-danger btn-sm mx-3" href="/topic-delete" value="" name=""><i class="fas fa-skull-crossbones"></i></a>
+                <p class="py-2">Time: 12:40 - 11:20</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<footer>
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href=""> JA Course [team 1]</a>
+    </div>
+</footer>
+
+</body>
+</html>
