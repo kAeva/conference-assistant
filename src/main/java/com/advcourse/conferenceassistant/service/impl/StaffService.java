@@ -6,13 +6,17 @@ import com.advcourse.conferenceassistant.service.StaffServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.StaffMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
-import java.util.List;
-
+import javax.persistence.NoResultException;
+@Repository
+@Scope(proxyMode = ScopedProxyMode.INTERFACES)
 @Service
 public class StaffService implements StaffServiceImpl {
+
     @Autowired
     private StaffRepository staffRepository;
 
@@ -23,14 +27,16 @@ public class StaffService implements StaffServiceImpl {
     @Override
     public StaffDto registerNewStaffDtoAccount(StaffDto dto) {
         Staff staff = StaffMapper.fromDto(dto);
-        Staff staffByEmail = staffRepository.findByEmail(dto.getEmail());
-        Staff staffByPass = staffRepository.findByPass(dto.getPass());
-        if (staffByEmail != null && staffByPass != null) {
+        Staff staffByEmail = staffRepository.findByEmailAndPass(dto.getEmail(),dto.getPass());
+        //Staff staffByEmail = staffRepository.findByEmail(dto.getEmail());
+        //Staff staffByPass = staffRepository.findByPass(dto.getPass());
+        if (staffByEmail != null ) {
             return dto;
         }
-            return StaffMapper.toDto(staffRepository.save(staff));
+        return StaffMapper.toDto(staffRepository.save(staff));
 
     }
+
 
 
 }

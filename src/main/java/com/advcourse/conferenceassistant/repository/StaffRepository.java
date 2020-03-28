@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
     Staff findByEmail(String email);
-    Staff findByPass(String pass);
+    Staff findByEmailAndPass(String email, String pass);
 }
