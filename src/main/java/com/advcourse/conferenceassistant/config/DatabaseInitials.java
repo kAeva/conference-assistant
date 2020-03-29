@@ -36,7 +36,7 @@ public class DatabaseInitials {
         return args -> {
 
             Set<Role> rolesAll = Set.of(Role.ADMIN, Role.MODERATOR);
-            Set<Role> rolesModerator = Set.of( Role.MODERATOR);
+            Set<Role> rolesModerator = Set.of(Role.MODERATOR);
 
 
             Staff staff1 = new Staff();
@@ -55,7 +55,6 @@ public class DatabaseInitials {
             staff2.setRoles(rolesAll);
 
 
-
             Conference conf1 = new Conference();
             conf1.setTheme("Dig Data Conference");
             conf1.setDescription("Big Data Conference Europe is a three-day conference with technical talks in the fields of Big Data, High Load, Data Science, Machine Learning and AI.");
@@ -64,18 +63,98 @@ public class DatabaseInitials {
             conf1.setAddress("Crowne Plaza Vilnius M. K. Čiurlionio str. 84, Vilnius, Lithuania");
             conf1 = conferenceRepository.save(conf1);
 
+            Conference conf2 = new Conference();
+            conf2.setTheme("Small Data Conference");
+            conf2.setDescription("Small Data Conference Europe is a three-day conference with technical talks in the fields of Small Data, High Load, Data Science, Machine Learning and AI.");
+            conf2.setStart(LocalDateTime.of(2020, 6, 14, 9, 30));
+            conf2.setEnd(LocalDateTime.of(2020, 6, 14, 15, 20));
+            conf2.setAddress("1638  Conference Center Way, Leesburg, Virginia");
+            conferenceRepository.save(conf2);
+
+            Conference conf3 = new Conference();
+            conf3.setTheme("Social Science Conference");
+            conf3.setDescription("Masters International Research & Development Center cordially invites abstracts and/or full papers from the broad range of Social Science fields:\n" +
+                    "\n" +
+                    "Accounting\n" +
+                    "Arts, Banking\n" +
+                    "Culture\n" +
+                    "Economics \n" +
+                    "Education\n" +
+                    "Environment\n" +
+                    "European Union\n" +
+                    "Finance, Heritage\n"
+            );
+            conf3.setStart(LocalDateTime.of(2021, 3, 27, 9, 05));
+            conf3.setEnd(LocalDateTime.of(2021, 3, 27, 15, 45));
+            conf3.setAddress("University of Washington Rome Center, Rome, Italy");
+            conferenceRepository.save(conf3);
+
+            Staff staff3 = new Staff();
+            staff3.setName("Ivan");
+            staff3.setSurname("Ivanenko");
+            staff3.setEmail("iii@gmail.com");
+            staff3.setPass("123");
+            staff3.setRoles(rolesAll);
+            staff3.setColab(conf2);
+
+
+            Staff staff4 = new Staff();
+            staff4.setName("Petro");
+            staff4.setSurname("Petrenko");
+            staff4.setEmail("follov@gmail.com");
+            staff4.setPass("1234");
+            staff4.setRoles(rolesModerator);
+            staff4.setColab(conf2);
+
+
+            Staff staff5 = new Staff();
+            staff5.setName("PetroSamePass");
+            staff5.setSurname("Petrenko");
+            staff5.setEmail("follov@gmail.com");
+            staff5.setPass("1234");
+            staff5.setRoles(rolesModerator);
+            staff5.setColab(conf2);
+
+
+            Staff staff6 = new Staff();
+            staff6.setName("John");
+            staff6.setSurname("Connor");
+            staff6.setEmail("johnC@uk.net");
+            staff6.setPass("12");
+            staff6.setRoles(rolesModerator);
+            staff6.setColab(conf3);
+
+
+            Staff staff7 = new Staff();
+            staff7.setName("Sarah");
+            staff7.setSurname("Connor");
+            staff7.setEmail("johnC@uk.net");
+            staff7.setPass("12345");
+            staff7.setRoles(rolesAll);
+            staff7.setColab(conf3);
+
+
             staff1.setColab(conf1);
             staff2.setColab(conf1);
-            staff1 = staffRepository.save(staff1);
-            staff2 = staffRepository.save(staff2);
+            staffRepository.save(staff1);
+            staffRepository.save(staff2);
+            staffRepository.save(staff3);
+            staffRepository.save(staff4);
+            staffRepository.save(staff5);
+            staffRepository.save(staff6);
+            staffRepository.save(staff7);
 
             Topic topic1 = new Topic();
+            topic1.setDescription("description Deconstructing Deep ");
+            topic1.setSpeakerdesc("description Mark West");
+
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
             topic1.setStart(LocalDateTime.of(2020, 5, 14, 10, 15));
             topic1.setEnd(LocalDateTime.of(2020, 5, 14, 11, 00));
-            topic1 = topicRepository.save(topic1);
             topic1.setConf(conf1);
+            topicRepository.save(topic1);
+
 
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
@@ -92,7 +171,7 @@ public class DatabaseInitials {
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
             visitor3.setName("Antonina");
-            visitor3.setVisit(conf1);
+            visitor3.setVisit(conf2);
             visitor3 = visitorRepository.save(visitor3);
 
 
@@ -106,14 +185,14 @@ public class DatabaseInitials {
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
             visitor5.setName("Chloe");
-            visitor5.setVisit(conf1);
+            visitor5.setVisit(conf2);
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
             visitor6.setName("Loony");
-            visitor6.setVisit(conf1);
+            visitor6.setVisit(conf3);
             visitor6 = visitorRepository.save(visitor6);
 
 
@@ -128,6 +207,8 @@ public class DatabaseInitials {
 
             Topic topic2 = new Topic();
             topic2.setTheme("You can AI like an Expert");
+            topic2.setDescription("desc You can AI like");
+            topic2.setSpeakerdesc("desc Jon McLoone");
             topic2.setSpeaker("Jon McLoone");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic2.setEnd(LocalDateTime.of(2020, 5, 14, 12, 30));
@@ -145,11 +226,14 @@ public class DatabaseInitials {
 
             Topic topic3 = new Topic();
             topic3.setTheme("Deep Learning for Lazy People... Neural Architecture Search with Automated Machine Learning");
+            topic3.setDescription("desc Deep Learning for");
+            topic3.setSpeakerdesc("descr Diego Hueltes");
             topic3.setSpeaker("Diego Hueltes");
             topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
             topic3.setEnd(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setConf(conf2);
             topic3 = topicRepository.save(topic3);
-            topic3.setConf(conf1);
+
 
             Question question3 = new Question();
             question3.setQuestion("How actually lazy are you?");
@@ -161,12 +245,13 @@ public class DatabaseInitials {
 
             Topic topic4 = new Topic();
             topic4.setTheme("Predicting the Moment of Birth using Sensor Data in Dairy Cows");
+            topic4.setDescription("desc Predicting the Moment");
+            topic4.setSpeakerdesc("desc Miel Hostens");
             topic4.setSpeaker("Miel Hostens");
             topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
             topic4.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
+            topic4.setConf(conf2);
             topic4 = topicRepository.save(topic4);
-            topic4.setConf(conf1);
-
 
             Question question4 = new Question();
             question4.setQuestion("Why cows???");
@@ -178,11 +263,14 @@ public class DatabaseInitials {
 
             Topic topic5 = new Topic();
             topic5.setTheme("Knowledge and AI Powering Microsoft & Office 365 Products");
+            topic5.setDescription("desc Knowledge and AI Powe");
+            topic5.setSpeakerdesc("desc David Gorena Elizondo");
             topic5.setSpeaker("David Gorena Elizondo");
             topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
             topic5.setEnd(LocalDateTime.of(2020, 5, 14, 14, 30));
+            topic5.setConf(conf3);
             topic5 = topicRepository.save(topic5);
-            topic5.setConf(conf1);
+
 
             Question question5 = new Question();
             question5.setQuestion("What is the most powerful AI tool provided by Miscrosoft?");
