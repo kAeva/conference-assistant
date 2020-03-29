@@ -1,7 +1,7 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Visitor;
-import com.advcourse.conferenceassistant.service.VisitorServiceImpl;
+import com.advcourse.conferenceassistant.service.impl.VisitorServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

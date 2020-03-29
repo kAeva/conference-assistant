@@ -1,4 +1,4 @@
-package com.advcourse.conferenceassistant.service;
+package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 
