@@ -1,6 +1,5 @@
 package com.advcourse.conferenceassistant.controller;
 
-import com.advcourse.conferenceassistant.model.Visitor;
 import com.advcourse.conferenceassistant.service.VisitorServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
@@ -26,10 +26,13 @@ public class VisitorController {
     /**
      * page with form to input visitor email
      */
-    @GetMapping("/")
-    public String homePage(Model model) {
-        model.addAttribute("visitor", new VisitorDto());
-
+    @GetMapping("/{confId}")
+    public String homePage(@PathVariable Long confId,
+                           Model model, HttpServletRequest request) {
+        VisitorDto dto = new VisitorDto();
+        dto.setConfId(confId);
+        model.addAttribute("visitor", dto);
+        Cookie[] cookies = request.getCookies();
         return "index";
     }
 
@@ -37,11 +40,13 @@ public class VisitorController {
      * adding email to cookie
      * adding visitor to bd
      */
-    @PostMapping("/registration-visitor")
+    @PostMapping("/registration-visitor/{confId}")
     public String registerUserAccount(
             @ModelAttribute("visitor") @Valid VisitorDto accountVisitor,
             BindingResult bindingResult,
-            HttpServletResponse response) {
+            @PathVariable Long confId,
+            HttpServletResponse response
+    ) {
 
         if (bindingResult.hasErrors()) {
             return "index";
@@ -51,12 +56,16 @@ public class VisitorController {
 
         Cookie newCookie = new Cookie("testCookie", registered.getEmail());
 
+        //without this method not working cookie!!!
+        newCookie.setPath("/");
         // set how long cookie is valid in seconds
         newCookie.setMaxAge(24 * 60 * 60);
+
         // adding cookie
         // adding cookie
         response.addCookie(newCookie);
-        return "redirect:liveconference";
+
+        return "redirect:/liveconference/" + confId;
 
 
     }
@@ -65,14 +74,16 @@ public class VisitorController {
      * delete email from cookie
      * and return to page "/"
      */
-    @PostMapping("/logout")
-    String signOut(HttpServletRequest request,
+    @PostMapping("/logout/{confId}")
+    String signOut(@PathVariable Long confId,
                    HttpServletResponse response) {
 
 
         Cookie newCookie = new Cookie("testCookie", "no_cookie");
         newCookie.setMaxAge(24 * 60 * 60);
+        newCookie.setPath("/");
         response.addCookie(newCookie);
-        return "redirect:/";
+
+        return "redirect:/" + confId;
     }
 }

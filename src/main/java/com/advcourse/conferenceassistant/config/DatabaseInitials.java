@@ -26,7 +26,7 @@ public class DatabaseInitials {
     private TopicRepository topicRepository;
 
     @Autowired
-    private StaffRepository moderatorRepository;
+    private StaffRepository staffRepository;
 
     @Autowired
     private VisitorRepository visitorRepository;
@@ -66,8 +66,8 @@ public class DatabaseInitials {
 
             staff1.setColab(conf1);
             staff2.setColab(conf1);
-            staff1 = moderatorRepository.save(staff1);
-            staff2 = moderatorRepository.save(staff2);
+            staff1 = staffRepository.save(staff1);
+            staff2 = staffRepository.save(staff2);
 
             Topic topic1 = new Topic();
             topic1.setTheme("Deconstructing Deep Learning");
@@ -80,34 +80,40 @@ public class DatabaseInitials {
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
             visitor1.setName("Anonymous");
+            visitor1.setVisit(conf1);
             visitor1 = visitorRepository.save(visitor1);
 
             Visitor visitor2 = new Visitor();
             visitor2.setEmail("superdeveloper@gmail.com");
             visitor2.setName("Valentyn");
+            visitor2.setVisit(conf1);
             visitor2 = visitorRepository.save(visitor2);
 
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
             visitor3.setName("Antonina");
+            visitor3.setVisit(conf1);
             visitor3 = visitorRepository.save(visitor3);
 
 
             Visitor visitor4 = new Visitor();
             visitor4.setEmail("wikihowyouknow@gmail.com");
             visitor4.setName("Taras");
+            visitor4.setVisit(conf1);
             visitor4 = visitorRepository.save(visitor4);
 
 
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
             visitor5.setName("Chloe");
+            visitor5.setVisit(conf1);
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
             visitor6.setName("Loony");
+            visitor6.setVisit(conf1);
             visitor6 = visitorRepository.save(visitor6);
 
 

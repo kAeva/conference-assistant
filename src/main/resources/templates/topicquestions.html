@@ -176,7 +176,7 @@
 <div th:text="${cookieValue}"></div>
 </body>
 <div>
-    <form th:action="@{/logout}" method="post">
+       <form action="#" th:action="@{'/logout/'+${conferenceId}}"  method="post">
         <input type="submit" value="Sign Out"/>
     </form>
 </div>
