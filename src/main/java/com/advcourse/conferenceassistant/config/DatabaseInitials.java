@@ -42,7 +42,7 @@ public class DatabaseInitials {
             staff1 = moderatorRepository.save(staff1);
 
             Conference conf1 = new Conference();
-            conf1.setTheme("Dig Data Conference");
+            conf1.setTheme("Big Data Conference");
             conf1.setDescription("Big Data Conference Europe is a three-day conference with technical talks in the fields of Big Data, High Load, Data Science, Machine Learning and AI.");
             conf1.setStart(LocalDateTime.of(2020, 5, 14, 10, 00));
             conf1.setEnd(LocalDateTime.of(2020, 5, 14, 16, 00));

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-    <title>Conferences Admin Panel</title>
+    <title>Conference Dashboard</title>
 </head>
 <body>
 
@@ -33,7 +33,7 @@
 </nav>
 
 <div class="container-fluid mx-auto mt-5">
-    <h1 class="text-center">Conferences</h1>
+    <h1 class="text-center">Conference Dashboard</h1>
 
 </div>
 
@@ -43,41 +43,45 @@
 
         <thead class="thead">
         <tr>
-            <th scope="col">Name</th>
+            <th scope="col">Topic</th>
             <th scope="col">Details</th>
-            <th scope="col">Topics</th>
-            <th scope="col">Date</th>
+            <th scope="col">Questions</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+            <th>Force</th>
 
             <th></th>
-            <th><a class="btn btn-primary btn-sm" href="/conference-add">Add</a></th>
 
         </tr>
         </thead>
 
         <tbody>
 
-            <tr>
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Conf name</a></th>
-                <td>Super popular and informative description</td>
-                <td>10</td>
-                <td>10 Apr</td>
+        <tr>
+            <!--Link /topic-dashboard for staff to manage topics start/end and see questions-->
+            <th scope="row"><a href="/topic-dashboard">Deconstructing Deep Learning</a></th>
+            <td>Super popular and informative topic</td>
+            <td>7</td>
+            <td>2020-05-14 07:15:00</td>
+            <td>2020-05-14 08:00:00</td>
 
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
+            <td><a class="btn btn-success btn-sm" href="/"><i class="far fa-play-circle"></i></a></td>
+            <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="far fa-stop-circle"></i></a></td>
 
-            </tr>
-            <tr>
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Big Data Conference</a></th>
-                <td>Big Data Conference Europe is a three-day conference with technical talks in the fields of Big Data,</td>
-                <td>7</td>
-                <td>26 Apr</td>
+        </tr>
+<!--        Add class="table-success" if topic is active-->
+        <tr class="table-success">
+            <!--Link /topic-dashboard for staff to manage topics start/end and see questions-->
+            <th scope="row"><a href="/topic-dashboard">You can AI like an Expert</a></th>
+            <td>You can AI like an Expert is a three-day conference with technical talks in the fields of Big Data,</td>
+            <td>15</td>
+            <td>2020-05-14 08:00:00</td>
+            <td>2020-05-14 09:30:00</td>
+<!--Next two buttons os for staff to force start and ent time. ! TODO: Next topic time should be updated after this forcing-->
+            <td><a class="btn btn-success btn-sm" href="/"><i class="far fa-play-circle"></i></a></td>
+            <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="far fa-stop-circle"></i></a></td>
 
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
-
-            </tr>
+        </tr>
 
         </tbody>
     </table>
