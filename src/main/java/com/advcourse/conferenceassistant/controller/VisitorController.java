@@ -1,5 +1,7 @@
 package com.advcourse.conferenceassistant.controller;
 
+import com.advcourse.conferenceassistant.model.Conference;
+import com.advcourse.conferenceassistant.repository.ConferenceRepository;
 import com.advcourse.conferenceassistant.service.VisitorServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 public class VisitorController {
@@ -22,17 +25,37 @@ public class VisitorController {
     @Autowired
     private VisitorServiceImpl service;
 
+    @Autowired
+    private ConferenceRepository conferenceRepository;
+
+    @GetMapping("/")
+    public void homePage(HttpServletResponse response) throws IOException {
+        response.sendError(404, "Conference not found");
+
+    }
 
     /**
      * page with form to input visitor email
      */
     @GetMapping("/{confId}")
     public String homePage(@PathVariable Long confId,
-                           Model model, HttpServletRequest request) {
+                           Model model, HttpServletResponse response) throws IOException {
+
         VisitorDto dto = new VisitorDto();
+        Conference conference = new Conference();
+
+        Optional<Conference> byId = conferenceRepository.findById(confId);
+        // rerurn 404 when conference doesn't exists
+        if (byId.isEmpty()) {
+            response.sendError(404, "Conference not found");
+        } else {
+            conference = byId.get();
+
+        }
+        model.addAttribute("conference", conference);
         dto.setConfId(confId);
         model.addAttribute("visitor", dto);
-        Cookie[] cookies = request.getCookies();
+
         return "index";
     }
 
@@ -47,21 +70,17 @@ public class VisitorController {
             @PathVariable Long confId,
             HttpServletResponse response
     ) {
-
         if (bindingResult.hasErrors()) {
             return "index";
         }
 
         VisitorDto registered = service.registerNewVisitorDtoAccount(accountVisitor);
-
         Cookie newCookie = new Cookie("testCookie", registered.getEmail());
 
         //without this method not working cookie!!!
         newCookie.setPath("/");
         // set how long cookie is valid in seconds
         newCookie.setMaxAge(24 * 60 * 60);
-
-        // adding cookie
         // adding cookie
         response.addCookie(newCookie);
 
@@ -80,7 +99,7 @@ public class VisitorController {
 
 
         Cookie newCookie = new Cookie("testCookie", "no_cookie");
-        newCookie.setMaxAge(24 * 60 * 60);
+        newCookie.setMaxAge(0);
         newCookie.setPath("/");
         response.addCookie(newCookie);
 

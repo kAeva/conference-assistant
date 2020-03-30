@@ -1,17 +1,37 @@
 package com.advcourse.conferenceassistant.controller;
 
+import com.advcourse.conferenceassistant.model.Conference;
+import com.advcourse.conferenceassistant.model.Visitor;
+import com.advcourse.conferenceassistant.repository.ConferenceRepository;
+import com.advcourse.conferenceassistant.repository.VisitorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Controller
 public class ConferenceController {
 
+    @Autowired
+    private VisitorRepository visitorRepository;
+
+    @Autowired
+    private ConferenceRepository conferenceRepository;
+
+    @GetMapping("/liveconference")
+    public void getError(HttpServletResponse response) throws IOException {
+        sendError(response);
+    }
 
     @GetMapping("/liveconference/{confId}")
     public String getLive(
@@ -19,21 +39,29 @@ public class ConferenceController {
                     String cookieValue,
             @PathVariable Long confId,
             Model model,
-            HttpServletRequest request) {
+            HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Cookie[] cookies = request.getCookies();
-        String result;
-        //check for available cookie
-        if (cookies != null && !"no_cookie".equals(cookies[0].getValue())) {
-            result = cookies[0].getValue();
-        } else {
-            return "redirect:/"+confId;
+        // rerurn 404 when conference doesn't exists
+        Optional<Conference> byId = conferenceRepository.findById(confId);
+        if (byId.isEmpty()) {
+            sendError(response);
+            return "topicquestions";
         }
-        model.addAttribute("conferenceId",confId);
-        model.addAttribute("cookieValue", result);
+
+        // return localhost080:/confId when visitor haven't registration for this conference yet
+        Visitor byEmailAndVisit = visitorRepository.findByEmailAndVisit(cookieValue, byId.get());
+        if (byEmailAndVisit == null) {
+            return "forward:/"+confId;
+
+        }
+        model.addAttribute("conferenceId", confId);
+        model.addAttribute("cookieValue", cookieValue);
         return "topicquestions";
     }
 
+    public void sendError(HttpServletResponse response) throws IOException {
+        response.sendError(404, "Conference not found");
+    }
 
 }
 
