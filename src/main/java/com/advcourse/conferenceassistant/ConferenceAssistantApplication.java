@@ -9,6 +9,7 @@ public class ConferenceAssistantApplication {
 
 
     public static void main(String[] args) {
+
         SpringApplication.run(ConferenceAssistantApplication.class, args);
     }
 }
