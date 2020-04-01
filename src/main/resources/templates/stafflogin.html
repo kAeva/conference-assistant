@@ -8,23 +8,24 @@
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body class="bg-info">
+
 <div class="container-fluid mx-auto mt-5 align-middle">
     <div class="col-md-10 mx-auto text-center">
-
-        <div class="col-md-10 d-flex justify-content-center mx-auto ">
-
-            <form  action="/registration-staff" th:object="${staff}" method="POST" class="form-inline py-5 justify-content-center "  style="width: 80%; margin-top: 20%">
-
-
-                <input type="email" th:field="*{email}"  style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputEmail1" aria-describedby="Email" placeholder="Enter email">
-                <input type="password" th:field="*{pass}" style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputPass" aria-describedby="Password" placeholder="Enter password">
-
-
-                <button type="submit" class="btn btn-dark">Login</button>
-            </form>
+        <div th:if="${param.error}">
+            Invalid username and password.
+        </div>
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+        <form action="#" th:action="@{'/stafflogin'}" method="post">
+            <div><label> User Name : <input type="text" name="username"/> </label></div>
+            <div><label> Password: <input type="password" name="password"/> </label></div>
+            <div><input type="submit" value="Sign In"/></div>
+        </form>
+        <div >
+            <a th:href="@{'/staffreg'}">Sign Up</a>
         </div>
     </div>
 </div>
-
 </body>
 </html>

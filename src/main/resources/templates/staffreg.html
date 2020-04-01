@@ -13,7 +13,7 @@
 
         <div class="col-md-10 d-flex justify-content-center mx-auto ">
 
-            <form  action="/registration-staff" th:object="${staff}" method="POST" class="form-inline py-5 justify-content-center "  style="width: 80%; margin-top: 20%">
+            <form action="#" th:action="@{'/registration-staff'}" th:object="${staff}" method="POST" class="form-inline py-5 justify-content-center "  style="width: 80%; margin-top: 20%">
 
 
                 <input type="email" th:field="*{email}"  style="width: 60%;" class="form-control px-5 py-4 mr-2" id="exampleInputEmail1" aria-describedby="Email" placeholder="Enter email">

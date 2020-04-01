@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -57,6 +55,23 @@ public class ConferenceController {
         model.addAttribute("conferenceId", confId);
         model.addAttribute("cookieValue", cookieValue);
         return "topicquestions";
+    }
+
+    /**
+     * delete email from cookie
+     * and return to page "/"
+     */
+    @GetMapping("/logout/{confId}")
+    String signOut(@PathVariable Long confId,
+                   HttpServletResponse response) {
+
+
+        Cookie newCookie = new Cookie("testCookie", "no_cookie");
+        newCookie.setMaxAge(0);
+        newCookie.setPath("/");
+        response.addCookie(newCookie);
+
+        return "forward:/" + confId;
     }
 
     public void sendError(HttpServletResponse response) throws IOException {

@@ -89,20 +89,5 @@ public class VisitorController {
 
     }
 
-    /**
-     * delete email from cookie
-     * and return to page "/"
-     */
-    @PostMapping("/logout/{confId}")
-    String signOut(@PathVariable Long confId,
-                   HttpServletResponse response) {
 
-
-        Cookie newCookie = new Cookie("testCookie", "no_cookie");
-        newCookie.setMaxAge(0);
-        newCookie.setPath("/");
-        response.addCookie(newCookie);
-
-        return "redirect:/" + confId;
-    }
 }
