@@ -9,7 +9,11 @@ import java.util.List;
 
 @Repository
 public interface VisitorRepository extends JpaRepository<Visitor, Long> {
+
+
     Visitor findByEmailAndVisit(String email, Conference conference);
 
     List<Visitor> findAll();
+
+
 }

@@ -1,10 +1,8 @@
 package com.advcourse.conferenceassistant.controller;
 
-import com.advcourse.conferenceassistant.model.Visitor;
-import com.advcourse.conferenceassistant.service.impl.VisitorServiceImpl;
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.repository.ConferenceRepository;
-import com.advcourse.conferenceassistant.service.VisitorServiceImpl;
+import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +23,7 @@ import java.util.Optional;
 public class VisitorController {
 
     @Autowired
-    private VisitorServiceImpl service;
+    private VisitorService service;
 
     @Autowired
     private ConferenceRepository conferenceRepository;

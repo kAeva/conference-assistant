@@ -2,6 +2,7 @@ package com.advcourse.conferenceassistant.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class TempControler {
@@ -16,6 +17,7 @@ public class TempControler {
     public String dashPagep() {
         return "staffdashboard";
     }
+
     @GetMapping("/schedule")
     public String schPage() {
         return "schedule";
