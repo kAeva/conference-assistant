@@ -39,13 +39,13 @@
     <form>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="inputEmail4">Name</label>
-                <input type="email" class="form-control" id="inputEmail4">
+                <label for="inputName">Name</label>
+                <input type="email" class="form-control" id="inputName" placeholder="Conference Name">
             </div>
             <div class="form-group col-md-6">
                 <label for="conf-time">Date and Time</label>
                 <input type="datetime-local" class="form-control" id="conf-time"
-                       name="meeting-time" value="2018-06-12T19:30"
+                       name="meeting-time" value=""
                        min="2020-04-21T00:00" max="2020-09-14T00:00">
             </div>
         </div>
@@ -57,6 +57,9 @@
             <label for="inputDescr">Description</label>
             <textarea type="text" class="form-control" id="inputDescr" placeholder="Apartment, studio, or floor"></textarea>
         </div>
+
+        <!--            TODO: Do wee need this image input here?-->
+
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="uploadImage">Upload an image</label>
@@ -68,15 +71,11 @@
 
         </div>
 
+        <!--this button in case of success should do redirect to /staffdashboard -->
         <button type="submit" class="btn btn-info">Save</button>
     </form>
 
 </div>
-
-<footer class="">
-    <div class="footer-copyright text-center py-3">© 2020 Copyright:
-        <a href=""> JA Course [team 1]</a>
-    </div>
-</footer>
+<div th:replace="fragments :: footer"></div>
 </body>
 </html>

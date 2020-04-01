@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-    <title>Conferences Admin Panel</title>
+    <title>Topic LIVE Dashboard</title>
 </head>
 <body>
 
@@ -26,15 +26,18 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-                <a  class="nav-link" th:href="@{'/logout_admin'}">Log out</a>
+                <a class="nav-link" href="#">Log out</a>
             </li>
         </ul>
     </div>
 </nav>
 
 <div class="container-fluid mx-auto mt-5">
-    <h1 class="text-center">Conferences</h1>
-
+    <h1 class="text-center">Deconstructing Deep Learning: LIVE Dashboard</h1>
+    <div class="mx-auto col-sm-8">
+    <a class="btn btn-success" href="/"><i class="far fa-play-circle"></i></a>
+    <a class="btn btn-danger" href="#" value="" name=""><i class="far fa-stop-circle"></i></a>
+    </div>
 </div>
 
 
@@ -43,44 +46,35 @@
 
         <thead class="thead">
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Details</th>
-            <th scope="col">Topics</th>
-            <th scope="col">Date</th>
+            <th scope="col">Likes</th>
+            <th scope="col">Question</th>
+            <th scope="col">User</th>
+            <th scope="col">Answered?</th>
 
             <th></th>
-            <th><a class="btn btn-primary btn-sm" href="/conference-add">Add</a></th>
 
         </tr>
         </thead>
 
         <tbody>
 
-            <tr>
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Conf name</a></th>
-                <td>Super popular and informative description</td>
-                <td>10</td>
-                <td>10 Apr</td>
+        <tr>
+            <th scope="row">15 <i class="fas fa-grin-hearts"></i></th>
+            <td>What is the biggest challenge you had in your practice?</td>
+            <td>imagenius</td>
+            <td><input type="checkbox" checked data-toggle="toggle"></td>
 
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
+        </tr>
+        <tr>
+            <th scope="row">11 <i class="fas fa-grin-hearts"></i></th>
+            <td>What should I do next, right after this lecture, to become an AI pro?</td>
+            <td>wikihowyouknow</td>
+            <td><input type="checkbox" aria-label="Checkbox for following text input"></td>
 
-            </tr>
-            <tr>
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Big Data Conference</a></th>
-                <td>Big Data Conference Europe is a three-day conference with technical talks in the fields of Big Data,</td>
-                <td>7</td>
-                <td>26 Apr</td>
-
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
-
-            </tr>
-
+        </tr>
         </tbody>
     </table>
+    <td><a class="btn btn-success float-right" href="/"><i class="fas fa-hourglass-start"></i> Save</a></td>
 
 </div>
 
