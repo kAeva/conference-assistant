@@ -1,4 +1,4 @@
 CREATE SCHEMA conference;
-CREATE USER 'cfadmin'@'localhost' IDENTIFIED BY 'cfadmin';
-GRANT ALL PRIVILEGES ON * . * TO 'cfadmin'@'localhost';
+CREATE USER 'conference'@'localhost' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON * . * TO 'conference'@'localhost';
 FLUSH PRIVILEGES;
