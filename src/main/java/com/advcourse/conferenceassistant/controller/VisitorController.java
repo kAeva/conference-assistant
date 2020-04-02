@@ -1,9 +1,9 @@
 package com.advcourse.conferenceassistant.controller;
 
-import com.advcourse.conferenceassistant.model.Conference;
-import com.advcourse.conferenceassistant.repository.ConferenceRepository;
+import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
 import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
+import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.Optional;
 
 @Controller
 public class VisitorController {
@@ -26,11 +24,11 @@ public class VisitorController {
     private VisitorService service;
 
     @Autowired
-    private ConferenceRepository conferenceRepository;
+    private ConferenceServiceImpl conferenceService;
 
     @GetMapping("/")
-    public void homePage(HttpServletResponse response) throws IOException {
-        response.sendError(404, "Conference not found");
+    public void homePage() {
+       throw new NoSuchConferenceException();
 
     }
 
@@ -38,22 +36,12 @@ public class VisitorController {
      * page with form to input visitor email
      */
     @GetMapping("/{confId}")
-    public String homePage(@PathVariable Long confId,
-                           Model model, HttpServletResponse response) throws IOException {
+    public String homePage(@PathVariable Long confId, Model model) {
 
         VisitorDto dto = new VisitorDto();
-        Conference conference = new Conference();
-
-        Optional<Conference> byId = conferenceRepository.findById(confId);
-        // rerurn 404 when conference doesn't exists
-        if (byId.isEmpty()) {
-            response.sendError(404, "Conference not found");
-        } else {
-            conference = byId.get();
-
-        }
-        model.addAttribute("conference", conference);
         dto.setConfId(confId);
+
+        model.addAttribute("conference", conferenceService.findById(confId));
         model.addAttribute("visitor", dto);
 
         return "index";

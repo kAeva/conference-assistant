@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface ConferenceRepository extends JpaRepository<Conference, Long> {
 //    List<Conference> findByNameIsLike(String name);
 
+
+    @Override
+    List<Conference> findAll();
 }

@@ -4,6 +4,8 @@ import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConferenceMapper {
 
@@ -24,5 +26,9 @@ public class ConferenceMapper {
                 dto.getStart(),
                 dto.getEnd(),
                 dto.getAddress() );
+    }
+
+    public static List<Conference> fromDto(List <ConferenceDto> dto){
+        return dto.stream().map(e->fromDto(e)).collect(Collectors.toList());
     }
 }

@@ -12,8 +12,8 @@
 <body>
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href=""><i class="fab fa-napster"></i> LIVE Conference</a>
-    <i class="navbar-brand" th:text="${cookieValue}"> Visitor email</i>
-    <a class="navbar-brand" th:href="@{'/logout/'+${conferenceId}}"> <i class="far fa-sad-tear"></i> Leave</a>
+    <i class="navbar-brand" th:text="${visitor.getEmail()}"> Visitor email</i>
+    <a class="navbar-brand" th:href="@{'/logout/'+${visitor.getConfId()}}"> <i class="far fa-sad-tear"></i> Leave</a>
 
 </nav>
 <nav class="nav py-3 justify-content-center">
