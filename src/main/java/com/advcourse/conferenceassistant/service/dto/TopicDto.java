@@ -19,4 +19,5 @@ public class TopicDto {
     private String speakerdesc;
     private LocalDateTime start;
     private LocalDateTime end;
+    private long confId;
 }
