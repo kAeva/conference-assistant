@@ -9,11 +9,10 @@ import com.advcourse.conferenceassistant.service.dto.mapper.StaffMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
-import java.util.HashSet;
 import java.util.Set;
 
 @Repository
@@ -24,6 +23,8 @@ public class StaffService implements StaffServiceImpl {
     @Autowired
     private StaffRepository staffRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      *adding staff to db
@@ -38,6 +39,7 @@ public class StaffService implements StaffServiceImpl {
         if (staff.getRoles()==null){
             staff.setRoles(Set.of(Role.MODERATOR));
         }
+        staff.setPass(passwordEncoder.encode(staff.getPass()));
         return StaffMapper.toDto(staffRepository.save(staff));
 
     }
