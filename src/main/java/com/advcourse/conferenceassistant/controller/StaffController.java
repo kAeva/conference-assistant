@@ -51,10 +51,9 @@ public class StaffController {
     }
 
     @GetMapping("/stafflogin")
-    public String getLoginPage(){
+    public String getLoginPage() {
         return "/stafflogin";
-}
-
+    }
 
 
     @GetMapping("/logout_admin")
@@ -68,21 +67,21 @@ public class StaffController {
     }
 
     @GetMapping("/delete-conference/{confId}")
-    public String deleteConf(@PathVariable Long confId){
+    public String deleteConf(@PathVariable Long confId) {
         coservice.deleteById(confId);
         return "forward:/dashboard";
     }
 
     @GetMapping("/dashboard")
     public String dashPage(Model model) {
-       model.addAttribute("Conflist",coservice.findAll());
+        model.addAttribute("Conflist", coservice.findAll());
         return "staffdashboard";
     }
 
 
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model) {
-        model.addAttribute("Confid",coservice.findById(confId));
+        model.addAttribute("Confid", coservice.findById(confId));
         return "conference-page";
     }
 
@@ -91,21 +90,30 @@ public class StaffController {
 
         return "conference-dashboard";
     }
+
     @GetMapping("/conferenceadd")
     public String addConf() {
         return "conference-add";
     }
+
     @PostMapping("/conference-add")
-    public String addConf(@ModelAttribute("conference")ConferenceDto dto) {
+    public String addConf(@ModelAttribute("conference") ConferenceDto dto) {
         coservice.saveConference(dto);
 
         return "redirect:/dashboard";
     }
 
     @GetMapping("/conference-edit/{confId}")
-    public String confEditPage() {
-
+    public String confEditPage(@PathVariable Long confId, Model model) {
+        model.addAttribute("conf", coservice.findById(confId));
         return "conference-edit";
+    }
+
+    @PostMapping("/conference-edit/{confId}")
+    public String editConf(@PathVariable Long confId, ConferenceDto dto) {
+        System.out.println(dto);
+        coservice.update(confId,dto);
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/topic-dashboard/{topicfId}")

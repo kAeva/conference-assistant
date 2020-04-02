@@ -23,8 +23,8 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public ConferenceDto findById(Long id) {
         try {
-           return ConferenceMapper.toDto(conferenceRepository.findById(id).get());
-        }catch (NoSuchElementException e){
+            return ConferenceMapper.toDto(conferenceRepository.findById(id).get());
+        } catch (NoSuchElementException e) {
             throw new NoSuchConferenceException();
         }
 
@@ -34,7 +34,18 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public ConferenceDto saveConference(ConferenceDto dto) {
         Conference conference = conferenceRepository.saveAndFlush(ConferenceMapper.fromDto(dto));
-    return ConferenceMapper.toDto(conference);
+        return ConferenceMapper.toDto(conference);
+    }
+
+    @Override
+    public ConferenceDto update(Long confId, ConferenceDto dto) {
+        ConferenceDto conf = findById(confId);
+        conf.setTheme(dto.getTheme());
+        conf.setAddress(dto.getAddress());
+        conf.setDescription(dto.getDescription());
+        conf.setStart(dto.getStart());
+        conf.setEnd(dto.getEnd());
+        return saveConference(conf);
     }
 
     @Override

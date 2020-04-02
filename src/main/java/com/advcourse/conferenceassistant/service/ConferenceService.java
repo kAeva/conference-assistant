@@ -10,4 +10,5 @@ public interface ConferenceService {
     List<ConferenceDto> findAll();
     void deleteById(Long id);
     ConferenceDto saveConference(ConferenceDto dto);
+    ConferenceDto update(Long confId, ConferenceDto dto);
 }
