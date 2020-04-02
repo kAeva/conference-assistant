@@ -46,7 +46,8 @@
             <th scope="col">Name</th>
             <th scope="col">Details</th>
             <th scope="col">Topics</th>
-            <th scope="col">Date</th>
+            <th scope="col">StartDate</th>
+            <th scope="col">EndDate</th>
 
             <th></th>
             <th><a class="btn btn-primary btn-sm" href="/conference-add">Add</a></th>
@@ -56,26 +57,16 @@
 
         <tbody>
 
-            <tr>
+            <tr th:each="conf:${Conflist}">
 <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Conf name</a></th>
-                <td>Super popular and informative description</td>
+                <th scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a></th>
+                <td th:text="${conf.getTheme()}"></td>
                 <td>10</td>
-                <td>10 Apr</td>
+                <td th:text="${conf.getStart()}"></td>
+                <td th:text="${conf.getEnd()}"></td>
 
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
-
-            </tr>
-            <tr>
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a href="/conference-dashboard">Big Data Conference</a></th>
-                <td>Big Data Conference Europe is a three-day conference with technical talks in the fields of Big Data,</td>
-                <td>7</td>
-                <td>26 Apr</td>
-
-                <td><a class="btn btn-danger btn-sm" href="#" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" href="/conference-page">Edit</a></td>
+                <td><a class="btn btn-danger btn-sm" th:href="@{'/delete-conference/' + ${conf.getId()}}" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
+                <td><a class="btn btn-success btn-sm" th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a></td>
 
             </tr>
 

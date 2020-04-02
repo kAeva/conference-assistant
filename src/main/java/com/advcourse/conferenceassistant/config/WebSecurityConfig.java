@@ -21,8 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/conference-add").hasAnyAuthority("ADMIN")
-                .antMatchers("/topic-add","/dashboard").hasAnyAuthority("ADMIN","MODERATOR")
+                .antMatchers("/conference-add/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/topic-add/**","/dashboard","/conference-page/**","/conference-dashboard/**").hasAnyAuthority("ADMIN","MODERATOR")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
