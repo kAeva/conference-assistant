@@ -13,4 +13,10 @@ public interface ConferenceRepository extends JpaRepository<Conference, Long> {
     List<Conference> findAll();
     void deleteByid(Long id);
 
+
+    @Override
+    <S extends Conference> S saveAndFlush(S s);
+
+    @Override
+    List<Conference> findAll();
 }

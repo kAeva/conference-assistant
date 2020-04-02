@@ -3,7 +3,7 @@ package com.advcourse.conferenceassistant.service.dto.mapper;
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +23,9 @@ public class ConferenceMapper {
         return dto.stream().map(e->toDto(e)).collect(Collectors.toList());
     }
 
-   /* public static List<Conference> fromDto(List<ConferenceDto> dto){
+   public static List<Conference> fromDto(List<ConferenceDto> dto){
         return dto.stream().map(e->fromDto(e)).collect(Collectors.toList());
-    }*/
+    }
 
     public static Conference fromDto(ConferenceDto dto){
         return new Conference(
@@ -36,5 +36,4 @@ public class ConferenceMapper {
                 dto.getEnd(),
                 dto.getAddress() );
     }
-
 }

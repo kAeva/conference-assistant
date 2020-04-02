@@ -9,4 +9,5 @@ public interface ConferenceService {
     ConferenceDto findById(Long id);
     List<ConferenceDto> findAll();
     void deleteById(Long id);
+    ConferenceDto saveConference(ConferenceDto dto);
 }
