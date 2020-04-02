@@ -1,7 +1,6 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.ConferenceService;
 import com.advcourse.conferenceassistant.service.StaffServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 
 @Controller
@@ -46,7 +44,7 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "staffreg";
         }
-        StaffDto registered = service.registerNewStaffDtoAccount(accountStaff);
+        service.registerNewStaffDtoAccount(accountStaff);
         return "redirect:/dashboard";
 
 
