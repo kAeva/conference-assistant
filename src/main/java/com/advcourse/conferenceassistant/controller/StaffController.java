@@ -111,7 +111,6 @@ public class StaffController {
 
     @PostMapping("/conference-edit/{confId}")
     public String editConf(@PathVariable Long confId, ConferenceDto dto) {
-        System.out.println(dto);
         coservice.update(confId,dto);
         return "redirect:/dashboard";
     }
