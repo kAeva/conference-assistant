@@ -81,10 +81,6 @@ public class StaffController {
         return "staffdashboard";
     }
 
-    @PostMapping("/dashboard")
-    public String dashPagep() {
-        return "staffdashboard";
-    }
 
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model) {
@@ -97,7 +93,10 @@ public class StaffController {
 
         return "conference-dashboard";
     }
-
+    @GetMapping("/conferenceadd")
+    public String addConf() {
+        return "conference-add";
+    }
     @PostMapping("/conference-add")
     public String addConf(@ModelAttribute("conference")ConferenceDto dto) {
         coservice.saveConference(dto);
