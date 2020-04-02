@@ -28,4 +28,10 @@ public class ConferenceServiceImpl implements ConferenceService {
 
 
     }
+
+    @Override
+    public ConferenceDto saveConference(ConferenceDto dto) {
+        Conference conference = conferenceRepository.saveAndFlush(ConferenceMapper.fromDto(dto));
+    return ConferenceMapper.toDto(conference);
+    }
 }

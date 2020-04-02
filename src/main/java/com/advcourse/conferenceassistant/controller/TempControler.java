@@ -1,12 +1,18 @@
 package com.advcourse.conferenceassistant.controller;
 
+import com.advcourse.conferenceassistant.service.ConferenceService;
+import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class TempControler {
 
+    @Autowired
+   private ConferenceService conferenceService;
 
     @GetMapping("/dashboard")
     public String dashPage() {
@@ -30,6 +36,14 @@ public class TempControler {
     public String confAddPage() {
         return "conference-add";
     }
+
+    @PostMapping("/conference-add")
+    public String addConf(@ModelAttribute("conference")ConferenceDto dto) {
+        conferenceService.saveConference(dto);
+
+        return "redirect:/dashboard";
+    }
+
     @GetMapping("/topic-add")
     public String topicAddPage() {
         return "topic-add";
