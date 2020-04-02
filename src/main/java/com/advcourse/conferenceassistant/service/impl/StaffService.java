@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
-import java.util.HashSet;
 import java.util.Set;
 
 @Repository

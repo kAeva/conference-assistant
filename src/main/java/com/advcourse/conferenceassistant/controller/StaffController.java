@@ -98,10 +98,11 @@ public class StaffController {
         return "conference-dashboard";
     }
 
-    @GetMapping("/conference-add")
-    public String confAddPage() {
+    @PostMapping("/conference-add")
+    public String addConf(@ModelAttribute("conference")ConferenceDto dto) {
+        coservice.saveConference(dto);
 
-        return "conference-add";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/conference-edit/{confId}")

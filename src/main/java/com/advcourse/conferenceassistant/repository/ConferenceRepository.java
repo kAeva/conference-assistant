@@ -16,7 +16,4 @@ public interface ConferenceRepository extends JpaRepository<Conference, Long> {
 
     @Override
     <S extends Conference> S saveAndFlush(S s);
-
-    @Override
-    List<Conference> findAll();
 }
