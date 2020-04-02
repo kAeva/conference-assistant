@@ -8,7 +8,14 @@ import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 public class QuestionMapper {
 
     public static QuestionDto toDto(Question e, boolean isLikedByThisVisitor, int likesQuantity) {
-        return new QuestionDto(e.getId(), e.getQuestion(), e.getAuthor().getId(), e.getTopic().getId(), e.getTime(), isLikedByThisVisitor, likesQuantity);
+        return new QuestionDto(
+                e.getId(),
+                e.getQuestion(),
+                e.getAuthor().getId(),
+                e.getTopic().getId(),
+                e.getTime(),
+                isLikedByThisVisitor,
+                likesQuantity);
     }
 
     public static Question fromDto(QuestionDto dto) {

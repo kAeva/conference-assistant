@@ -9,8 +9,14 @@ import java.util.Set;
 public class StaffMapper {
 
     public static StaffDto toDto(Staff entity){
-
-        return new StaffDto(entity.getId(),entity.getEmail(),entity.getPass(),entity.getName(),entity.getSurname(),entity.getColab(),entity.getRoles());
+        return new StaffDto(
+                entity.getId(),
+                entity.getEmail(),
+                entity.getPass(),
+                entity.getName(),
+                entity.getSurname(),
+                entity.getColab(),
+                entity.getRoles());
     }
 
     public static Staff fromDto(StaffDto dto){
@@ -23,7 +29,7 @@ public class StaffMapper {
         staff.setSurname(dto.getSurname());
         staff.setColab(dto.getColab_id());
         staff.setRoles(dto.getRoles());
+
         return staff;
     }
 }
-

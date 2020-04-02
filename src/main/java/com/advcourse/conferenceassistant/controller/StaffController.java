@@ -41,15 +41,12 @@ public class StaffController {
         StaffDto registered = service.registerNewStaffDtoAccount(accountStaff);
         return "redirect:/dashboard";
 
-
     }
 
-@GetMapping("/stafflogin")
-    public String getLoginPage(){
-        return "/stafflogin";
-}
-
-
+    @GetMapping("/stafflogin")
+        public String getLoginPage(){
+            return "/stafflogin";
+    }
 
     @GetMapping("/logout_admin")
     public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {
@@ -60,5 +57,4 @@ public class StaffController {
 
         return "redirect:/stafflogin?logout";
     }
-
 }

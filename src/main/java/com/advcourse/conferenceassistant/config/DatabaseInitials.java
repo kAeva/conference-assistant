@@ -279,7 +279,6 @@ public class DatabaseInitials {
             question5.setAuthor(visitor6);
             question5.setLikes(new HashSet<>(Arrays.asList(visitor5, visitor1)));
             question5 = questionRepository.save(question5);
-
         };
     }
 }

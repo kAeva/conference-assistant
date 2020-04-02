@@ -16,6 +16,7 @@ public class ConferenceMapper {
                 entity.getEnd(),
                 entity.getAddress() );
     }
+
     public static Conference fromDto(ConferenceDto dto){
         return new Conference(
                 dto.getId(),
