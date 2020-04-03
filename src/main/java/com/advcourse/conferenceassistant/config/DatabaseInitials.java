@@ -120,7 +120,7 @@ public class DatabaseInitials {
             Staff staff5 = new Staff();
             staff5.setName("PetroSamePass");
             staff5.setSurname("Petrenko");
-            staff5.setEmail("follov@gmail.com");
+            staff5.setEmail("follovPetr@gmail.com");
             staff5.setPass("1234");
             staff5.setRoles(rolesModerator);
             staff5.setColab(conf2);
@@ -138,7 +138,7 @@ public class DatabaseInitials {
             Staff staff7 = new Staff();
             staff7.setName("Sarah");
             staff7.setSurname("Connor");
-            staff7.setEmail("johnC@uk.net");
+            staff7.setEmail("sara@uk.net");
             staff7.setPass("12345");
             staff7.setRoles(rolesAll);
             staff7.setColab(conf3);
