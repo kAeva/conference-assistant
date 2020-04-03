@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Controller
@@ -92,12 +94,16 @@ public class StaffController {
     }
 
     @GetMapping("/conferenceadd")
-    public String addConf() {
+    public String addConf(Model model) {
+
+        /*ConferenceDto dto = new ConferenceDto();
+        model.addAttribute("conf",dto);*/
         return "conference-add";
     }
 
     @PostMapping("/conference-add")
     public String addConf(@ModelAttribute("conference") ConferenceDto dto) {
+
         coservice.saveConference(dto);
 
         return "redirect:/dashboard";
@@ -111,8 +117,7 @@ public class StaffController {
 
     @PostMapping("/conference-edit/{confId}")
     public String editConf(@PathVariable Long confId, ConferenceDto dto) {
-        System.out.println(dto);
-        coservice.update(confId,dto);
+        coservice.update(confId, dto);
         return "redirect:/dashboard";
     }
 

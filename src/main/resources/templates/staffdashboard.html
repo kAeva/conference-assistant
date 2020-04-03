@@ -60,7 +60,7 @@
             <tr th:each="conf:${Conflist}">
 <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
                 <th scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a></th>
-                <td th:text="${conf.getTheme()}"></td>
+                <td th:text="${conf.getDescription()}"></td>
                 <td>10</td>
                 <td th:text="${conf.getStart()}"></td>
                 <td th:text="${conf.getEnd()}"></td>
