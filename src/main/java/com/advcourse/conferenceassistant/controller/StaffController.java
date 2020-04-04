@@ -5,6 +5,7 @@ import com.advcourse.conferenceassistant.service.StaffServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
+import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Controller
@@ -31,6 +30,9 @@ public class StaffController {
 
     @Autowired
     private ConferenceServiceImpl coservice;
+
+    @Autowired
+    ConferenceValidator conferenceValidator;
 
     @GetMapping("/staffreg")
     public String stafflogin(Model model) {
@@ -95,28 +97,46 @@ public class StaffController {
 
     @GetMapping("/conferenceadd")
     public String addConf(Model model) {
-
-        /*ConferenceDto dto = new ConferenceDto();
-        model.addAttribute("conf",dto);*/
+        ConferenceDto dto = new ConferenceDto();
+        model.addAttribute("conference", dto);
         return "conference-add";
     }
 
     @PostMapping("/conference-add")
-    public String addConf(@ModelAttribute("conference") ConferenceDto dto) {
+    public String addConf(
+            @ModelAttribute("conference") ConferenceDto dto,
+            BindingResult bindingResult) {
 
+       /**
+       * End or start date shouldn't be empty
+       * End date should be greater than start date
+       * */
+        conferenceValidator.validate(dto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "conference-add";
+        }
         coservice.saveConference(dto);
-
         return "redirect:/dashboard";
     }
 
     @GetMapping("/conference-edit/{confId}")
     public String confEditPage(@PathVariable Long confId, Model model) {
-        model.addAttribute("conf", coservice.findById(confId));
+        model.addAttribute("conference", coservice.findById(confId));
         return "conference-edit";
     }
 
     @PostMapping("/conference-edit/{confId}")
-    public String editConf(@PathVariable Long confId, ConferenceDto dto) {
+    public String editConf(@PathVariable Long confId,
+                           @ModelAttribute("conference") ConferenceDto dto,BindingResult bindingResult) {
+        /**
+         * End or start date shouldn't be empty
+         * End date should be greater than start date
+         * */
+        conferenceValidator.validate(dto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "conference-edit";
+        }
         coservice.update(confId, dto);
         return "redirect:/dashboard";
     }
