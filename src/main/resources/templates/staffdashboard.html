@@ -64,21 +64,28 @@
         <!--${colab_id} == ${conf.getId()}-->
         <tr th:each="conf:${Conflist}">
             <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-            <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}"scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
+            <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
+                scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
             </th>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getDescription()}"></td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}">10</td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getStart()}"></td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getEnd()}"></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
+                th:text="${conf.getDescription()}"></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}">10</td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
+                th:text="${conf.getStart()}"></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
+                th:text="${conf.getEnd()}"></td>
 
-            <!--See only 'ADMIN'-->
-            <div sec:authorize="hasAnyAuthority('ADMIN')">
-                <td><a class="btn btn-danger btn-sm" th:href="@{'/delete-conference/' + ${conf.getId()}}" value=""
-                       name=""><i class="fas fa-skull-crossbones"></i></a></td>
-            </div>
-            <!--See only 'ADMIN'-->
 
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}"><a class="btn btn-success btn-sm" th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} and ${#lists.contains(roles,'ADMIN')}"><a class="btn btn-danger btn-sm"
+                                                                      th:href="@{'/delete-conference/' + ${conf.getId()}}"
+                                                                      value=""
+                                                                      name=""><i
+                    class="fas fa-skull-crossbones"></i></a></td>
+
+
+            <td th:if="${#lists.contains(colabs_id,conf.getId())}"><a class="btn btn-success btn-sm"
+                                                                      th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a>
+            </td>
 
         </tr>
 

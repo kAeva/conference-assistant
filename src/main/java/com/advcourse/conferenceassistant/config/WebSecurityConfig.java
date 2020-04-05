@@ -40,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/conferenceadd").hasAnyAuthority("ADMIN")
-                .antMatchers("/topic-add/**", "/dashboard", "/conference-page/**", "/conference-dashboard/**").hasAnyAuthority("ADMIN", "MODERATOR")
+                .antMatchers("/topic-add/**", "/dashboard", "/conference-page/**", "/conference-dashboard/**").hasAnyAuthority("ADMIN", "MODERATOR","SUPERVISOR")
+                .antMatchers("/staflist").hasAnyAuthority("SUPERVISOR")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
