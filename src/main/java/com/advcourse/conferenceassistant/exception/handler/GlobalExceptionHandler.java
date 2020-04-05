@@ -2,8 +2,10 @@ package com.advcourse.conferenceassistant.exception.handler;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
 import com.advcourse.conferenceassistant.exception.NoSuchVisitorException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,6 +20,12 @@ public class GlobalExceptionHandler {
     public String noSuchVisitorExceptionHandler() {
 
         return "visitorError";
+    }
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String badRequest() {
+
+        return "badrequest-page";
     }
 
 }
