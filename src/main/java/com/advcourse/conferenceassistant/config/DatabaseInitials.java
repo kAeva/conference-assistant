@@ -8,13 +8,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
-
-
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 public class DatabaseInitials {
@@ -145,6 +144,11 @@ public class DatabaseInitials {
             staff7.setColab(Set.of(conf3));
             staff7.setPass(passwordEncoder.encode(staff7.getPass()));
 
+            Staff staff8 = new Staff();
+            staff8.setEmail("admin@gmail.com");
+            staff8.setPass("admin");
+            staff8.setRoles(Set.of(Role.SUPERVISOR));
+            staff8.setPass(passwordEncoder.encode(staff8.getPass()));
 
             staff1.setColab(Set.of(conf1,conf3));
             staff2.setColab(Set.of(conf1,conf2));
@@ -155,6 +159,7 @@ public class DatabaseInitials {
             staffRepository.save(staff5);
             staffRepository.save(staff6);
             staffRepository.save(staff7);
+            staffRepository.save(staff8);
 
             Topic topic1 = new Topic();
             topic1.setDescription("description Deconstructing Deep ");

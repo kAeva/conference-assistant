@@ -12,31 +12,29 @@ import java.util.stream.Collectors;
 
 public class StaffMapper {
 
-    public static StaffDto toDto(Staff entity){
+    public static StaffDto toDto(Staff entity) {
         Set<Long> colabsId = entity.getColab().stream().map(Conference::getId).collect(Collectors.toSet());
+
         return new StaffDto(
                 entity.getId(),
                 entity.getEmail(),
-                entity.getPass(),
                 entity.getName(),
                 entity.getSurname(),
+                entity.getPass(),
                 colabsId,
                 entity.getRoles());
     }
 
-    public static Staff fromDto(StaffDto dto){
-        Set<Conference> setConf= new HashSet<>();
-        Conference conf = new Conference();
-
+    public static Staff fromDto(StaffDto dto) {
+        Set<Conference> setConf = new HashSet<>();
         Set<Long> colabs_id = dto.getColabs_id();
-        if(colabs_id!=null){
-            for (Long id: colabs_id){
+        if (colabs_id != null) {
+            for (Long id : colabs_id) {
+                Conference conf = new Conference();
                 conf.setId(id);
                 setConf.add(conf);
             }
         }
-
-
         Staff staff = new Staff();
         staff.setId(dto.getId());
         String email = dto.getEmail();

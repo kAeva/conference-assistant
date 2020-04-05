@@ -4,6 +4,7 @@ import com.advcourse.conferenceassistant.model.Staff;
 import com.advcourse.conferenceassistant.service.StaffServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
+import com.advcourse.conferenceassistant.service.dto.mapper.ConferenceMapper;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -77,7 +79,7 @@ public class StaffController {
     @GetMapping("/delete-conference/{confId}")
     public String deleteConf(@PathVariable Long confId) {
         coservice.deleteById(confId);
-        return "forward:/dashboard";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/dashboard")
@@ -85,13 +87,10 @@ public class StaffController {
         List<ConferenceDto> dtoList = coservice.findAll();
 
         Set<Long> colabs_id = service.findByEmail(auth.getName()).getColabs_id();
-        Optional<String> admin = auth.getAuthorities().stream().map(e -> e.getAuthority()).filter(e -> e.equals("ADMIN")).findFirst();
-        String isAdmin = "";
-        if (admin.isPresent()) {
-            isAdmin = admin.get();
-        }
+        List<String> roles = auth.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
 
-        model.addAttribute("isAdmin", isAdmin);
+
+        model.addAttribute("roles", roles);
         model.addAttribute("colabs_id", List.copyOf(colabs_id));
         model.addAttribute("Conflist", dtoList);
 
@@ -123,7 +122,7 @@ public class StaffController {
     @PostMapping("/conference-add")
     public String addConf(
             @ModelAttribute("conference") ConferenceDto dto,
-            BindingResult bindingResult) {
+            BindingResult bindingResult, Authentication auth) {
 
         /**
          * End or start date shouldn't be empty
@@ -134,7 +133,8 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "conference-add";
         }
-        coservice.saveConference(dto);
+        ConferenceDto conferenceDto = coservice.saveConference(dto);
+        service.addConference(auth.getName(), conferenceDto);
         return "redirect:/dashboard";
     }
 
@@ -188,6 +188,11 @@ public class StaffController {
     public String topicEditPage() {
 
         return "topic-edit";
+    }
+
+    @GetMapping("/stafflist")
+    public String getStaffList() {
+        return "stafflist";
     }
 
 }
