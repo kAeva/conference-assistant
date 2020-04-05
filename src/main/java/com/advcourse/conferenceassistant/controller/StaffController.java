@@ -5,8 +5,10 @@ import com.advcourse.conferenceassistant.service.StaffServiceImpl;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
+import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 
 @Controller
@@ -29,6 +34,9 @@ public class StaffController {
 
     @Autowired
     private ConferenceServiceImpl coservice;
+
+    @Autowired
+    ConferenceValidator conferenceValidator;
 
     @GetMapping("/staffreg")
     public String stafflogin(Model model) {
@@ -73,15 +81,29 @@ public class StaffController {
     }
 
     @GetMapping("/dashboard")
-    public String dashPage(Model model) {
-        model.addAttribute("Conflist", coservice.findAll());
+    public String dashPage(Model model, Authentication auth) {
+        List<ConferenceDto> dtoList = coservice.findAll();
+
+        Set<Long> colabs_id = service.findByEmail(auth.getName()).getColabs_id();
+        Optional<String> admin = auth.getAuthorities().stream().map(e -> e.getAuthority()).filter(e -> e.equals("ADMIN")).findFirst();
+        String isAdmin = "";
+        if (admin.isPresent()) {
+            isAdmin = admin.get();
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("colabs_id", List.copyOf(colabs_id));
+        model.addAttribute("Conflist", dtoList);
+
         return "staffdashboard";
     }
 
 
     @GetMapping("/conference-page/{confId}")
-    public String confPage(@PathVariable Long confId, Model model) {
+    public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
+        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
+
         return "conference-page";
     }
 
@@ -92,26 +114,61 @@ public class StaffController {
     }
 
     @GetMapping("/conferenceadd")
-    public String addConf() {
+    public String addConf(Model model) {
+        ConferenceDto dto = new ConferenceDto();
+        model.addAttribute("conference", dto);
         return "conference-add";
     }
 
     @PostMapping("/conference-add")
-    public String addConf(@ModelAttribute("conference") ConferenceDto dto) {
-        coservice.saveConference(dto);
+    public String addConf(
+            @ModelAttribute("conference") ConferenceDto dto,
+            BindingResult bindingResult) {
 
+        /**
+         * End or start date shouldn't be empty
+         * End date should be greater than start date
+         * */
+        conferenceValidator.validate(dto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "conference-add";
+        }
+        coservice.saveConference(dto);
         return "redirect:/dashboard";
     }
 
     @GetMapping("/conference-edit/{confId}")
-    public String confEditPage(@PathVariable Long confId, Model model) {
-        model.addAttribute("conf", coservice.findById(confId));
+    public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
+
+        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
+        model.addAttribute("conference", coservice.findById(confId));
         return "conference-edit";
     }
 
+    private boolean isCurrentConfIdandStaffColabId(@PathVariable Long confId, Authentication auth) {
+        StaffDto staff = service.findByEmail(auth.getName());
+
+        if (staff.getColabs_id() != null && staff.getColabs_id().contains(confId)) {
+            return true;
+        }
+        return false;
+    }
+
     @PostMapping("/conference-edit/{confId}")
-    public String editConf(@PathVariable Long confId, ConferenceDto dto) {
-        coservice.update(confId,dto);
+    public String editConf(@PathVariable Long confId,
+                           @ModelAttribute("conference") ConferenceDto dto,
+                           BindingResult bindingResult) {
+
+        /**
+         * End or start date shouldn't be empty
+         * End date should be greater than start date
+         * */
+        conferenceValidator.validate(dto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "conference-edit";
+        }
+        coservice.update(confId, dto);
         return "redirect:/dashboard";
     }
 

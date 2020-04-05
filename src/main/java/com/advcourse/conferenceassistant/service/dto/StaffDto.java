@@ -19,7 +19,7 @@ public class StaffDto {
     private String name;
     private String surname;
     private String pass;
-    private Conference colab_id;
+    private Set<Long> colabs_id;
 
     private Set<Role> roles;
 

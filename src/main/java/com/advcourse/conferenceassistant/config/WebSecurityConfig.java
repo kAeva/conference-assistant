@@ -1,5 +1,6 @@
 package com.advcourse.conferenceassistant.config;
 
+import com.advcourse.conferenceassistant.exception.handler.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -27,13 +30,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(8);
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/conference-add").hasAnyAuthority("ADMIN")
-                .antMatchers("/topic-add/**","/dashboard","/conference-page/**","/conference-dashboard/**").hasAnyAuthority("ADMIN","MODERATOR")
+                .antMatchers("/conferenceadd").hasAnyAuthority("ADMIN")
+                .antMatchers("/topic-add/**", "/dashboard", "/conference-page/**", "/conference-dashboard/**").hasAnyAuthority("ADMIN", "MODERATOR")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -43,7 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout_admin"))
                 .logoutUrl("/logout_admin")
-                .permitAll();
+                .permitAll()
+
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler());
     }
 
     @Override

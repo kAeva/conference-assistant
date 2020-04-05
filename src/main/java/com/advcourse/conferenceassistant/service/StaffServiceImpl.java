@@ -6,4 +6,6 @@ public interface StaffServiceImpl {
 
     StaffDto registerNewStaffDtoAccount(StaffDto accountStaff);
 
+    StaffDto findByEmail(String email);
+
 }

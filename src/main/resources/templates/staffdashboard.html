@@ -11,7 +11,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="/dashboard"><i class="fas fa-crown"></i> Dashboard</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
+            aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -26,7 +27,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-                <a  class="nav-link" th:href="@{'/logout_admin'}">Log out</a>
+                <a class="nav-link" th:href="@{'/logout_admin'}">Log out</a>
             </li>
         </ul>
     </div>
@@ -50,25 +51,36 @@
             <th scope="col">EndDate</th>
 
             <th></th>
-            <th><a class="btn btn-primary btn-sm" href="/conferenceadd">Add</a></th>
 
+            <!--See only 'ADMIN'-->
+            <div sec:authorize="hasAnyAuthority('ADMIN')">
+                <th><a class="btn btn-primary btn-sm" href="/conferenceadd">Add</a></th>
+            </div>
+            <!---->
         </tr>
         </thead>
 
         <tbody>
+        <!--${colab_id} == ${conf.getId()}-->
+        <tr th:each="conf:${Conflist}">
+            <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
+            <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}"scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
+            </th>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getDescription()}"></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}">10</td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getStart()}"></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}" th:text="${conf.getEnd()}"></td>
 
-            <tr th:each="conf:${Conflist}">
-<!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-                <th scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a></th>
-                <td th:text="${conf.getTheme()}"></td>
-                <td>10</td>
-                <td th:text="${conf.getStart()}"></td>
-                <td th:text="${conf.getEnd()}"></td>
+            <!--See only 'ADMIN'-->
+            <div sec:authorize="hasAnyAuthority('ADMIN')">
+                <td><a class="btn btn-danger btn-sm" th:href="@{'/delete-conference/' + ${conf.getId()}}" value=""
+                       name=""><i class="fas fa-skull-crossbones"></i></a></td>
+            </div>
+            <!--See only 'ADMIN'-->
 
-                <td><a class="btn btn-danger btn-sm" th:href="@{'/delete-conference/' + ${conf.getId()}}" value="" name=""><i class="fas fa-skull-crossbones"></i></a></td>
-                <td><a class="btn btn-success btn-sm" th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a></td>
+            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${isAdmin.equals('ADMIN')}"><a class="btn btn-success btn-sm" th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a></td>
 
-            </tr>
+        </tr>
 
         </tbody>
     </table>
