@@ -8,6 +8,6 @@ public class ErrorPageContrroller {
 
     @GetMapping("/forbidden")
     public String getFrobidenPage(){
-        return "/main/resources/templates/forbidden-page.html";
+        return "forbidden-page";
     }
 }
