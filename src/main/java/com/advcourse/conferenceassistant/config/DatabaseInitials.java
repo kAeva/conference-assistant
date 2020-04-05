@@ -7,11 +7,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.*;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 public class DatabaseInitials {
@@ -33,10 +35,15 @@ public class DatabaseInitials {
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext cntx) {
+
         return args -> {
 
             Set<Role> rolesAll = Set.of(Role.ADMIN, Role.MODERATOR);
             Set<Role> rolesModerator = Set.of(Role.MODERATOR);
+
+
+            PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(8);
+
 
 
             Staff staff1 = new Staff();
@@ -45,6 +52,7 @@ public class DatabaseInitials {
             staff1.setEmail("liskovbrbr@mail.com");
             staff1.setPass("super34secret9pass");
             staff1.setRoles(rolesModerator);
+            staff1.setPass(passwordEncoder.encode(staff1.getPass()));
 
 
             Staff staff2 = new Staff();
@@ -53,6 +61,7 @@ public class DatabaseInitials {
             staff2.setEmail("dark_lord@sith.com");
             staff2.setPass("darkforce");
             staff2.setRoles(rolesAll);
+            staff2.setPass(passwordEncoder.encode(staff2.getPass()));
 
 
             Conference conf1 = new Conference();
@@ -95,8 +104,8 @@ public class DatabaseInitials {
             staff3.setEmail("iii@gmail.com");
             staff3.setPass("123");
             staff3.setRoles(rolesAll);
-            staff3.setColab(conf2);
-
+            staff3.setColab(Set.of(conf2));
+            staff3.setPass(passwordEncoder.encode(staff3.getPass()));
 
             Staff staff4 = new Staff();
             staff4.setName("Petro");
@@ -104,17 +113,18 @@ public class DatabaseInitials {
             staff4.setEmail("follov@gmail.com");
             staff4.setPass("1234");
             staff4.setRoles(rolesModerator);
-            staff4.setColab(conf2);
+            staff4.setColab(Set.of(conf2));
+            staff4.setPass(passwordEncoder.encode(staff4.getPass()));
 
 
             Staff staff5 = new Staff();
             staff5.setName("PetroSamePass");
             staff5.setSurname("Petrenko");
-            staff5.setEmail("follov@gmail.com");
+            staff5.setEmail("follovPetr@gmail.com");
             staff5.setPass("1234");
             staff5.setRoles(rolesModerator);
-            staff5.setColab(conf2);
-
+            staff5.setColab(Set.of(conf2));
+            staff5.setPass(passwordEncoder.encode(staff5.getPass()));
 
             Staff staff6 = new Staff();
             staff6.setName("John");
@@ -122,20 +132,26 @@ public class DatabaseInitials {
             staff6.setEmail("johnC@uk.net");
             staff6.setPass("12");
             staff6.setRoles(rolesModerator);
-            staff6.setColab(conf3);
-
+            staff6.setColab(Set.of(conf3));
+            staff6.setPass(passwordEncoder.encode(staff6.getPass()));
 
             Staff staff7 = new Staff();
             staff7.setName("Sarah");
             staff7.setSurname("Connor");
-            staff7.setEmail("johnC@uk.net");
+            staff7.setEmail("sara@uk.net");
             staff7.setPass("12345");
             staff7.setRoles(rolesAll);
-            staff7.setColab(conf3);
+            staff7.setColab(Set.of(conf3));
+            staff7.setPass(passwordEncoder.encode(staff7.getPass()));
 
+            Staff staff8 = new Staff();
+            staff8.setEmail("admin@gmail.com");
+            staff8.setPass("admin");
+            staff8.setRoles(Set.of(Role.SUPERVISOR));
+            staff8.setPass(passwordEncoder.encode(staff8.getPass()));
 
-            staff1.setColab(conf1);
-            staff2.setColab(conf1);
+            staff1.setColab(Set.of(conf1,conf3));
+            staff2.setColab(Set.of(conf1,conf2));
             staffRepository.save(staff1);
             staffRepository.save(staff2);
             staffRepository.save(staff3);
@@ -143,6 +159,7 @@ public class DatabaseInitials {
             staffRepository.save(staff5);
             staffRepository.save(staff6);
             staffRepository.save(staff7);
+            staffRepository.save(staff8);
 
             Topic topic1 = new Topic();
             topic1.setDescription("description Deconstructing Deep ");
@@ -279,7 +296,6 @@ public class DatabaseInitials {
             question5.setAuthor(visitor6);
             question5.setLikes(new HashSet<>(Arrays.asList(visitor5, visitor1)));
             question5 = questionRepository.save(question5);
-
         };
     }
 }

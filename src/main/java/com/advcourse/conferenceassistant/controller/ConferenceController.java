@@ -1,61 +1,43 @@
 package com.advcourse.conferenceassistant.controller;
 
-import com.advcourse.conferenceassistant.model.Conference;
-import com.advcourse.conferenceassistant.model.Visitor;
-import com.advcourse.conferenceassistant.repository.ConferenceRepository;
-import com.advcourse.conferenceassistant.repository.VisitorRepository;
+import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
+import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
+import com.advcourse.conferenceassistant.service.impl.VisitorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Optional;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Controller
 public class ConferenceController {
 
     @Autowired
-    private VisitorRepository visitorRepository;
+    private VisitorServiceImpl visitorService;
 
     @Autowired
-    private ConferenceRepository conferenceRepository;
+    private ConferenceServiceImpl conferenceService;
 
     @GetMapping("/liveconference")
-    public void getError(HttpServletResponse response) throws IOException {
-        sendError(response);
+    public void getError() {
+        throw new NoSuchConferenceException();
     }
 
-    @GetMapping("/liveconference/{confId}/{topicId}")
+    @GetMapping("/liveconference/{confId}")
     public String getLive(
             @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
                     String cookieValue,
             @PathVariable Long confId,
-            Model model,
-            HttpServletRequest request, HttpServletResponse response, @PathVariable String topicId) throws IOException {
+            Model model) {
 
-        // rerurn 404 when conference doesn't exists
-        Optional<Conference> byId = conferenceRepository.findById(confId);
-        if (byId.isEmpty()) {
-            sendError(response);
-            return "topicquestions";
-        }
-
-        // return localhost080:/confId when visitor haven't registration for this conference yet
-        Visitor byEmailAndVisit = visitorRepository.findByEmailAndVisit(cookieValue, byId.get());
-        if (byEmailAndVisit == null) {
-            return "forward:/"+confId;
-
-        }
-        TopicDto t = topicService.findById(topicId);
-        model.addAttribute("conferenceId", confId);
-        model.addAttribute("cookieValue", cookieValue);
-        model.addAttribute("topic", currentTopic);
+        model.addAttribute("visitor", visitorService.findByEmailAndVisit(cookieValue, confId));
         return "topicquestions";
     }
 
@@ -74,10 +56,6 @@ public class ConferenceController {
         response.addCookie(newCookie);
 
         return "forward:/" + confId;
-    }
-
-    public void sendError(HttpServletResponse response) throws IOException {
-        response.sendError(404, "Conference not found");
     }
 
 }

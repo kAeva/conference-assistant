@@ -15,42 +15,43 @@
 
 <div class="container-fluid mx-auto mt-5 col-sm-5">
 
-    <form>
-        <div class="form-row">
+    <form action="#" th:action="@{'/conference-edit/'+${confId}}" th:object="${conference}" method="post">
+        <div class="form-group">
             <div class="form-group col-md-6">
                 <label for="inputName">Name</label>
-                <textarea type="text" class="form-control" id="inputName" name="textarea" rows="1" cols="50">Get name from DB</textarea>
+                <textarea type="text" th:field="*{theme}" class="form-control" id="inputName" name="textarea" rows="1"
+                          cols="50">Get name from DB</textarea>
+            </div>
+        </div>
+        <div class="form-row">
+
+            <div class="form-group col-md-6">
+                <label for="conf-time-start">Start</label>
+                <input type="datetime-local" class="form-control" id="conf-time-start"
+                       name="meeting-time" th:field="*{start}"
+                       min="2020-03-30T00:00">
             </div>
             <div class="form-group col-md-6">
-                <label for="conf-time">Date and Time</label>
-<!--                TODO: get value="" for this input from DB-->
-                <input type="datetime-local" class="form-control" id="conf-time"
-                       name="meeting-time" value="2018-06-12T19:30"
-                       min="2020-04-21T00:00" max="2020-09-14T00:00">
+                <label for="conf-time-end">End</label>
+                <input type="datetime-local" class="form-control" id="conf-time-end"
+                       name="meeting-time" th:field="*{end}"
+                       min="2020-03-30T00:00">
             </div>
+            <div th:if="${#fields.hasErrors('end')}" th:errors="*{end}" ></div>
         </div>
         <div class="form-group">
             <label for="inputAddress">Address</label>
-            <textarea type="text" class="form-control" id="inputAddress" name="textarea" rows="1" cols="50">Get address from DB</textarea>
+            <textarea type="text" th:field="*{address}" class="form-control" id="inputAddress" name="textarea" rows="1"
+                      cols="50">Get address from DB</textarea>
 
         </div>
         <div class="form-group">
             <label for="inputDescr">Description</label>
-            <textarea type="text" class="form-control" id="inputDescr" >Get description from DB</textarea>
-        </div>
-        <div class="form-row">
-<!--            TODO: Do wee need this here?-->
-<!--            <div class="form-group col-md-6">-->
-<!--                <label for="uploadImage">Upload an image</label>-->
-<!--                <input type="file" class="form-control-file" id="uploadImage">-->
-<!--            </div>-->
-<!--            <div class="form-group col-md-4">-->
-
-<!--            </div>-->
-
+            <textarea type="text" th:field="*{description}" class="form-control"
+                      id="inputDescr">Get description from DB</textarea>
         </div>
 
-<!--this button in case of success should do redirect to /conference-page -->
+                <!--this button in case of success should do redirect to /conference-page -->
         <button type="submit" class="btn btn-info">Save</button>
     </form>
 

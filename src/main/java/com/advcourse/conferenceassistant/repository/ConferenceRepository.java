@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface ConferenceRepository extends JpaRepository<Conference, Long> {
-//    List<Conference> findByNameIsLike(String name);
+ //  List<Conference> findByNameIsLike(String name);
+    List<Conference> findAll();
 
+    @Override
+    <S extends Conference> S saveAndFlush(S s);
 }

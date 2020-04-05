@@ -17,8 +17,13 @@ public class Staff {
     private String name;
     private String surname;
 
-    @ManyToOne
-    private Conference colab;
+    @ManyToMany
+    @JoinTable(
+            name = "Staff_Conference",
+            joinColumns = { @JoinColumn(name = "staff_id") },
+    inverseJoinColumns = { @JoinColumn(name = "conf_id") }
+    )
+    private Set<Conference> colab;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "staff_role", joinColumns = @JoinColumn(name = "staff_id"))
