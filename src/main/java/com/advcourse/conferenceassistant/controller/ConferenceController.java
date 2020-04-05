@@ -31,13 +31,13 @@ public class ConferenceController {
         sendError(response);
     }
 
-    @GetMapping("/liveconference/{confId}")
+    @GetMapping("/liveconference/{confId}/{topicId}")
     public String getLive(
             @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
                     String cookieValue,
             @PathVariable Long confId,
             Model model,
-            HttpServletRequest request, HttpServletResponse response) throws IOException {
+            HttpServletRequest request, HttpServletResponse response, @PathVariable String topicId) throws IOException {
 
         // rerurn 404 when conference doesn't exists
         Optional<Conference> byId = conferenceRepository.findById(confId);
@@ -52,8 +52,10 @@ public class ConferenceController {
             return "forward:/"+confId;
 
         }
+        TopicDto t = topicService.findById(topicId);
         model.addAttribute("conferenceId", confId);
         model.addAttribute("cookieValue", cookieValue);
+        model.addAttribute("topic", currentTopic);
         return "topicquestions";
     }
 

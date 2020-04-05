@@ -23,7 +23,7 @@
         <h3 class="text-center h3 py-3">CONFERENCE NAME</h3>
         <ul class="nav mx-auto">
             <li class="nav-item h4 text-center mx-auto"><span style="color: green"><i
-                    class="fab fa-rocketchat"></i></span> NOW: Current Topic Name <a class="btn btn-outline-info"
+                    class="fab fa-rocketchat"></i></span> NOW: <h2 th:text="${topic.getTitle()}"/> <a class="btn btn-outline-info"
                                                                                      href="/schedule">Schedule</a></li>
         </ul>
         <p class="px-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
@@ -173,8 +173,10 @@
 </div>
 <div class="container-fluid py-1 fixed-bottom bg-light">
     <div class=" col-sm-6 mx-auto py-1">
-        <form action="POST" class="form-inline mx-auto">
-            <textarea class="form-control" rows="2" style="float: left; width: 80%"></textarea>
+        <form th:action="@{/add-question}" method="POST" class="form-inline mx-auto">
+            <textarea class="form-control" th:name="questionText" rows="2" style="float: left; width: 80%"></textarea>
+            <input type="hidden" th:name="topicId" th:value="${topic.getId()}">
+            <input type="hidden" th:name="authorId" th:value="${visitorId}">
             <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%"><i
                     class="fas fa-chevron-right"></i></button>
         </form>

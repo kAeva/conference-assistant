@@ -36,6 +36,7 @@ public class StaffController {
             @ModelAttribute("staff") @Valid StaffDto accountStaff,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+
             return "staffreg";
         }
         StaffDto registered = service.registerNewStaffDtoAccount(accountStaff);
