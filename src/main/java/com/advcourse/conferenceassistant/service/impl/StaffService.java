@@ -44,7 +44,10 @@ public class StaffService implements StaffServiceImpl {
 
     }
 
-
+    @Override
+    public StaffDto findByEmail(String email) {
+        return  StaffMapper.toDto(staffRepository.findByEmail(email));
+    }
 
 
 }
