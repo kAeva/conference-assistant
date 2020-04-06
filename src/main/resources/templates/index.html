@@ -20,13 +20,14 @@
 
         <div class="col-md-10 d-flex justify-content-center mx-auto ">
 
-            <form action="#" th:action="@{'/registration-visitor/'+${visitor.getConfId()}}"  th:object="${visitor}" method="POST"
+            <form th:action="@{/registration-visitor}" method="POST"
                   class="form-inline py-5 justify-content-center " style="width: 80%; margin-top: 20%">
 
 
-                <input type="email" th:field="*{email}" style="width: 60%;" class="form-control px-5 py-4 mr-2"
+                <input type="email" th:name="email" style="width: 60%;" class="form-control px-5 py-4 mr-2"
                        id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                <input type="hidden" th:name="confId"+ th:value="${visitor.getConfId()}">
+<!--                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>-->
                 <button type="submit" class="btn btn-dark">Go</button>
             </form>
             </div>

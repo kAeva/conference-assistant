@@ -22,9 +22,9 @@
 
         <h3 class="text-center h3 py-3">CONFERENCE NAME</h3>
         <ul class="nav mx-auto">
-            <li class="nav-item h4 text-center mx-auto"><span style="color: green"><i
-                    class="fab fa-rocketchat"></i></span> NOW: <h2 th:text="${topic.getTitle()}"/> <a class="btn btn-outline-info"
-                                                                                     href="/schedule">Schedule</a></li>
+            <li class="nav-item h4 text-center mx-auto"><span style="color: green;"><i
+                    class="fab fa-rocketchat"></i></span> NOW: <h2 th:text="${topic.getTheme()}"></h2> <a class="btn btn-outline-info"
+                                                                                                          href="/schedule">Schedule</a></li>
         </ul>
         <p class="px-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
             the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
@@ -42,10 +42,10 @@
             <table class="table table-borderless">
                 <thead>
                 <tr>
-                    <th scope="col" style="width: 10%">Likes</th>
-                    <th scope="col" style="width: 50%">Question</th>
-                    <th scope="col" style="width: 20%">UserName</th>
-                    <th scope="col" style="width: 20%">Date (sort)</th>
+                    <th scope="col" style="width: 10%;">Likes</th>
+                    <th scope="col" style="width: 50%;">Question</th>
+                    <th scope="col" style="width: 20%;">UserName</th>
+                    <th scope="col" style="width: 20%;">Date (sort)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,85 +82,25 @@
             <table class="table table-borderless table-fixed">
                 <thead>
                 <tr class="table-info">
-                    <th scope="col" style="width: 10%">Likes</th>
-                    <th scope="col" style="width: 50%">Question</th>
-                    <th scope="col" style="width: 20%">UserName</th>
-                    <th scope="col" style="width: 20%">Date (sort)</th>
+                    <th scope="col" style="width: 1%;">Likes</th>
+                    <th style="width: 9%"></th>
+                    <th scope="col" style="width: 50%;">Question</th>
+                    <th scope="col" style="width: 20%;">UserName</th>
+                    <th scope="col" style="width: 20%;">Date (sort)</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 7</th>
-                    <td>Question first text</td>
-                    <td>Otto</td>
-                    <td>18:36 01-02-2019</td>
+                <tr th:each="q : ${questions}">
+                    <th scope="row" th:text="${q.likesQuantity}"></th>
+<!--                    TODO: 1) finish /like/  2) solve problen with UserName - do we need to show it here at all? -->
+                    <td> <div th:if="${q.isLikedByThisVisitor}"><i class="fas fa-heart"></i></div>
+                        <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
+                    </td>
+                    <td th:text="${q.getQuestionText()}"></td>
+                    <td th:text="${q.getCreatorId()}">Otto</td>
+                    <td th:text="${q.getTime()}">18:36 01-02-2019</td>
                 </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 9</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 5</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:41 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 10</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:57 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 11</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:45 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 2</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:51 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 5</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:56 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 13</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 8</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 8</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 8</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 8</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
+
                 </tbody>
             </table>
         </div>
@@ -174,16 +114,15 @@
 <div class="container-fluid py-1 fixed-bottom bg-light">
     <div class=" col-sm-6 mx-auto py-1">
         <form th:action="@{/add-question}" method="POST" class="form-inline mx-auto">
-            <textarea class="form-control" th:name="questionText" rows="2" style="float: left; width: 80%"></textarea>
+            <textarea class="form-control" th:name="questionText" rows="2" style="float: left; width: 80%;"></textarea>
             <input type="hidden" th:name="topicId" th:value="${topic.getId()}">
-            <input type="hidden" th:name="authorId" th:value="${visitorId}">
-            <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%"><i
+            <input type="hidden" th:name="creatorId" th:value="${visitor.getId()}">
+            <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%;"><i
                     class="fas fa-chevron-right"></i></button>
         </form>
     </div>
+</div>
+</body>
 
 
-    <div>
-
-    </div>
 </html>

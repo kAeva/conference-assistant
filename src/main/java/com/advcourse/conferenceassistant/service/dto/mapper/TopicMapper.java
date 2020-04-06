@@ -3,10 +3,12 @@ package com.advcourse.conferenceassistant.service.dto.mapper;
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TopicMapper {
 
-    public static TopicDto toDto (Topic topic) {
+    public static TopicDto toDto(Topic topic) {
         return new TopicDto(
                 topic.getId(),
                 topic.getTheme(),
@@ -16,7 +18,7 @@ public class TopicMapper {
                 topic.getSpeakerdesc(),
                 topic.getStart(),
                 topic.getEnd(),
-                topic.getConf().getId()     // getConf() - this good???
+                topic.getConference().getId()     // getConf() - this good???
         );
     }
 
@@ -32,8 +34,22 @@ public class TopicMapper {
         topic.setEnd(dto.getEnd());
         Conference conference = new Conference();
         conference.setId(dto.getConfId());
-        topic.setConf(conference);
+        topic.setConference(conference);
 
         return topic;
+    }
+    public static List<TopicDto> toDtos(List<Topic> entities) {
+        return entities
+                .stream()
+                .map((e) -> new TopicDto(e.getId(), e.getTheme(),
+                        e.getDescription(), e.getSpeaker(), e.getSpeakerimg(), e.getSpeakerdesc(), e.getStart(), e.getEnd(),
+                        e.getConference().getId()))
+                .collect(Collectors.toList());
+    }
+    public static List<Topic> fromDtos(List<TopicDto> dtos) {
+        return dtos
+                .stream()
+                .map(TopicMapper::fromDto)
+                .collect(Collectors.toList());
     }
 }

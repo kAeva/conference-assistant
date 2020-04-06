@@ -23,6 +23,6 @@ public class Topic {
     private LocalDateTime end;
 
     @ManyToOne
-    private Conference conf;
+    private Conference conference;
 
 }

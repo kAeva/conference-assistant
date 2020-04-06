@@ -169,7 +169,7 @@ public class DatabaseInitials {
             topic1.setSpeaker("Mark West");
             topic1.setStart(LocalDateTime.of(2020, 5, 14, 10, 15));
             topic1.setEnd(LocalDateTime.of(2020, 5, 14, 11, 00));
-            topic1.setConf(conf1);
+            topic1.setConference(conf1);
             topicRepository.save(topic1);
 
 
@@ -229,7 +229,7 @@ public class DatabaseInitials {
             topic2.setSpeaker("Jon McLoone");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic2.setEnd(LocalDateTime.of(2020, 5, 14, 12, 30));
-            topic2.setConf(conf1);
+            topic2.setConference(conf1);
             topic2 = topicRepository.save(topic2);
 
 
@@ -248,7 +248,7 @@ public class DatabaseInitials {
             topic3.setSpeaker("Diego Hueltes");
             topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
             topic3.setEnd(LocalDateTime.of(2020, 5, 14, 13, 00));
-            topic3.setConf(conf2);
+            topic3.setConference(conf2);
             topic3 = topicRepository.save(topic3);
 
 
@@ -260,6 +260,31 @@ public class DatabaseInitials {
             question3.setLikes(new HashSet<>(Arrays.asList(visitor3, visitor4)));
             question3 = questionRepository.save(question3);
 
+            Question question33 = new Question();
+            question33.setQuestion("What is the first you remeber from your childhood?");
+            question33.setTopic(topic3);
+            question33.setTime(LocalDateTime.now());
+            question33.setAuthor(visitor2);
+            question33.setLikes(new HashSet<>(Arrays.asList(visitor2, visitor4, visitor1, visitor5)));
+            question33 = questionRepository.save(question33);
+
+
+            Question question31 = new Question();
+            question31.setQuestion("WIs it a highest possible popularity level of this technology for now?");
+            question31.setTopic(topic3);
+            question31.setTime(LocalDateTime.now());
+            question31.setAuthor(visitor1);
+            question31.setLikes(new HashSet<>(Arrays.asList(visitor3, visitor4, visitor6)));
+            question31 = questionRepository.save(question31);
+
+            Question question99 = new Question();
+            question99.setQuestion("What was the first book you read about it?");
+            question99.setTopic(topic3);
+            question99.setTime(LocalDateTime.now());
+            question99.setAuthor(visitor4);
+            question99.setLikes(new HashSet<>(Arrays.asList(visitor3, visitor4, visitor1, visitor5, visitor2)));
+            question99 = questionRepository.save(question99);
+
             Topic topic4 = new Topic();
             topic4.setTheme("Predicting the Moment of Birth using Sensor Data in Dairy Cows");
             topic4.setDescription("desc Predicting the Moment");
@@ -267,7 +292,7 @@ public class DatabaseInitials {
             topic4.setSpeaker("Miel Hostens");
             topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
             topic4.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
-            topic4.setConf(conf2);
+            topic4.setConference(conf2);
             topic4 = topicRepository.save(topic4);
 
             Question question4 = new Question();
@@ -285,7 +310,7 @@ public class DatabaseInitials {
             topic5.setSpeaker("David Gorena Elizondo");
             topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
             topic5.setEnd(LocalDateTime.of(2020, 5, 14, 14, 30));
-            topic5.setConf(conf3);
+            topic5.setConference(conf3);
             topic5 = topicRepository.save(topic5);
 
 

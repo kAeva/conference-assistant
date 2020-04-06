@@ -16,7 +16,6 @@ public class VisitorDto {
     @NotNull
     @NotBlank
     private String email;
-
     private Long confId;
 
 }

@@ -12,6 +12,7 @@ public class QuestionDto {
     private Long id;
     private String questionText;
     private Long creatorId;
+//    Todo: add a variable for creator Username - needs some changes into Visitor registering logic
     private Long topicId;
     private LocalDateTime time;
     Boolean isLikedByThisVisitor;
