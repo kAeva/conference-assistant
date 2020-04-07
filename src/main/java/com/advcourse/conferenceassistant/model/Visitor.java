@@ -21,11 +21,18 @@ public class Visitor {
     private String email;
     private String name;
 
-    @ManyToOne
-    private Conference visit;
+    @ManyToMany
+    @JoinTable(
+            name = "Visitor_Conference",
+            joinColumns = { @JoinColumn(name = "visitor_id") },
+            inverseJoinColumns = { @JoinColumn(name = "conf_id") }
+    )
+    private Set<Conference> visit;
 
     @ManyToMany(mappedBy = "likes")
     private Set<Question> liked;
+
+
 
     @Override
     public boolean equals(Object o) {

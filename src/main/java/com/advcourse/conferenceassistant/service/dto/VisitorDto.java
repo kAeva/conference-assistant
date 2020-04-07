@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,8 +15,8 @@ public class VisitorDto {
     private Long id;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Email shouldn't be empty")
     private String email;
-    private Long confId;
+    private Set<Long> confId;
 
 }

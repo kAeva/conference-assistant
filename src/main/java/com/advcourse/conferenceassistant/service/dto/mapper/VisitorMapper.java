@@ -2,32 +2,38 @@ package com.advcourse.conferenceassistant.service.dto.mapper;
 
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.model.Visitor;
-import com.advcourse.conferenceassistant.repository.ConferenceRepository;
-import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class VisitorMapper {
 
 
-
-
     public static VisitorDto toDto(Visitor entity) {
+        Set<Long> allConfId = entity.getVisit().stream().map(Conference::getId).collect(Collectors.toSet());
+
         return new VisitorDto(
                 entity.getId(),
                 entity.getEmail(),
-                entity.getVisit().getId());
+                allConfId);
     }
 
     public static Visitor fromDto(VisitorDto visitorDto) {
+        Set<Conference> conferences = new HashSet<>();
+        Set<Long> confId = visitorDto.getConfId();
+        for (Long id : confId) {
+            Conference conference = new Conference();
+            conference.setId(id);
+            conferences.add(conference);
+        }
         Visitor visitor = new Visitor();
         visitor.setId(visitorDto.getId());
         String email = visitorDto.getEmail();
         visitor.setEmail(email);
         visitor.setName(visitorDto.getEmail().substring(0, email.indexOf('@')));
-        Conference conference = new Conference();
-        conference.setId(visitorDto.getConfId());
-        visitor.setVisit(conference);
+        visitor.setVisit(conferences);
 
         return visitor;
     }
