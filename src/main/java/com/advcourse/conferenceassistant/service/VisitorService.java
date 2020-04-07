@@ -14,7 +14,6 @@ public interface VisitorService {
 
     VisitorDto findByEmail(String email);
 
-    VisitorDto findByName(String name);
     VisitorDto findById(Long id);
 
     VisitorDto addConference(VisitorDto visitorDto, Set<Long> confIdSet);

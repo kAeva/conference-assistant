@@ -75,7 +75,7 @@ public class ConferenceController {
         newCookie.setPath("/");
         response.addCookie(newCookie);
 
-        return "forward:/" + confId;
+        return "forward:/liveconference/" + confId;
     }
 
 }

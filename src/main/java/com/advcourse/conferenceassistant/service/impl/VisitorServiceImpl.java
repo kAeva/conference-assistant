@@ -61,14 +61,6 @@ public class VisitorServiceImpl implements VisitorService {
         return VisitorMapper.toDto(visitor);
     }
 
-    @Override
-    public VisitorDto findByName(String name) {
-        Visitor visitor = visitorRepository.findByEmail(name);
-        if (visitor == null) {
-            throw new NoSuchVisitorException();
-        }
-        return VisitorMapper.toDto(visitor);
-    }
 
     @Override
     public VisitorDto findById(Long id) {
