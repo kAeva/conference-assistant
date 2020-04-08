@@ -2,8 +2,10 @@ package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
 import com.advcourse.conferenceassistant.service.StaffServiceImpl;
+import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
+import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.ConferenceMapper;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
@@ -39,6 +41,10 @@ public class StaffController {
 
     @Autowired
     ConferenceValidator conferenceValidator;
+
+    @Autowired
+    TopicService topicService;
+
 
     @GetMapping("/staffreg")
     public String stafflogin(Model model) {
@@ -103,7 +109,7 @@ public class StaffController {
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
         if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
-
+        model.addAttribute("allTopic", topicService.findByConfId(confId));
         return "conference-page";
     }
 

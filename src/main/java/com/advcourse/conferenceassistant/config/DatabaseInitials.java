@@ -167,6 +167,7 @@ public class DatabaseInitials {
 
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
+            topic1.setSpeakerimg("image-placeholder.png");
             topic1.setStart(LocalDateTime.of(2020, 5, 14, 10, 15));
             topic1.setEnd(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic1.setConference(conf1);
@@ -227,6 +228,7 @@ public class DatabaseInitials {
             topic2.setDescription("desc You can AI like");
             topic2.setSpeakerdesc("desc Jon McLoone");
             topic2.setSpeaker("Jon McLoone");
+            topic2.setSpeakerimg("image-placeholder.png");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic2.setEnd(LocalDateTime.of(2020, 5, 14, 12, 30));
             topic2.setConference(conf1);
