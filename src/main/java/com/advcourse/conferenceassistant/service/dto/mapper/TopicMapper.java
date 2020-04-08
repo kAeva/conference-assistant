@@ -3,6 +3,7 @@ package com.advcourse.conferenceassistant.service.dto.mapper;
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,14 +39,24 @@ public class TopicMapper {
 
         return topic;
     }
+
+
     public static List<TopicDto> toDtos(List<Topic> entities) {
         return entities
                 .stream()
-                .map((e) -> new TopicDto(e.getId(), e.getTheme(),
-                        e.getDescription(), e.getSpeaker(), e.getSpeakerimg(), e.getSpeakerdesc(), e.getStart(), e.getEnd(),
+                .map((e) -> new TopicDto(
+                        e.getId(),
+                        e.getTheme(),
+                        e.getDescription(),
+                        e.getSpeaker(),
+                        e.getSpeakerimg(),
+                        e.getSpeakerdesc(),
+                        e.getStart(),
+                        e.getEnd(),
                         e.getConference().getId()))
                 .collect(Collectors.toList());
     }
+
     public static List<Topic> fromDtos(List<TopicDto> dtos) {
         return dtos
                 .stream()

@@ -1,5 +1,6 @@
 package com.advcourse.conferenceassistant.service.impl;
 
+import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.repository.TopicRepository;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
@@ -7,7 +8,6 @@ import com.advcourse.conferenceassistant.service.dto.mapper.TopicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,7 +25,35 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<TopicDto> findByConfId(long confId) {
-        return TopicMapper.toDtos(topicRepository.findByConferenceId(confId));
+        List<Topic> byConferenceId = topicRepository.findByConferenceId(confId);
+        return TopicMapper.toDtos(byConferenceId);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        topicRepository.deleteById(id);
+    }
+
+    @Override
+    public TopicDto save(TopicDto dto) {
+        Topic topic = topicRepository.saveAndFlush(TopicMapper.fromDto(dto));
+        return TopicMapper.toDto(topic);
+
+
+    }
+
+    @Override
+    public TopicDto update(Long confId, TopicDto dto) {
+        TopicDto topic = findById(confId);
+        topic.setDescription(dto.getDescription());
+        topic.setEnd(dto.getEnd());
+        topic.setSpeaker(dto.getSpeaker());
+        topic.setSpeakerdesc(dto.getSpeakerdesc());
+        topic.setSpeakerimg(dto.getSpeakerimg());
+        topic.setStart(dto.getStart());
+        topic.setTheme(dto.getTheme());
+        topic.setConfId(dto.getConfId());
+        return save(topic);
     }
 
 
