@@ -21,7 +21,7 @@
     </div>
     <hr>
     <div class="col-sm-8 mx-auto py-3">
-        <h2 class="h2 text-center py-3">List Of Topics <a class="btn btn-success" href="/topic-add">Add topic</a></h2>
+        <h2 class="h2 text-center py-3">List Of Topics <a class="btn btn-success" th:href="@{'/topic-add/'+${confId}}">Add topic</a></h2>
 
         <div class="row py-3 topic" th:each="topic : ${allTopic}">
 

@@ -15,40 +15,44 @@
 
 <div class="container-fluid mx-auto mt-5 col-sm-5">
 
-    <form>
+    <form form action="#" th:action="@{'/topic-add/'+${confId}}" th:object="${topic}" method="post" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Name</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Topic Name">
+                <input type="text" th:field="*{theme}" class="form-control" id="inputEmail4" placeholder="Topic Name">
             </div>
             <div class="form-group col-md-6">
                 <label for="inputSpeaker">Speaker</label>
-                <input type="text" class="form-control" id="inputSpeaker" placeholder="Name, position">
+                <input type="text" th:field="*{speaker}"class="form-control" id="inputSpeaker" placeholder="Name, position">
 
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
             <label for="conf-time-start">Start at:</label>
-            <input type="datetime-local" class="form-control" id="conf-time-start"
+            <input type="datetime-local" th:field="*{start}" class="form-control" id="conf-time-start"
                    name="meeting-time" value=""
                    min="2020-04-21T00:00" max="2020-09-14T00:00">
             </div>
             <div class="form-group col-md-6">
             <label for="conf-time-end">End at:</label>
-            <input type="datetime-local" class="form-control" id="conf-time-end"
+            <input type="datetime-local" th:field="*{end}" class="form-control" id="conf-time-end"
                    name="meeting-time" value=""
                    min="2020-04-21T00:00" max="2020-09-14T00:00">
             </div>
         </div>
         <div class="form-group">
             <label for="inputDescr">Description</label>
-            <textarea type="text" class="form-control" id="inputDescr" placeholder="Apartment, studio, or floor"></textarea>
+            <textarea type="text" th:field="*{description}"class="form-control" id="inputDescr" placeholder="Apartment, studio, or floor"></textarea>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="uploadImage">Upload speaker picture</label>
-                <input type="file" class="form-control-file" id="uploadImage">
+                <input type="file" name="file" class="form-control-file" id="uploadImage">
+            </div>
+            <div class="form-group">
+                <label for="inputDescrSpeaker">Description</label>
+                <textarea type="text" th:field="*{speakerdesc}"class="form-control" id="inputDescrSpeaker" placeholder="Apartment, studio, or floor"></textarea>
             </div>
             <div class="form-group col-md-4">
 
