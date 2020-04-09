@@ -9,9 +9,8 @@ import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
-import com.sun.xml.bind.v2.model.core.ElementInfo;
+import com.advcourse.conferenceassistant.service.validator.dateDiffConf.TopicValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -21,16 +20,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -50,8 +46,9 @@ public class StaffController {
 
     @Autowired
     FileService fileService;
-    @Value("${upload.location}")
-    private String uploadPath;
+
+    @Autowired
+    TopicValidator topicValidator;
 
     @GetMapping("/staffreg")
     public String stafflogin(Model model) {
@@ -117,9 +114,9 @@ public class StaffController {
         if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
-        File uploadDir = new File(System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"static"+File.separator+"images");
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
 
-        model.addAttribute("pathImg", uploadDir.getAbsolutePath()+File.separator);
+        model.addAttribute("pathImg", uploadDir.getAbsolutePath() + File.separator);
         return "conference-page";
     }
 
@@ -209,11 +206,14 @@ public class StaffController {
                            BindingResult bindingResult,
                            @RequestParam("file") MultipartFile file, HttpServletRequest request
 
-    ) throws IOException {
+    ) {
+        topicValidator.validate(dto, bindingResult);
 
+        if (bindingResult.hasErrors()) {
+            return "redirect:/topic-add/"+confId;
+        }
 
-
-        File uploadDir = new File(System.getProperty("user.dir")+File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"static"+File.separator+"images");
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
