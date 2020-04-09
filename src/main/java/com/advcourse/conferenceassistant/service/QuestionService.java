@@ -5,9 +5,8 @@ import java.util.List;
 
 public interface QuestionService {
     QuestionDto getQuestionById(long id, String email);
-    List<QuestionDto> getQuestionByTopicId(long topicId, String email);
-
     QuestionDto addQuestion(QuestionDto dto);
+    List<QuestionDto> getQuestionsByTopicId(long topicId, String email);
+    List<QuestionDto> getTopQuestionsByTopicId(long topicId, String email);
     QuestionDto like(long questionId, long guestId);
-    String getCreatorName(QuestionDto qDto);
 }

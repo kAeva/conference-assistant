@@ -12,6 +12,7 @@ import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.QuestionMapper;
 import com.advcourse.conferenceassistant.service.dto.mapper.VisitorMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,26 +22,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import java.util.Collections;
+import java.util.Comparator;
+@Slf4j
 @Service
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     QuestionRepository questionRepository;
-
     @Autowired
     VisitorRepository visitorRepository;
     @Autowired
     VisitorService visitorService;
-
-
+    @Autowired
+    QuestionService questionService;
     @Autowired
     TopicRepository topicRepository;
 
     @Override
     public QuestionDto getQuestionById(long id, String email) {
         Question q = questionRepository.findById(id).get();
-
-        //Visitor visitor = visitorRepository.findByEmail(email);
         Long conf_id = q.getTopic().getConference().getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
 
@@ -49,10 +49,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionDto> getQuestionByTopicId(long topicId, String email) {
-
-
-        // Visitor visitor = visitorRepository.findByEmail(email);
+    public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
         Long conf_id = topicRepository
                 .findById(topicId)
                 .get()
@@ -70,24 +67,29 @@ public class QuestionServiceImpl implements QuestionService {
                         }
                 ).collect(Collectors.toList());
     }
+    @Override
+    public List<QuestionDto> getTopQuestionsByTopicId(long topicId, String email) {
+        List<QuestionDto> questions = questionService.getQuestionsByTopicId(topicId, email);
+        log.debug("questions: list before sorting " + questions);
+        Comparator<QuestionDto> compareByLikes = Comparator.comparing(QuestionDto::getLikesQuantity);
+        Collections.sort(questions, compareByLikes.reversed());
+        log.debug("questions: list after sorting " + questions);
+        return questions.subList(0, 3);
+    }
+
 
     @Override
-    public String getCreatorName(QuestionDto qDto) {
-        VisitorDto vDto =  visitorService.findById(qDto.getCreatorId());
-        return vDto.getEmail().substring(0, vDto.getEmail().indexOf('@'));
-    }
-@Override
-public QuestionDto addQuestion(QuestionDto dto) {
-    Question question = QuestionMapper.fromDto(dto);
-    Topic topic = topicRepository.findById(dto.getTopicId()).get();
-    question.setTopic(topic);
-    Visitor creator = visitorRepository.findById(dto.getCreatorId()).get();
-    question.setAuthor(creator);
-    question.setLikes(new HashSet<>(Arrays.asList(creator)));
-    question.setTime(LocalDateTime.now());
+    public QuestionDto addQuestion(QuestionDto dto) {
+        Question question = QuestionMapper.fromDto(dto);
+        Topic topic = topicRepository.findById(dto.getTopicId()).get();
+        question.setTopic(topic);
+        Visitor creator = visitorRepository.findById(dto.getCreatorId()).get();
+        question.setAuthor(creator);
+        question.setLikes(new HashSet<>(Arrays.asList(creator)));
+        question.setTime(LocalDateTime.now());
 
-    return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
-}
+        return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
+    }
 
     @Override
     public QuestionDto like(long questionId, long guestId) {
@@ -97,4 +99,5 @@ public QuestionDto addQuestion(QuestionDto dto) {
 
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
+
 }

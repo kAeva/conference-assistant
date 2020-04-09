@@ -32,9 +32,7 @@
 </nav>
 <div class="container-fluid py-2">
     <h3 class="h3 text-center pt-2">Top questions</h3>
-    <p class="text-center">for current topic</p>
-    <div class="border bg-light col-sm-10 mx-auto">
-
+    <div class="border bg-light col-sm-8 mx-auto">
         <div class="table-responsive text-nowrap">
             <table class="table table-borderless">
                 <thead>
@@ -46,11 +44,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 51</th>
-                    <td>Question first text</td>
-                    <td>Otto</td>
-                    <td>18:36 01-02-2019</td>
+                <tr th:each="tq : ${topquestions}">
+                    <td><div style="color: darkred" th:if="${tq.isLikedByThisVisitor}"><i class="fas fa-heart"></i><span th:text="${tq.getLikesQuantity()}"></span></div>
+                        <div th:if="${!tq.isLikedByThisVisitor}"><a th:href="'/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span></div></td>
+                    <td th:text="${tq.getQuestionText()}"></td>
+                    <td th:text="${tq.getCreatorName()}"></td>
+                    <td th:text="${tq.getTime()}"></td>
                 </tr>
 
                 </tbody>
@@ -73,12 +72,12 @@
                     <th scope="col" style="width: 50%;">Question</th>
                     <th scope="col" style="width: 20%;">User</th>
                     <th scope="col" style="width: 20%;">Time</th>
-<!--                    TODO: add sorting bu time-->
+<!--                    TODO: add sorting bu time, likes and users-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="q : ${questions}">
-                    <th scope="row" th:text="${q.likesQuantity}"></th>
+                    <th scope="row" th:text="${q.getLikesQuantity()}"></th>
 <!--                    TODO: 1) finish /like/  -->
                     <td> <div th:if="${q.isLikedByThisVisitor}"><i class="fas fa-heart"></i></div>
                         <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
@@ -87,7 +86,6 @@
                     <td th:text="${q.getCreatorName()}"></td>
                     <td th:text="${q.getTime()}"></td>
                 </tr>
-
                 </tbody>
             </table>
         </div>

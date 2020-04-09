@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Collections;
+
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Controller
@@ -54,10 +56,12 @@ public class ConferenceController {
 //        !! this topic id is for debugging only, use conferenceId 2;
 //        VisitorDto news = visitorService.findByEmailAndVisit(cookieValue, confId);
 
-        List<QuestionDto> questions = questionService.getQuestionByTopicId(currentTopic.getId(), visitorService.findByEmailAndVisit(cookieValue, confId).getEmail());
+        List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorService.findByEmailAndVisit(cookieValue, confId).getEmail());
+        List<QuestionDto> topQuestions = questionService.getTopQuestionsByTopicId(currentTopic.getId(), visitorService.findByEmailAndVisit(cookieValue, confId).getEmail());
         model.addAttribute("visitor", visitorService.findByEmailAndVisit(cookieValue, confId));
         model.addAttribute("topic", currentTopic);
         model.addAttribute("questions", questions);
+        model.addAttribute("topquestions", topQuestions);
         model.addAttribute("conference", conferenceService.findById(confId));
         return "topicquestions";
     }
