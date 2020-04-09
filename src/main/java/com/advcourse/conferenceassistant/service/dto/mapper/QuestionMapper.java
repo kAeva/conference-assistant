@@ -1,6 +1,5 @@
 package com.advcourse.conferenceassistant.service.dto.mapper;
 
-import com.advcourse.conferenceassistant.converter.EmailToUserNameConverter;
 import com.advcourse.conferenceassistant.model.Question;
 import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.model.Visitor;

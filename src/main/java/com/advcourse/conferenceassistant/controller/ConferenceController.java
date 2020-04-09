@@ -27,7 +27,6 @@ public class ConferenceController {
 
     @Autowired
     private VisitorServiceImpl visitorService;
-
     @Autowired
     private ConferenceServiceImpl conferenceService;
     @Autowired

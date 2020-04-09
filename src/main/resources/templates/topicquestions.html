@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="tq : ${topquestions}">
-                    <td><div style="color: darkred" th:if="${tq.isLikedByThisVisitor}"><i class="fas fa-heart"></i><span th:text="${tq.getLikesQuantity()}"></span></div>
+                    <td><div style="color: darkred" th:if="${tq.isLikedByThisVisitor}"><i class="fas fa-heart"></i> <span th:text="${tq.getLikesQuantity()}"></span></div>
                         <div th:if="${!tq.isLikedByThisVisitor}"><a th:href="'/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span></div></td>
                     <td th:text="${tq.getQuestionText()}"></td>
                     <td th:text="${tq.getCreatorName()}"></td>
@@ -80,7 +80,7 @@
                     <th scope="row" th:text="${q.getLikesQuantity()}"></th>
 <!--                    TODO: 1) finish /like/  -->
                     <td> <div th:if="${q.isLikedByThisVisitor}"><i class="fas fa-heart"></i></div>
-                        <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
+                        <div style="color: darkred" th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
                     </td>
                     <td th:text="${q.getQuestionText()}"></td>
                     <td th:text="${q.getCreatorName()}"></td>

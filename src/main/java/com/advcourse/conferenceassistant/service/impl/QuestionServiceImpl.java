@@ -79,14 +79,16 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public QuestionDto addQuestion(QuestionDto dto) {
-        Question question = QuestionMapper.fromDto(dto);
-        Topic topic = topicRepository.findById(dto.getTopicId()).get();
+    public QuestionDto addQuestion(QuestionDto questionDto) {
+        log.info("Question DTO received: " + questionDto);
+        Question question = QuestionMapper.fromDto(questionDto);
+        Topic topic = topicRepository.findById(questionDto.getTopicId()).get();
         question.setTopic(topic);
-        Visitor creator = visitorRepository.findById(dto.getCreatorId()).get();
+        Visitor creator = visitorRepository.findById(questionDto.getCreatorId()).get();
         question.setAuthor(creator);
         question.setLikes(new HashSet<>(Arrays.asList(creator)));
         question.setTime(LocalDateTime.now());
+        log.info("Question received: " + question);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 
