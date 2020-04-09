@@ -2,7 +2,7 @@ package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
 import com.advcourse.conferenceassistant.service.FileService;
-import com.advcourse.conferenceassistant.service.StaffServiceImpl;
+import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @Controller
 public class StaffController {
     @Autowired
-    private StaffServiceImpl service;
+    private StaffService service;
 
     @Autowired
     private ConferenceServiceImpl coservice;

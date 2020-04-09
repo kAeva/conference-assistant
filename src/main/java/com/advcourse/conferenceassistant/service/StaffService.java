@@ -4,7 +4,7 @@ import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 
-public interface StaffServiceImpl {
+public interface StaffService {
 
     StaffDto registerNewStaffDtoAccount(StaffDto accountStaff);
 

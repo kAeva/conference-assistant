@@ -1,14 +1,12 @@
 package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.exception.NoSuchVisitorException;
-import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
 import com.advcourse.conferenceassistant.repository.StaffRepository;
-import com.advcourse.conferenceassistant.service.StaffServiceImpl;
+import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
-import com.advcourse.conferenceassistant.service.dto.mapper.ConferenceMapper;
 import com.advcourse.conferenceassistant.service.dto.mapper.StaffMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +21,7 @@ import java.util.Set;
 @Repository
 @Scope(proxyMode = ScopedProxyMode.INTERFACES)
 @Service
-public class StaffService implements StaffServiceImpl {
+public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private StaffRepository staffRepository;
