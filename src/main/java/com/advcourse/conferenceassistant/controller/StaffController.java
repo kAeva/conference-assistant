@@ -1,30 +1,31 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
+import com.advcourse.conferenceassistant.service.FileService;
 import com.advcourse.conferenceassistant.service.StaffServiceImpl;
+import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
-import com.advcourse.conferenceassistant.service.dto.mapper.ConferenceMapper;
+import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
+import com.advcourse.conferenceassistant.service.validator.dateDiffConf.TopicValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,15 @@ public class StaffController {
 
     @Autowired
     ConferenceValidator conferenceValidator;
+
+    @Autowired
+    TopicService topicService;
+
+    @Autowired
+    FileService fileService;
+
+    @Autowired
+    TopicValidator topicValidator;
 
     @GetMapping("/staffreg")
     public String stafflogin(Model model) {
@@ -103,7 +113,10 @@ public class StaffController {
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
         if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
+        model.addAttribute("allTopic", topicService.findByConfId(confId));
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
 
+        model.addAttribute("pathImg", uploadDir.getAbsolutePath() + File.separator);
         return "conference-page";
     }
 
@@ -179,10 +192,39 @@ public class StaffController {
         return "topic-dashboard";
     }
 
-    @GetMapping("/topic-add")
-    public String topicAddPage() {
+    @GetMapping("/topic-add/{confId}")
+    public String topicAddPage(@PathVariable long confId,
+                               Model model) {
 
+        model.addAttribute("topic", new TopicDto());
         return "topic-add";
+    }
+
+    @PostMapping("/topic-add/{confId}")
+    public String topicAdd(@PathVariable long confId,
+                           @ModelAttribute("topic") TopicDto dto,
+                           BindingResult bindingResult,
+                           @RequestParam("file") MultipartFile file, HttpServletRequest request
+
+    ) {
+        topicValidator.validate(dto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "redirect:/topic-add/"+confId;
+        }
+
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        dto.setConfId(confId);
+
+        dto.setSpeakerimg(fileService.uploadFile(file, uploadDir.getAbsolutePath()));
+
+        topicService.save(dto);
+        return "redirect:/conference-page/" + dto.getConfId();
+
     }
 
     @GetMapping("/topic-edit/{topicfId}")
@@ -194,6 +236,40 @@ public class StaffController {
     @GetMapping("/stafflist")
     public String getStaffList() {
         return "stafflist";
+    }
+
+    private String findDir(File root, String name) {
+        if (root.getName().equals(name)) {
+            return root.getAbsolutePath();
+        }
+
+        File[] files = root.listFiles();
+
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    String myResult = findDir(f, name);
+                    //this just means this branch of the
+                    //recursion reached the end of the
+                    //directory tree without results, but
+                    //we don't want to cut it short here,
+                    //we still need to check the other
+                    //directories, so continue the for loop
+                    if (myResult == null) {
+                        continue;
+                    }
+                    //we found a result so return!
+                    else {
+                        return myResult;
+                    }
+                }
+            }
+        }
+
+        //we don't actually need to change this. It just means we reached
+        //the end of the directory tree (there are no more sub-directories
+        //in this directory) and didn't find the result
+        return null;
     }
 
 }

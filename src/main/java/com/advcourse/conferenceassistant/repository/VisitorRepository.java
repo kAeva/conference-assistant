@@ -10,8 +10,9 @@ import java.util.List;
 @Repository
 public interface VisitorRepository extends JpaRepository<Visitor, Long> {
 
+    Visitor findByEmail(String email);
 
-    Visitor findByEmailAndVisit(String email, Conference conference);
+       Visitor findByEmailAndVisit(String email, Conference conference);
 
     List<Visitor> findAll();
 

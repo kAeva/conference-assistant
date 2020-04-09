@@ -167,6 +167,7 @@ public class DatabaseInitials {
 
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
+            topic1.setSpeakerimg("image-placeholder.png");
             topic1.setStart(LocalDateTime.of(2020, 5, 14, 10, 15));
             topic1.setEnd(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic1.setConference(conf1);
@@ -176,40 +177,40 @@ public class DatabaseInitials {
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
             visitor1.setName("Anonymous");
-            visitor1.setVisit(conf1);
+            visitor1.setVisit(Set.of(conf1));
             visitor1 = visitorRepository.save(visitor1);
 
             Visitor visitor2 = new Visitor();
             visitor2.setEmail("superdeveloper@gmail.com");
             visitor2.setName("Valentyn");
-            visitor2.setVisit(conf1);
+            visitor2.setVisit(Set.of(conf1));
             visitor2 = visitorRepository.save(visitor2);
 
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
             visitor3.setName("Antonina");
-            visitor3.setVisit(conf2);
+            visitor3.setVisit(Set.of(conf2));
             visitor3 = visitorRepository.save(visitor3);
 
 
             Visitor visitor4 = new Visitor();
             visitor4.setEmail("wikihowyouknow@gmail.com");
             visitor4.setName("Taras");
-            visitor4.setVisit(conf1);
+            visitor4.setVisit(Set.of(conf2));
             visitor4 = visitorRepository.save(visitor4);
 
 
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
             visitor5.setName("Chloe");
-            visitor5.setVisit(conf2);
+            visitor5.setVisit(Set.of(conf2));
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
             visitor6.setName("Loony");
-            visitor6.setVisit(conf3);
+            visitor6.setVisit(Set.of(conf1,conf3));
             visitor6 = visitorRepository.save(visitor6);
 
 
@@ -227,6 +228,7 @@ public class DatabaseInitials {
             topic2.setDescription("desc You can AI like");
             topic2.setSpeakerdesc("desc Jon McLoone");
             topic2.setSpeaker("Jon McLoone");
+            topic2.setSpeakerimg("image-placeholder.png");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
             topic2.setEnd(LocalDateTime.of(2020, 5, 14, 12, 30));
             topic2.setConference(conf1);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
@@ -27,11 +28,10 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public VisitorDto registerNewVisitorDtoAccount(VisitorDto dto) {
         Visitor visitor = VisitorMapper.fromDto(dto);
-        Conference conference = ConferenceMapper.fromDto(conferenceService.findById(dto.getConfId()));
-        Visitor visitorByEmail = visitorRepository.findByEmailAndVisit(dto.getEmail(), conference);
+        Visitor visitorByEmail = visitorRepository.findByEmail(dto.getEmail());
 
         if (visitorByEmail != null) {
-            return dto;
+            visitor = VisitorMapper.fromDto(addConference(VisitorMapper.toDto(visitorByEmail), dto.getConfId()));
         }
 
         return VisitorMapper.toDto(visitorRepository.save(visitor));
@@ -53,6 +53,16 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
+    public VisitorDto findByEmail(String email) {
+        Visitor visitor = visitorRepository.findByEmail(email);
+        if (visitor == null) {
+            throw new NoSuchVisitorException();
+        }
+        return VisitorMapper.toDto(visitor);
+    }
+
+
+    @Override
     public VisitorDto findById(Long id) {
         try {
             return VisitorMapper.toDto(visitorRepository.findById(id).get());
@@ -62,6 +72,13 @@ public class VisitorServiceImpl implements VisitorService {
 
     }
 
+    @Override
+    public VisitorDto addConference(VisitorDto visitorDto, Set<Long> confIDSet) {
+
+        visitorDto.getConfId().addAll(confIDSet);
+
+        return visitorDto;
+    }
 
 
 }
