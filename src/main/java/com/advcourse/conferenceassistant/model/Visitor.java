@@ -3,6 +3,7 @@ package com.advcourse.conferenceassistant.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,7 +33,9 @@ public class Visitor {
     @ManyToMany(mappedBy = "likes")
     private Set<Question> liked;
 
-
+    public void setName(String email){
+        this.name = email.substring(0, email.indexOf('@'));
+    }
 
     @Override
     public boolean equals(Object o) {

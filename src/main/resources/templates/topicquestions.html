@@ -12,7 +12,7 @@
 <body>
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href=""><i class="fab fa-napster"></i> LIVE Conference</a>
-    <i class="navbar-brand" th:text="${visitor.getEmail()}"> Visitor email</i>
+    <p>Welcome <i class="" th:text="${visitor.getUserName()}">Visitor</i>!</p>
     <a class="navbar-brand" th:href="@{'/logout/'+${topic.confId}}"> <i class="far fa-sad-tear"></i> Leave</a>
 
 </nav>
@@ -20,23 +20,20 @@
 
     <div class="col-sm-8 mx-auto py-3">
 
-        <h3 class="text-center h3 py-3">CONFERENCE NAME</h3>
+        <h3 class="text-center h3 py-3" th:text="${conference.getTheme()}">CONFERENCE NAME</h3>
         <ul class="nav mx-auto">
             <li class="nav-item h4 text-center mx-auto"><span style="color: green;"><i
                     class="fab fa-rocketchat"></i></span> NOW: <h2 th:text="${topic.getTheme()}"></h2> <a class="btn btn-outline-info"
                                                                                                           href="/schedule">Schedule</a></li>
         </ul>
-        <p class="px-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-            the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
-            electronic typesetting, remaining essentially unchanged.</p>
+        <p class="px-3" th:text="${topic.getDescription()}">No description available</p>
     </div>
 
 </nav>
 <div class="container-fluid py-2">
     <h3 class="h3 text-center pt-2">Top questions</h3>
     <p class="text-center">for current topic</p>
-    <div class="border bg-light col-sm-8 mx-auto">
+    <div class="border bg-light col-sm-10 mx-auto">
 
         <div class="table-responsive text-nowrap">
             <table class="table table-borderless">
@@ -44,8 +41,8 @@
                 <tr>
                     <th scope="col" style="width: 10%;">Likes</th>
                     <th scope="col" style="width: 50%;">Question</th>
-                    <th scope="col" style="width: 20%;">UserName</th>
-                    <th scope="col" style="width: 20%;">Date (sort)</th>
+                    <th scope="col" style="width: 20%;">User</th>
+                    <th scope="col" style="width: 20%;">Time</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,18 +52,7 @@
                     <td>Otto</td>
                     <td>18:36 01-02-2019</td>
                 </tr>
-                <tr>
-                    <th scope="row"><i class="far fa-heart"></i> 30</th>
-                    <td>Question 2 text</td>
-                    <td>Thornton</td>
-                    <td>18:38 01-02-2019</td>
-                </tr>
-                <tr>
-                    <th scope="row"><span style="color: darkred"><i class="fas fa-heart"></i></span> 22</th>
-                    <td>Question 3 text</td>
-                    <td>the Bird</td>
-                    <td>18:41 01-02-2019</td>
-                </tr>
+
                 </tbody>
             </table>
         </div>
@@ -76,7 +62,7 @@
 <div class="container-fluid py-3 all-questions-block">
     <h3 class="h3 text-center pt-2">All questions</h3>
     <p class="text-center">for current topic</p>
-    <div class="border col-sm-8 mx-auto py-1" style="height: 300px; overflow-y: scroll; overflow-x: hidden;">
+    <div class="border col-sm-10 mx-auto py-1" style="height: 300px; overflow-y: scroll; overflow-x: hidden;">
 
         <div class="table-responsive text-nowrap">
             <table class="table table-borderless table-fixed">
@@ -85,20 +71,21 @@
                     <th scope="col" style="width: 1%;">Likes</th>
                     <th style="width: 9%"></th>
                     <th scope="col" style="width: 50%;">Question</th>
-                    <th scope="col" style="width: 20%;">UserName</th>
-                    <th scope="col" style="width: 20%;">Date (sort)</th>
+                    <th scope="col" style="width: 20%;">User</th>
+                    <th scope="col" style="width: 20%;">Time</th>
+<!--                    TODO: add sorting bu time-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="q : ${questions}">
                     <th scope="row" th:text="${q.likesQuantity}"></th>
-<!--                    TODO: 1) finish /like/  2) solve problen with UserName - do we need to show it here at all? -->
+<!--                    TODO: 1) finish /like/  -->
                     <td> <div th:if="${q.isLikedByThisVisitor}"><i class="fas fa-heart"></i></div>
                         <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
                     </td>
                     <td th:text="${q.getQuestionText()}"></td>
-                    <td th:text="${q.getCreatorId()}">Otto</td>
-                    <td th:text="${q.getTime()}">18:36 01-02-2019</td>
+                    <td th:text="${q.getCreatorName()}"></td>
+                    <td th:text="${q.getTime()}"></td>
                 </tr>
 
                 </tbody>

@@ -162,9 +162,8 @@ public class DatabaseInitials {
             staffRepository.save(staff8);
 
             Topic topic1 = new Topic();
-            topic1.setDescription("description Deconstructing Deep ");
+            topic1.setDescription("For difficult problems neural networks can sometimes lack robustness whereby they might fail to perform accurate predictions on under classified examples and edge cases. This can still be the case even if suitable architectures have been selected.");
             topic1.setSpeakerdesc("description Mark West");
-
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
             topic1.setSpeakerimg("image-placeholder.png");
@@ -176,40 +175,40 @@ public class DatabaseInitials {
 
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
-            visitor1.setName("Anonymous");
+            visitor1.setName(visitor1.getEmail());
             visitor1.setVisit(Set.of(conf1));
             visitor1 = visitorRepository.save(visitor1);
 
             Visitor visitor2 = new Visitor();
             visitor2.setEmail("superdeveloper@gmail.com");
-            visitor2.setName("Valentyn");
+            visitor2.setName(visitor2.getEmail());
             visitor2.setVisit(Set.of(conf1));
             visitor2 = visitorRepository.save(visitor2);
 
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
-            visitor3.setName("Antonina");
+            visitor3.setName(visitor3.getEmail());
             visitor3.setVisit(Set.of(conf2));
             visitor3 = visitorRepository.save(visitor3);
 
 
             Visitor visitor4 = new Visitor();
             visitor4.setEmail("wikihowyouknow@gmail.com");
-            visitor4.setName("Taras");
+            visitor4.setName(visitor4.getEmail());
             visitor4.setVisit(Set.of(conf2));
             visitor4 = visitorRepository.save(visitor4);
 
 
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
-            visitor5.setName("Chloe");
+            visitor5.setName(visitor5.getEmail());
             visitor5.setVisit(Set.of(conf2));
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
-            visitor6.setName("Loony");
+            visitor6.setName(visitor6.getEmail());
             visitor6.setVisit(Set.of(conf1,conf3));
             visitor6 = visitorRepository.save(visitor6);
 
@@ -224,7 +223,7 @@ public class DatabaseInitials {
 
 
             Topic topic2 = new Topic();
-            topic2.setTheme("You can AI like an Expert");
+            topic2.setTheme("Getting lost in the latest tech talk? Don’t know your AI from your ML? Then it’s time to learn how to talk AI like an expert.");
             topic2.setDescription("desc You can AI like");
             topic2.setSpeakerdesc("desc Jon McLoone");
             topic2.setSpeaker("Jon McLoone");
@@ -245,7 +244,7 @@ public class DatabaseInitials {
 
             Topic topic3 = new Topic();
             topic3.setTheme("Deep Learning for Lazy People... Neural Architecture Search with Automated Machine Learning");
-            topic3.setDescription("desc Deep Learning for");
+            topic3.setDescription("Meta-learning is all the rage in research these days. This is not unexpected, since such a capability essentially is way for the automation that we create to bootstrap their capabilities.");
             topic3.setSpeakerdesc("descr Diego Hueltes");
             topic3.setSpeaker("Diego Hueltes");
             topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
@@ -289,7 +288,7 @@ public class DatabaseInitials {
 
             Topic topic4 = new Topic();
             topic4.setTheme("Predicting the Moment of Birth using Sensor Data in Dairy Cows");
-            topic4.setDescription("desc Predicting the Moment");
+            topic4.setDescription("On dairy farms, management of calving is important for the health of dairy cows and the survival rate of calves born.");
             topic4.setSpeakerdesc("desc Miel Hostens");
             topic4.setSpeaker("Miel Hostens");
             topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
@@ -307,7 +306,7 @@ public class DatabaseInitials {
 
             Topic topic5 = new Topic();
             topic5.setTheme("Knowledge and AI Powering Microsoft & Office 365 Products");
-            topic5.setDescription("desc Knowledge and AI Powe");
+            topic5.setDescription("Using Azure's AI scanning capabilities, the system was able to return less than 1,300 images that were relevant in terms of potential human incursion, preventing the team from being overwhelmed by an influx of data.");
             topic5.setSpeakerdesc("desc David Gorena Elizondo");
             topic5.setSpeaker("David Gorena Elizondo");
             topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));

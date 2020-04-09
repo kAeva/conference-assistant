@@ -6,6 +6,7 @@ import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
+import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import com.advcourse.conferenceassistant.service.impl.QuestionServiceImpl;
 import com.advcourse.conferenceassistant.service.impl.VisitorServiceImpl;
@@ -51,12 +52,13 @@ public class ConferenceController {
 //        TODO: currently hardcoded, add time check for the current topic which is going live right now
         TopicDto currentTopic = topicService.findById(22);
 //        !! this topic id is for debugging only, use conferenceId 2;
-
+//        VisitorDto news = visitorService.findByEmailAndVisit(cookieValue, confId);
 
         List<QuestionDto> questions = questionService.getQuestionByTopicId(currentTopic.getId(), visitorService.findByEmailAndVisit(cookieValue, confId).getEmail());
         model.addAttribute("visitor", visitorService.findByEmailAndVisit(cookieValue, confId));
         model.addAttribute("topic", currentTopic);
         model.addAttribute("questions", questions);
+        model.addAttribute("conference", conferenceService.findById(confId));
         return "topicquestions";
     }
 

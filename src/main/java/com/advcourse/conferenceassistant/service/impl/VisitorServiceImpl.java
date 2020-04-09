@@ -29,11 +29,9 @@ public class VisitorServiceImpl implements VisitorService {
     public VisitorDto registerNewVisitorDtoAccount(VisitorDto dto) {
         Visitor visitor = VisitorMapper.fromDto(dto);
         Visitor visitorByEmail = visitorRepository.findByEmail(dto.getEmail());
-
         if (visitorByEmail != null) {
             visitor = VisitorMapper.fromDto(addConference(VisitorMapper.toDto(visitorByEmail), dto.getConfId()));
         }
-
         return VisitorMapper.toDto(visitorRepository.save(visitor));
     }
 
@@ -48,8 +46,6 @@ public class VisitorServiceImpl implements VisitorService {
         }
 
         return VisitorMapper.toDto(byEmailAndVisit);
-
-
     }
 
     @Override
@@ -69,16 +65,11 @@ public class VisitorServiceImpl implements VisitorService {
         } catch (NoSuchElementException e) {
             throw new NoSuchVisitorException();
         }
-
     }
 
     @Override
     public VisitorDto addConference(VisitorDto visitorDto, Set<Long> confIDSet) {
-
         visitorDto.getConfId().addAll(confIDSet);
-
         return visitorDto;
     }
-
-
 }
