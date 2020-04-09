@@ -82,6 +82,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto addQuestion(QuestionDto questionDto) {
         log.info("Question DTO received: " + questionDto);
         Question question = QuestionMapper.fromDto(questionDto);
+        log.info("QuestionDTO converted to Question " + question);
         Topic topic = topicRepository.findById(questionDto.getTopicId()).get();
         question.setTopic(topic);
         Visitor creator = visitorRepository.findById(questionDto.getCreatorId()).get();
@@ -97,6 +98,13 @@ public class QuestionServiceImpl implements QuestionService {
         Visitor guest = visitorRepository.findById(guestId).get();
         Question question = questionRepository.findById(questionId).get();
         question.getLikes().add(guest);
+        return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
+    }
+    @Override
+    public QuestionDto unlike(long questionId, long guestId){
+        Visitor guest = visitorRepository.findById(guestId).get();
+        Question question = questionRepository.findById(questionId).get();
+        question.getLikes().remove(guest);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 

@@ -7,14 +7,14 @@ import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.*;
+@Slf4j
 @Controller
+@RequestMapping("/liveconference/now/question")
+
 public class QuestionController {
 
     @Autowired
@@ -29,8 +29,11 @@ public class QuestionController {
     @PostMapping("/add-question")
     public String addQuestion(QuestionDto question){
 //        TODO: refactor this later
+        log.debug("Question for adding: "+ question.getQuestion());
         QuestionDto newQuestion = questionService.addQuestion(question);
         TopicDto topic = topicService.findById(newQuestion.getTopicId());
+        log.debug("Topic to add in : "+ topic.getId());
+        log.debug("Conference related to topic " + topic.getConfId());
         return "redirect:/liveconference/now/" + topic.getConfId();
     }
 //TODO:change cookie value name after changing in declaration
@@ -42,5 +45,14 @@ public class QuestionController {
         QuestionDto dto = questionService.like(questionId, visitorDto.getId());
        return "redirect:/liveconference/now/" + topicService.findById(dto.getTopicId()).getConfId();
     }
-
+    @GetMapping("/unlike/{questionId}")
+    public String unlikeQuestion(@PathVariable Long questionId,
+                               @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
+                                       String cookieValue) {
+        VisitorDto visitorDto = visitorService.findByEmail(cookieValue);
+        log.debug("Current visitor id " + visitorDto.getId());
+        QuestionDto questionDto = questionService.unlike(questionId, visitorDto.getId());
+        log.debug("Liked by current user? - " + questionDto.getIsLikedByThisVisitor());
+        return "redirect:/liveconference/now/" + topicService.findById(questionDto.getTopicId()).getConfId();
+    }
 }

@@ -45,9 +45,15 @@
                 </thead>
                 <tbody>
                 <tr th:each="tq : ${topquestions}">
-                    <td><div style="color: darkred" th:if="${tq.isLikedByThisVisitor}"><i class="fas fa-heart"></i> <span th:text="${tq.getLikesQuantity()}"></span></div>
-                        <div th:if="${!tq.isLikedByThisVisitor}"><a th:href="'/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span></div></td>
-                    <td th:text="${tq.getQuestionText()}"></td>
+                    <td>
+                        <div th:if="${tq.isLikedByThisVisitor}">
+                            <a style="color: darkred;" th:href="'/liveconference/now/question/unlike/' + ${tq.getId()}"><i class="fas fa-heart"></i></a> <span th:text="${tq.getLikesQuantity()}"></span>
+                        </div>
+                        <div th:if="${!tq.isLikedByThisVisitor}">
+                            <a th:href="'/liveconference/now/question/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span>
+                        </div>
+                    </td>
+                    <td th:text="${tq.getQuestion()}"></td>
                     <td th:text="${tq.getCreatorName()}"></td>
                     <td th:text="${tq.getTime()}"></td>
                 </tr>
@@ -68,7 +74,7 @@
                 <thead>
                 <tr class="table-info">
                     <th scope="col" style="width: 1%;">Likes</th>
-                    <th style="width: 9%"></th>
+                    <th style="width: 9%;"></th>
                     <th scope="col" style="width: 50%;">Question</th>
                     <th scope="col" style="width: 20%;">User</th>
                     <th scope="col" style="width: 20%;">Time</th>
@@ -79,10 +85,10 @@
                 <tr th:each="q : ${questions}">
                     <th scope="row" th:text="${q.getLikesQuantity()}"></th>
 <!--                    TODO: 1) finish /like/  -->
-                    <td> <div th:if="${q.isLikedByThisVisitor}"><i class="fas fa-heart"></i></div>
-                        <div style="color: darkred" th:if="${!q.isLikedByThisVisitor}"><a th:href="'/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
+                    <td> <div th:if="${q.isLikedByThisVisitor}"><a style="color: darkred;" th:href="'/liveconference/now/question/unlike/' + ${q.getId()}"><i class="fas fa-heart"></i></a></div>
+                        <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/liveconference/now/question/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
                     </td>
-                    <td th:text="${q.getQuestionText()}"></td>
+                    <td th:text="${q.getQuestion()}"></td>
                     <td th:text="${q.getCreatorName()}"></td>
                     <td th:text="${q.getTime()}"></td>
                 </tr>
@@ -98,7 +104,7 @@
 </div>
 <div class="container-fluid py-1 fixed-bottom bg-light">
     <div class=" col-sm-6 mx-auto py-1">
-        <form th:action="@{/add-question}" method="POST" class="form-inline mx-auto">
+        <form th:action="@{/liveconference/now/question/add-question}" method="POST" class="form-inline mx-auto">
             <textarea class="form-control" th:name="questionText" rows="2" style="float: left; width: 80%;"></textarea>
             <input type="hidden" th:name="topicId" th:value="${topic.getId()}">
             <input type="hidden" th:name="creatorId" th:value="${visitor.getId()}">

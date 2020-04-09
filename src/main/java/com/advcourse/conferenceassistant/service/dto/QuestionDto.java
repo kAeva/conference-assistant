@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class QuestionDto {
 
     private Long id;
-    private String questionText;
+    private String question;
     private Long creatorId;
     private String creatorName;
 //    Todo: add a variable for creator Username - needs some changes into Visitor registering logic

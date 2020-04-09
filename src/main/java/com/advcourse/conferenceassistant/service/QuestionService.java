@@ -9,4 +9,6 @@ public interface QuestionService {
     List<QuestionDto> getQuestionsByTopicId(long topicId, String email);
     List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions);
     QuestionDto like(long questionId, long guestId);
+    QuestionDto unlike(long questionId, long guestId);
+
 }

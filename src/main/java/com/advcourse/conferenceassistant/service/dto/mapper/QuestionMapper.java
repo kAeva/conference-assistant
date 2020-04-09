@@ -11,7 +11,7 @@ public class QuestionMapper {
 
 
     public static QuestionDto toDto(Question e, boolean isLikedByThisVisitor, int likesQuantity) {
-//        log.info("this is the name we will transfer to questiondto " + e.getAuthor());
+        log.info("this is the name we will transfer to questiondto " + e.getAuthor());
         return new QuestionDto(
                 e.getId(),
                 e.getQuestion(),
@@ -21,11 +21,13 @@ public class QuestionMapper {
                 e.getTime(),
                 isLikedByThisVisitor,
                 likesQuantity);
+
+
     }
 
     public static Question fromDto(QuestionDto dto) {
         Question q = new Question();
-        q.setQuestion(dto.getQuestionText());
+        q.setQuestion(dto.getQuestion());
         Topic topic = new Topic();
         topic.setId(dto.getTopicId());
         q.setTopic(topic);
