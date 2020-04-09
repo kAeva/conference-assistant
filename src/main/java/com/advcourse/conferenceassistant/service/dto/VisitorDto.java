@@ -17,6 +17,7 @@ public class VisitorDto {
     @NotNull
     @NotBlank(message = "Email shouldn't be empty")
     private String email;
+    private String userName;
     private Set<Long> confId;
 
 }

@@ -17,6 +17,7 @@ public class VisitorMapper {
         return new VisitorDto(
                 entity.getId(),
                 entity.getEmail(),
+                entity.getName(),
                 allConfId);
     }
 
@@ -30,9 +31,9 @@ public class VisitorMapper {
         }
         Visitor visitor = new Visitor();
         visitor.setId(visitorDto.getId());
-        String email = visitorDto.getEmail();
-        visitor.setEmail(email);
-        visitor.setName(visitorDto.getEmail().substring(0, email.indexOf('@')));
+        visitor.setEmail(visitorDto.getEmail());
+//      get name from email using setName() method in Visitor
+        visitor.setName(visitorDto.getEmail());
         visitor.setVisit(conferences);
 
         return visitor;
