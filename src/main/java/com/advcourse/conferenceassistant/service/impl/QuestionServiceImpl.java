@@ -9,7 +9,6 @@ import com.advcourse.conferenceassistant.repository.VisitorRepository;
 import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
-import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.QuestionMapper;
 import com.advcourse.conferenceassistant.service.dto.mapper.VisitorMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Comparator;
+
 @Slf4j
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -68,14 +68,14 @@ public class QuestionServiceImpl implements QuestionService {
                 ).collect(Collectors.toList());
     }
     @Override
-    public List<QuestionDto> getTopQuestionsByTopicId(long topicId, String email) {
-        List<QuestionDto> questions = questionService.getQuestionsByTopicId(topicId, email);
+    public List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions){
         log.debug("questions: list before sorting " + questions);
         Comparator<QuestionDto> compareByLikes = Comparator.comparing(QuestionDto::getLikesQuantity);
         Collections.sort(questions, compareByLikes.reversed());
         log.debug("questions: list after sorting " + questions);
         return questions.subList(0, 3);
     }
+
 
 
     @Override
@@ -87,7 +87,6 @@ public class QuestionServiceImpl implements QuestionService {
         question.setAuthor(creator);
         question.setLikes(new HashSet<>(Arrays.asList(creator)));
         question.setTime(LocalDateTime.now());
-
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 
@@ -96,7 +95,6 @@ public class QuestionServiceImpl implements QuestionService {
         Visitor guest = visitorRepository.findById(guestId).get();
         Question question = questionRepository.findById(questionId).get();
         question.getLikes().add(guest);
-
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 
