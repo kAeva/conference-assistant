@@ -33,10 +33,6 @@ public class Visitor {
     @ManyToMany(mappedBy = "likes")
     private Set<Question> liked;
 
-    public void setName(String email){
-        this.name = email.substring(0, email.indexOf('@'));
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

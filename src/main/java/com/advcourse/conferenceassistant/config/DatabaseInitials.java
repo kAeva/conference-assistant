@@ -175,40 +175,40 @@ public class DatabaseInitials {
 
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
-            visitor1.setName(visitor1.getEmail());
+            visitor1.setName("imagenius");
             visitor1.setVisit(Set.of(conf1));
             visitor1 = visitorRepository.save(visitor1);
 
             Visitor visitor2 = new Visitor();
             visitor2.setEmail("superdeveloper@gmail.com");
-            visitor2.setName(visitor2.getEmail());
+            visitor2.setName("superdeveloper");
             visitor2.setVisit(Set.of(conf1));
             visitor2 = visitorRepository.save(visitor2);
 
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
-            visitor3.setName(visitor3.getEmail());
+            visitor3.setName("stopcorruption");
             visitor3.setVisit(Set.of(conf2));
             visitor3 = visitorRepository.save(visitor3);
 
 
             Visitor visitor4 = new Visitor();
             visitor4.setEmail("wikihowyouknow@gmail.com");
-            visitor4.setName(visitor4.getEmail());
+            visitor4.setName("wikihowyouknow");
             visitor4.setVisit(Set.of(conf2));
             visitor4 = visitorRepository.save(visitor4);
 
 
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
-            visitor5.setName(visitor5.getEmail());
+            visitor5.setName("yasscleverone");
             visitor5.setVisit(Set.of(conf2));
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
-            visitor6.setName(visitor6.getEmail());
+            visitor6.setName("andrewtetcher");
             visitor6.setVisit(Set.of(conf1,conf3));
             visitor6 = visitorRepository.save(visitor6);
 

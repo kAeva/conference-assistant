@@ -50,29 +50,32 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
+        log.trace("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)
                 .get()
                 .getConference()
                 .getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
-
+        log.debug("Current visitor " + visitor.getName());
 
         return questionRepository
                 .findByTopicId(topicId)
                 .stream()
-                .map((e) -> {
-                            Set<Visitor> likes = e.getLikes();
-                            return QuestionMapper.toDto(e, e.getLikes().contains(visitor), likes.size());
+                .map((q) -> {
+                            Set<Visitor> likes = q.getLikes();
+                            QuestionDto questionDto = QuestionMapper.toDto(q, likes.contains(visitor), likes.size());
+                            log.debug("Question to QuestionDto converted : " + questionDto);
+                            return questionDto;
                         }
                 ).collect(Collectors.toList());
     }
     @Override
     public List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions){
-        log.debug("questions: list before sorting " + questions);
+        log.debug("Questions: list before sorting " + questions);
         Comparator<QuestionDto> compareByLikes = Comparator.comparing(QuestionDto::getLikesQuantity);
         Collections.sort(questions, compareByLikes.reversed());
-        log.debug("questions: list after sorting " + questions);
+        log.debug("Questions: list after sorting " + questions);
         return questions.subList(0, 3);
     }
 
@@ -80,16 +83,17 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDto addQuestion(QuestionDto questionDto) {
-        log.info("Question DTO received: " + questionDto);
+        log.trace("In addQuestion() method");
+        log.debug("Question DTO received: " + questionDto);
         Question question = QuestionMapper.fromDto(questionDto);
-        log.info("QuestionDTO converted to Question " + question);
+        log.debug("QuestionDTO converted to Question " + question);
         Topic topic = topicRepository.findById(questionDto.getTopicId()).get();
         question.setTopic(topic);
         Visitor creator = visitorRepository.findById(questionDto.getCreatorId()).get();
         question.setAuthor(creator);
         question.setLikes(new HashSet<>(Arrays.asList(creator)));
         question.setTime(LocalDateTime.now());
-        log.info("Question received: " + question);
+        log.debug("Question received: " + question);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 
