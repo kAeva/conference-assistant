@@ -13,7 +13,7 @@
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href=""><i class="fab fa-napster"></i> LIVE Conference</a>
     <p>Welcome <i class="" th:text="${visitor.getUserName()}">Visitor</i>!</p>
-    <a class="navbar-brand" th:href="@{'/logout/'+${topic.confId}}"> <i class="far fa-sad-tear"></i> Leave</a>
+    <a class="navbar-brand" th:href="@{'/liveconference/logout/'+${topic.confId}}"> <i class="far fa-sad-tear"></i> Leave</a>
 
 </nav>
 <nav class="nav py-3 justify-content-center">
@@ -24,7 +24,7 @@
         <ul class="nav mx-auto">
             <li class="nav-item h4 text-center mx-auto"><span style="color: green;"><i
                     class="fab fa-rocketchat"></i></span> NOW: <h2 th:text="${topic.getTheme()}"></h2> <a class="btn btn-outline-info"
-                                                                                                          href="/schedule">Schedule</a></li>
+                                                                                                          th:href="'/liveconference/now/' + ${conference.getId()} + '/schedule'">Schedule</a></li>
         </ul>
         <p class="px-3" th:text="${topic.getDescription()}">No description available</p>
     </div>
@@ -47,10 +47,10 @@
                 <tr th:each="tq : ${topquestions}">
                     <td>
                         <div th:if="${tq.isLikedByThisVisitor}">
-                            <a style="color: darkred;" th:href="'/liveconference/now/question/unlike/' + ${tq.getId()}"><i class="fas fa-heart"></i></a> <span th:text="${tq.getLikesQuantity()}"></span>
+                            <a style="color: darkred;" th:href="'/question/unlike/' + ${tq.getId()}"><i class="fas fa-heart"></i></a> <span th:text="${tq.getLikesQuantity()}"></span>
                         </div>
                         <div th:if="${!tq.isLikedByThisVisitor}">
-                            <a th:href="'/liveconference/now/question/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span>
+                            <a th:href="'/question/like/' + ${tq.getId()}"><i class="far fa-heart"></i> </a><span th:text="${tq.getLikesQuantity()}"></span>
                         </div>
                     </td>
                     <td th:text="${tq.getQuestion()}"></td>
@@ -85,8 +85,8 @@
                 <tr th:each="q : ${questions}">
                     <th scope="row" th:text="${q.getLikesQuantity()}"></th>
 <!--                    TODO: 1) finish /like/  -->
-                    <td> <div th:if="${q.isLikedByThisVisitor}"><a style="color: darkred;" th:href="'/liveconference/now/question/unlike/' + ${q.getId()}"><i class="fas fa-heart"></i></a></div>
-                        <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/liveconference/now/question/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
+                    <td> <div th:if="${q.isLikedByThisVisitor}"><a style="color: darkred;" th:href="'/question/unlike/' + ${q.getId()}"><i class="fas fa-heart"></i></a></div>
+                        <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/question/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
                     </td>
                     <td th:text="${q.getQuestion()}"></td>
                     <td th:text="${q.getCreatorName()}"></td>
@@ -104,8 +104,8 @@
 </div>
 <div class="container-fluid py-1 fixed-bottom bg-light">
     <div class=" col-sm-6 mx-auto py-1">
-        <form th:action="@{/liveconference/now/question/add-question}" method="POST" class="form-inline mx-auto">
-            <textarea class="form-control" th:name="questionText" rows="2" style="float: left; width: 80%;"></textarea>
+        <form th:action="@{/question/add-question}" method="POST" class="form-inline mx-auto">
+            <textarea class="form-control" th:name="question" rows="2" style="float: left; width: 80%;"></textarea>
             <input type="hidden" th:name="topicId" th:value="${topic.getId()}">
             <input type="hidden" th:name="creatorId" th:value="${visitor.getId()}">
             <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%;"><i

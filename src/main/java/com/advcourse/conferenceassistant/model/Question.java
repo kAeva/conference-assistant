@@ -25,10 +25,7 @@ public class Question {
     @ManyToOne
     private Topic topic;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "question_likes",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "guest_id"))
+    @ManyToMany
     private Set<Visitor> likes;
 
     @Override

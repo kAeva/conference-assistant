@@ -3,7 +3,6 @@ import com.advcourse.conferenceassistant.service.ConferenceService;
 import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
-import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
@@ -11,9 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 @Slf4j
 @Controller
-@RequestMapping("/liveconference/now/question")
+@RequestMapping("/question")
 
 public class QuestionController {
 
@@ -30,10 +30,10 @@ public class QuestionController {
     public String addQuestion(QuestionDto question){
 //        TODO: refactor this later
         log.debug("Question for adding: "+ question.getQuestion());
+        String visitorEmail = visitorService.findById(question.getCreatorId()).getEmail();
+        question.setCreatorName(visitorEmail.substring(0,visitorEmail.indexOf('@')));
         QuestionDto newQuestion = questionService.addQuestion(question);
         TopicDto topic = topicService.findById(newQuestion.getTopicId());
-        log.debug("Topic to add in : "+ topic.getId());
-        log.debug("Conference related to topic " + topic.getConfId());
         return "redirect:/liveconference/now/" + topic.getConfId();
     }
 //TODO:change cookie value name after changing in declaration

@@ -50,22 +50,22 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
-        log.trace("In getQuestionsByTopicId() method");
+        log.info("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)
                 .get()
                 .getConference()
                 .getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
-        log.debug("Current visitor " + visitor.getName());
-
+        log.info("Current visitor " + visitor.getName());
+        log.info("List of questions expected: quanttity " + questionRepository.findByTopicId(topicId).size());
         return questionRepository
                 .findByTopicId(topicId)
                 .stream()
                 .map((q) -> {
                             Set<Visitor> likes = q.getLikes();
                             QuestionDto questionDto = QuestionMapper.toDto(q, likes.contains(visitor), likes.size());
-                            log.debug("Question to QuestionDto converted : " + questionDto);
+                            log.info("Question to QuestionDto converted : " + questionDto);
                             return questionDto;
                         }
                 ).collect(Collectors.toList());
@@ -80,35 +80,39 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
 
-
     @Override
     public QuestionDto addQuestion(QuestionDto questionDto) {
-        log.trace("In addQuestion() method");
+        log.debug("In addQuestion() method");
         log.debug("Question DTO received: " + questionDto);
         Question question = QuestionMapper.fromDto(questionDto);
         log.debug("QuestionDTO converted to Question " + question);
-        Topic topic = topicRepository.findById(questionDto.getTopicId()).get();
-        question.setTopic(topic);
-        Visitor creator = visitorRepository.findById(questionDto.getCreatorId()).get();
+        Visitor creator = visitorRepository.findById(questionDto.getCreatorId());
+        log.debug("Received creator " + creator.getName());
         question.setAuthor(creator);
-        question.setLikes(new HashSet<>(Arrays.asList(creator)));
+        log.debug("Set an author: " + question.getAuthor().getName());
+        Set<Visitor> likes = new HashSet<>();
+        likes.add(creator);
+        question.setLikes(likes);
+        log.debug("Likes setted: " + likes);
         question.setTime(LocalDateTime.now());
-        log.debug("Question received: " + question);
-        return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
+        log.debug("Got time : " + question.getTime());
+        log.debug("Received question: " + question);
+        return QuestionMapper.toDto(questionRepository.save(question), true, likes.size());
+//        TODO: fix bug: question could be added only once by the same user user
     }
 
     @Override
     public QuestionDto like(long questionId, long guestId) {
-        Visitor guest = visitorRepository.findById(guestId).get();
+        Visitor visitor = visitorRepository.findById(guestId);
         Question question = questionRepository.findById(questionId).get();
-        question.getLikes().add(guest);
+        question.getLikes().add(visitor);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
     @Override
     public QuestionDto unlike(long questionId, long guestId){
-        Visitor guest = visitorRepository.findById(guestId).get();
+        Visitor visitor = visitorRepository.findById(guestId);
         Question question = questionRepository.findById(questionId).get();
-        question.getLikes().remove(guest);
+        question.getLikes().remove(visitor);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
 

@@ -30,7 +30,10 @@ public class Visitor {
     )
     private Set<Conference> visit;
 
-    @ManyToMany(mappedBy = "likes")
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(name = "likes_question",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> liked;
 
     @Override

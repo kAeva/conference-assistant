@@ -1,6 +1,7 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
+import com.advcourse.conferenceassistant.model.Visitor;
 import com.advcourse.conferenceassistant.repository.VisitorRepository;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
@@ -14,15 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-
+@RequestMapping("/liveconference")
 @Slf4j
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Controller
@@ -37,27 +35,26 @@ public class ConferenceController {
     @Autowired
     private QuestionServiceImpl questionService;
 
-    @GetMapping("/liveconference")
+    @GetMapping("/")
     public void getError() {
         throw new NoSuchConferenceException();
     }
 
-    @GetMapping("/liveconference/now/{confId}")
+    @GetMapping("/now/{confId}")
     public String getLive(
             @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
                     String cookieValue, @PathVariable Long confId,
             Model model) {
-        log.info("Welcome this is redirect to live conference page with id " + confId);
+        log.info("Redirected to conference page with id " + confId);
 //        TODO: currently hardcoded, add time check for the current topic which is going live right now
         TopicDto currentTopic = topicService.findById(22);
         log.info("Active topic id: " + currentTopic.getId());
 //        !! this topic id is for debugging only, use conferenceId 2;
-        log.info("Before getting list of questions");
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
-        log.info("visitorDto: " + visitorDto);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
-        log.info("Got the list of questions: " + questions);
-        model.addAttribute("visitor", visitorService.findByEmailAndVisit(cookieValue, confId));
+        log.info("Received list of questions with size: " + questions.size());
+
+        model.addAttribute("visitor", visitorDto);
         model.addAttribute("topic", currentTopic);
         model.addAttribute("questions", questions);
         model.addAttribute("topquestions", questionService.getTopQuestionsByTopicId(questions));
@@ -81,6 +78,12 @@ public class ConferenceController {
         response.addCookie(newCookie);
 
         return "forward:/liveconference/" + confId;
+    }
+
+    @GetMapping("/now/{confId}/schedule")
+    String showSchedule(@PathVariable Long confId) {
+
+        return "schedule";
     }
 
 }
