@@ -5,11 +5,13 @@ import com.advcourse.conferenceassistant.repository.TopicRepository;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.TopicMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
+@Slf4j
 @Service
 public class TopicServiceImpl implements TopicService {
 
@@ -55,6 +57,20 @@ public class TopicServiceImpl implements TopicService {
         topic.setConfId(dto.getConfId());
         return save(topic);
     }
+    @Override
+    public TopicDto findActiveTopicByConfId(long confId) {
+        List<Topic> byConferenceId = topicRepository.findByConferenceId(confId);
+        List<TopicDto> topics = TopicMapper.toDtos(byConferenceId);
+        for (TopicDto t : topics) {
+            if (LocalDateTime.now().isAfter(t.getStart()) & LocalDateTime.now().isBefore(t.getEnd())) {
+                log.debug("Found active topic: " + t.getId());
+                return t;
+            }
+//            TODO: avoid this null returning if possible
+        } log.info("No active topic found");
+        return null;
+    }
 
 
 }
+

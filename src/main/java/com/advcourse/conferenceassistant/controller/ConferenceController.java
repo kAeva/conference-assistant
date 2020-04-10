@@ -46,10 +46,9 @@ public class ConferenceController {
                     String cookieValue, @PathVariable Long confId,
             Model model) {
         log.info("Redirected to conference page with id " + confId);
-//        TODO: currently hardcoded, add time check for the current topic which is going live right now
-        TopicDto currentTopic = topicService.findById(22);
+        TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
         log.info("Active topic id: " + currentTopic.getId());
-//        !! this topic id is for debugging only, use conferenceId 2;
+//        !!important USE spring.jpa.hibernate.ddl-auto=create-drop property to have active topics in DB from DataBaseInitials
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
         log.info("Received list of questions with size: " + questions.size());
@@ -82,7 +81,7 @@ public class ConferenceController {
 
     @GetMapping("/now/{confId}/schedule")
     String showSchedule(@PathVariable Long confId) {
-
+//        TopicDto topicDto = topicService.getBy
         return "schedule";
     }
 

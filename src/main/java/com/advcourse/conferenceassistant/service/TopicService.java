@@ -7,12 +7,9 @@ import java.util.List;
 public interface TopicService {
 
     TopicDto findById(long id);
-
     List<TopicDto> findByConfId(long confId);
-
     void deleteById(Long id);
-
     TopicDto save(TopicDto dto);
-
     TopicDto update(Long confId, TopicDto dto);
+    TopicDto findActiveTopicByConfId(long confId);
 }

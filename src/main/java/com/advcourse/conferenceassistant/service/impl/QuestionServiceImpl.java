@@ -50,6 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
+//        TODO: add excpetion handling for no questions found
         log.info("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)
@@ -72,11 +73,17 @@ public class QuestionServiceImpl implements QuestionService {
     }
     @Override
     public List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions){
+//        TODO: add exceprion handling for no questions found
         log.debug("Questions: list before sorting " + questions);
         Comparator<QuestionDto> compareByLikes = Comparator.comparing(QuestionDto::getLikesQuantity);
         Collections.sort(questions, compareByLikes.reversed());
         log.debug("Questions: list after sorting " + questions);
-        return questions.subList(0, 3);
+        if (questions.size() >= 3) {
+            log.debug("Questions list size is >= 3");
+            return questions.subList(0, 3);
+        }
+        log.debug("Qustions list is less than 3");
+        return questions;
     }
 
 
@@ -115,5 +122,4 @@ public class QuestionServiceImpl implements QuestionService {
         question.getLikes().remove(visitor);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
-
 }

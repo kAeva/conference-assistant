@@ -247,8 +247,8 @@ public class DatabaseInitials {
             topic3.setDescription("Meta-learning is all the rage in research these days. This is not unexpected, since such a capability essentially is way for the automation that we create to bootstrap their capabilities.");
             topic3.setSpeakerdesc("descr Diego Hueltes");
             topic3.setSpeaker("Diego Hueltes");
-            topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
-            topic3.setEnd(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
             topic3.setConference(conf2);
             topic3 = topicRepository.save(topic3);
 
@@ -291,8 +291,8 @@ public class DatabaseInitials {
             topic4.setDescription("On dairy farms, management of calving is important for the health of dairy cows and the survival rate of calves born.");
             topic4.setSpeakerdesc("desc Miel Hostens");
             topic4.setSpeaker("Miel Hostens");
-            topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
-            topic4.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
+            topic4.setStart(LocalDateTime.now());
+            topic4.setEnd(LocalDateTime.now().plusHours(4));
             topic4.setConference(conf2);
             topic4 = topicRepository.save(topic4);
 
@@ -309,8 +309,8 @@ public class DatabaseInitials {
             topic5.setDescription("Using Azure's AI scanning capabilities, the system was able to return less than 1,300 images that were relevant in terms of potential human incursion, preventing the team from being overwhelmed by an influx of data.");
             topic5.setSpeakerdesc("desc David Gorena Elizondo");
             topic5.setSpeaker("David Gorena Elizondo");
-            topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
-            topic5.setEnd(LocalDateTime.of(2020, 5, 14, 14, 30));
+            topic5.setStart(LocalDateTime.now());
+            topic5.setEnd(LocalDateTime.now().plusHours(1));
             topic5.setConference(conf3);
             topic5 = topicRepository.save(topic5);
 
