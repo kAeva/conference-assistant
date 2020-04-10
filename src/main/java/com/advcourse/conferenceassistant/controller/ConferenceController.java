@@ -1,9 +1,8 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
-import com.advcourse.conferenceassistant.model.Visitor;
-import com.advcourse.conferenceassistant.repository.VisitorRepository;
 import com.advcourse.conferenceassistant.service.TopicService;
+import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
@@ -39,16 +38,16 @@ public class ConferenceController {
     public void getError() {
         throw new NoSuchConferenceException();
     }
-
+// TODO: add checking conference active status
     @GetMapping("/now/{confId}")
     public String getLive(
             @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
                     String cookieValue, @PathVariable Long confId,
             Model model) {
         log.info("Redirected to conference page with id " + confId);
+//        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
         log.info("Active topic id: " + currentTopic.getId());
-//        !!important USE spring.jpa.hibernate.ddl-auto=create-drop property to have active topics in DB from DataBaseInitials
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
         log.info("Received list of questions with size: " + questions.size());
@@ -67,7 +66,7 @@ public class ConferenceController {
      * and return to page "/"
      */
     @GetMapping("/logout/{confId}")
-    String signOut(@PathVariable Long confId,
+    public String signOut(@PathVariable Long confId,
                    HttpServletResponse response) {
 
 
@@ -80,8 +79,11 @@ public class ConferenceController {
     }
 
     @GetMapping("/now/{confId}/schedule")
-    String showSchedule(@PathVariable Long confId) {
-//        TopicDto topicDto = topicService.getBy
+    public String showSchedule(@PathVariable Long confId, Model model) {
+        log.debug("Adding a conference to model with id: " + conferenceService.findById(confId).getId());
+        model.addAttribute("conference", conferenceService.findById(confId));
+        log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
+        model.addAttribute("topics", topicService.findByConfId(confId));
         return "schedule";
     }
 
