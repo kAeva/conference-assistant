@@ -4,66 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Welcome to CONFERENCENAME</title>
+    <title>Welcome to <span th:text="${conference.getTheme()}"></span></title>
     <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="/liveconference"> Back to live chat <i class="far fa-caret-square-right"></i></a>
+    <a class="navbar-brand" th:href="@{'/liveconference/now/'+ ${conference.getId()}}"> Back to live chat <i class="far fa-caret-square-right"></i></a>
     <a class="navbar-brand" href="#"><i class="far fa-sad-tear"></i> Leave</a>
 
 </nav>
 <div class="container-fluid py-5">
     <div class="col-sm-8 mx-auto py-3">
-    <h3 class="text-center h3 py-3">CONFERENCE NAME</h3>
-    <p class="px-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+    <h3 class="text-center h3 py-3" th:text="${conference.getTheme()}">CONFERENCE NAME</h3>
+    <p class="px-3" th:text="${conference.getDescription()}"></p>
     </div>
 <hr>
     <div class="col-sm-8 mx-auto py-3">
-        <div class="row py-3 topic">
+        <div class="row py-3 topic" th:each="t : ${topics}">
         <div class="col-sm-8 mx-auto">
-            <h4 class="h4">First topic name</h4>
-            <p>Time: 11:00 - 11:45</p>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-        </div>
-            <div class="col-sm-3 mx-auto">
-                <figure class="figure">
-                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
-                    <figcaption class="figure-caption">Speaker picture above, name and position here</figcaption>
-                </figure>
-            </div>
-        </div>
-<hr>
-        <div class="row py-3 topic">
-            <div class="col-sm-8 mx-auto">
-                <span class="text-danger">NOW!!!</span><h4 class="h4 text-success">Second topic name</h4>
-                <p class="text-success">Time: 11:45 - 12:30</p>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-            </div>
-            <div class="col-sm-3 mx-auto">
-                <figure class="figure">
-                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
-                    <figcaption class="figure-caption">Speaker picture above, name and position here</figcaption>
-                </figure>
-            </div>
-        </div>
-<hr>
-        <div class="row py-3 topic">
-            <div class="col-sm-8 mx-auto">
-                <h4 class="h4">Third topic name</h4>
-                <p>Time: 12:40 - 11:20</p>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-            </div>
-            <div class="col-sm-3 mx-auto">
-                <figure class="figure">
-                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
-                    <figcaption class="figure-caption">Speaker picture above, name and position here</figcaption>
-                </figure>
-            </div>
-        </div>
 
+            <div th:if="${t.isActive()}">
+            <span style="color: limegreen;">NOW: <h4 class="h4" th:text="${t.getTheme()}"></h4></span>
+            </div>
+            <div th:if="${!t.isActive()}">
+                <h4 class="h4" th:text="${t.getTheme()}"></h4>
+            </div>
+<!--TODO: add LocalDateTime parser to show HH:MM time only-->
+            <p>Time: <span th:text="${t.getStart()}">11:00</span> - <span th:text="${t.getEnd()}">11:45</span></p>
+            <p th:text="${t.getDescription()}"></p>
+        </div>
+            <div class="col-sm-3 mx-auto">
+                <figure class="figure">
+                    <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                    <figcaption class="figure-caption" th:text="${t.getSpeaker()} + ', '+ ${t.getSpeakerdesc()}"></figcaption>
+                </figure>
+                <hr>
+            </div>
 
+        </div>
     </div>
 </div>
 <div th:replace="fragments :: footer"></div>

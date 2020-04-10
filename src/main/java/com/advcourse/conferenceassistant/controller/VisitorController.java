@@ -7,6 +7,7 @@ import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Set;
-
+@Slf4j
 @Controller
 public class VisitorController {
 
@@ -45,12 +46,17 @@ public class VisitorController {
      */
     @GetMapping("/liveconference/{confId}")
     public String homePage(@PathVariable Long confId, Model model) {
+        log.info("New visitor in conference " + confId);
+        VisitorDto visitorDto = new VisitorDto();
+        visitorDto.setConfId(Set.of(confId));
+        log.info("Visitor has been attached to conferenceid " + visitorDto.getConfId());
+//        ConferenceDto conference = conferenceService.findById(confId);
+//        log.info("Adding new visitor to conference " + conference.getId());
+//        visitorDto.setConfId(Set.of(conference.getId()));
 
-        VisitorDto dto = new VisitorDto();
-        ConferenceDto conference = conferenceService.findById(confId);
-        dto.setConfId(Set.of(conference.getId()));
-        model.addAttribute("conference", conference);
-        model.addAttribute("visitor", dto);
+//        model.addAttribute("conference", conference);
+        model.addAttribute("conference", conferenceService.findById(confId));
+        model.addAttribute("visitor", visitorDto);
 
         return "index";
     }
@@ -71,6 +77,7 @@ public class VisitorController {
         }
 
         VisitorDto registered = visitorService.registerNewVisitorDtoAccount(accountVisitor);
+        log.info("New user has been registered " + registered);
         //TODO:change cookie value name and check for usages
         Cookie newCookie = new Cookie("testCookie", registered.getEmail());
         //without this method not working cookie!!!

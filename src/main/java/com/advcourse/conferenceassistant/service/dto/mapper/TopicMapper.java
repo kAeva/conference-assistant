@@ -3,13 +3,15 @@ package com.advcourse.conferenceassistant.service.dto.mapper;
 import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 public class TopicMapper {
-
     public static TopicDto toDto(Topic topic) {
+        log.debug("Converting Topic to TopicDto: " + topic);
         return new TopicDto(
                 topic.getId(),
                 topic.getTheme(),
@@ -19,6 +21,7 @@ public class TopicMapper {
                 topic.getSpeakerdesc(),
                 topic.getStart(),
                 topic.getEnd(),
+                LocalDateTime.now().isAfter(topic.getStart()) & LocalDateTime.now().isBefore(topic.getEnd()),
                 topic.getConference().getId()     // getConf() - this good???
         );
     }
@@ -53,6 +56,7 @@ public class TopicMapper {
                         e.getSpeakerdesc(),
                         e.getStart(),
                         e.getEnd(),
+                        LocalDateTime.now().isAfter(e.getStart()) & LocalDateTime.now().isBefore(e.getEnd()),
                         e.getConference().getId()))
                 .collect(Collectors.toList());
     }

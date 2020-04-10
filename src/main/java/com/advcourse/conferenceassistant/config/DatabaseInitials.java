@@ -175,40 +175,40 @@ public class DatabaseInitials {
 
             Visitor visitor1 = new Visitor();
             visitor1.setEmail("imagenius@gmail.com");
-            visitor1.setName(visitor1.getEmail());
+            visitor1.setName("imagenius");
             visitor1.setVisit(Set.of(conf1));
             visitor1 = visitorRepository.save(visitor1);
 
             Visitor visitor2 = new Visitor();
             visitor2.setEmail("superdeveloper@gmail.com");
-            visitor2.setName(visitor2.getEmail());
+            visitor2.setName("superdeveloper");
             visitor2.setVisit(Set.of(conf1));
             visitor2 = visitorRepository.save(visitor2);
 
             Visitor visitor3 = new Visitor();
             visitor3.setEmail("stopcorruption@gmail.com");
-            visitor3.setName(visitor3.getEmail());
+            visitor3.setName("stopcorruption");
             visitor3.setVisit(Set.of(conf2));
             visitor3 = visitorRepository.save(visitor3);
 
 
             Visitor visitor4 = new Visitor();
             visitor4.setEmail("wikihowyouknow@gmail.com");
-            visitor4.setName(visitor4.getEmail());
+            visitor4.setName("wikihowyouknow");
             visitor4.setVisit(Set.of(conf2));
             visitor4 = visitorRepository.save(visitor4);
 
 
             Visitor visitor5 = new Visitor();
             visitor5.setEmail("yasscleverone@gmail.com");
-            visitor5.setName(visitor5.getEmail());
+            visitor5.setName("yasscleverone");
             visitor5.setVisit(Set.of(conf2));
             visitor5 = visitorRepository.save(visitor5);
 
 
             Visitor visitor6 = new Visitor();
             visitor6.setEmail("andrewtetcher@gmail.com");
-            visitor6.setName(visitor6.getEmail());
+            visitor6.setName("andrewtetcher");
             visitor6.setVisit(Set.of(conf1,conf3));
             visitor6 = visitorRepository.save(visitor6);
 
@@ -247,8 +247,8 @@ public class DatabaseInitials {
             topic3.setDescription("Meta-learning is all the rage in research these days. This is not unexpected, since such a capability essentially is way for the automation that we create to bootstrap their capabilities.");
             topic3.setSpeakerdesc("descr Diego Hueltes");
             topic3.setSpeaker("Diego Hueltes");
-            topic3.setStart(LocalDateTime.of(2020, 5, 14, 12, 30));
-            topic3.setEnd(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
+            topic3.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
             topic3.setConference(conf2);
             topic3 = topicRepository.save(topic3);
 
@@ -291,8 +291,8 @@ public class DatabaseInitials {
             topic4.setDescription("On dairy farms, management of calving is important for the health of dairy cows and the survival rate of calves born.");
             topic4.setSpeakerdesc("desc Miel Hostens");
             topic4.setSpeaker("Miel Hostens");
-            topic4.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
-            topic4.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
+            topic4.setStart(LocalDateTime.now());
+            topic4.setEnd(LocalDateTime.now().plusHours(4));
             topic4.setConference(conf2);
             topic4 = topicRepository.save(topic4);
 
@@ -309,8 +309,8 @@ public class DatabaseInitials {
             topic5.setDescription("Using Azure's AI scanning capabilities, the system was able to return less than 1,300 images that were relevant in terms of potential human incursion, preventing the team from being overwhelmed by an influx of data.");
             topic5.setSpeakerdesc("desc David Gorena Elizondo");
             topic5.setSpeaker("David Gorena Elizondo");
-            topic5.setStart(LocalDateTime.of(2020, 5, 14, 14, 00));
-            topic5.setEnd(LocalDateTime.of(2020, 5, 14, 14, 30));
+            topic5.setStart(LocalDateTime.now());
+            topic5.setEnd(LocalDateTime.now().plusHours(1));
             topic5.setConference(conf3);
             topic5 = topicRepository.save(topic5);
 

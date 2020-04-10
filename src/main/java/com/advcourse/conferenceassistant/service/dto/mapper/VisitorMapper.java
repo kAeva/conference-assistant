@@ -32,8 +32,7 @@ public class VisitorMapper {
         Visitor visitor = new Visitor();
         visitor.setId(visitorDto.getId());
         visitor.setEmail(visitorDto.getEmail());
-//      get name from email using setName() method in Visitor
-        visitor.setName(visitorDto.getEmail());
+        visitor.setName(visitorDto.getEmail().substring(0,visitorDto.getEmail().indexOf('@')));
         visitor.setVisit(conferences);
 
         return visitor;
