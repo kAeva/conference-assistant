@@ -1,14 +1,15 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.FileService;
 import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
+import com.advcourse.conferenceassistant.service.impl.FileServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.DateValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequestMapping("/staff")
 @Controller
 public class StaffController {
@@ -41,7 +43,7 @@ public class StaffController {
     TopicService topicService;
 
     @Autowired
-    FileService fileService;
+    FileServiceImpl fileServiceImpl;
 
 
     @Autowired
@@ -192,7 +194,6 @@ public class StaffController {
     @GetMapping("/topic-add/{confId}")
     public String topicAddPage(@PathVariable long confId,
                                Model model) {
-
         model.addAttribute("topic", new TopicDto());
         return "topic-add";
     }
@@ -207,17 +208,20 @@ public class StaffController {
         dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/staff/topic-add/" + confId;
+            return "topic-add";
         }
-
-        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
+//TODO set upload dir path in properties
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
         if (!uploadDir.exists()) {
-            uploadDir.mkdir();
+            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
+            boolean mkdir = uploadDir.mkdirs();
+            log.info("Create dir {}", uploadDir);
         }
 
         dto.setConfId(confId);
-
-        dto.setSpeakerimg(fileService.uploadFile(file, uploadDir.getAbsolutePath()));
+        if (!file.isEmpty()) {
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+        }
 
         topicService.save(dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
@@ -235,38 +239,5 @@ public class StaffController {
         return "stafflist";
     }
 
-    private String findDir(File root, String name) {
-        if (root.getName().equals(name)) {
-            return root.getAbsolutePath();
-        }
-
-        File[] files = root.listFiles();
-
-        if (files != null) {
-            for (File f : files) {
-                if (f.isDirectory()) {
-                    String myResult = findDir(f, name);
-                    //this just means this branch of the
-                    //recursion reached the end of the
-                    //directory tree without results, but
-                    //we don't want to cut it short here,
-                    //we still need to check the other
-                    //directories, so continue the for loop
-                    if (myResult == null) {
-                        continue;
-                    }
-                    //we found a result so return!
-                    else {
-                        return myResult;
-                    }
-                }
-            }
-        }
-
-        //we don't actually need to change this. It just means we reached
-        //the end of the directory tree (there are no more sub-directories
-        //in this directory) and didn't find the result
-        return null;
-    }
 
 }
