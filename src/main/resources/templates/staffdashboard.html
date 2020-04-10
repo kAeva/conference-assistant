@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +33,7 @@
 
             <!--See only 'ADMIN'-->
             <div sec:authorize="hasAnyAuthority('ADMIN')">
-                <th><a class="btn btn-primary btn-sm" href="/conferenceadd">Add</a></th>
+                <th><a class="btn btn-primary btn-sm" href="/staff/conferenceadd">Add</a></th>
             </div>
             <!---->
         </tr>
@@ -43,7 +44,7 @@
         <tr th:each="conf:${Conflist}">
             <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
             <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                scope="row"><a th:href="@{'/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
+                scope="row"><a th:href="@{'/staff/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
             </th>
             <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
                 th:text="${conf.getDescription()}"></td>
@@ -55,14 +56,14 @@
 
 
             <td th:if="${#lists.contains(colabs_id,conf.getId())} and ${#lists.contains(roles,'ADMIN')}"><a class="btn btn-danger btn-sm"
-                                                                      th:href="@{'/delete-conference/' + ${conf.getId()}}"
+                                                                      th:href="@{'/staff/delete-conference/' + ${conf.getId()}}"
                                                                       value=""
                                                                       name=""><i
                     class="fas fa-skull-crossbones"></i></a></td>
 
 
             <td th:if="${#lists.contains(colabs_id,conf.getId())}"><a class="btn btn-success btn-sm"
-                                                                      th:href="@{'/conference-page/' + ${conf.getId()}}">Edit</a>
+                                                                      th:href="@{'/staff/conference-page/' + ${conf.getId()}}">Edit</a>
             </td>
 
         </tr>

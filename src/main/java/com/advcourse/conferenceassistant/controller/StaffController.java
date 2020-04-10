@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+@RequestMapping("/staff")
 @Controller
 public class StaffController {
     @Autowired
@@ -49,14 +49,14 @@ public class StaffController {
     @Autowired
     TopicValidator topicValidator;
 
-    @GetMapping("/staffreg")
+    @GetMapping("/registration")
     public String stafflogin(Model model) {
         Staff staff = new Staff();
         model.addAttribute(staff);
         return "staffreg";
     }
 
-    @PostMapping("/registration-staff")
+    @PostMapping("/registration")
     public String registerStaffAccount(
             @ModelAttribute("staff") @Valid StaffDto accountStaff,
             BindingResult bindingResult) {
@@ -65,12 +65,12 @@ public class StaffController {
             return "staffreg";
         }
         service.registerNewStaffDtoAccount(accountStaff);
-        return "redirect:/dashboard";
+        return "redirect:/staff/dashboard";
 
 
     }
 
-    @GetMapping("/stafflogin")
+    @GetMapping("/login")
     public String getLoginPage() {
         return "/stafflogin";
     }
@@ -83,13 +83,13 @@ public class StaffController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
 
-        return "redirect:/stafflogin?logout";
+        return "redirect:/staff/login?logout";
     }
 
     @GetMapping("/delete-conference/{confId}")
     public String deleteConf(@PathVariable Long confId) {
         coservice.deleteById(confId);
-        return "redirect:/dashboard";
+        return "redirect:/staff/dashboard";
     }
 
     @GetMapping("/dashboard")
@@ -125,7 +125,7 @@ public class StaffController {
         return "conference-dashboard";
     }
 
-    @GetMapping("/conferenceadd")
+    @GetMapping("/conference-add")
     public String addConf(Model model) {
         ConferenceDto dto = new ConferenceDto();
         model.addAttribute("conference", dto);
@@ -148,7 +148,7 @@ public class StaffController {
         }
         ConferenceDto conferenceDto = coservice.saveConference(dto);
         service.addConference(auth.getName(), conferenceDto);
-        return "redirect:/dashboard";
+        return "redirect:/staff/dashboard";
     }
 
     @GetMapping("/conference-edit/{confId}")
@@ -182,7 +182,7 @@ public class StaffController {
             return "conference-edit";
         }
         coservice.update(confId, dto);
-        return "redirect:/dashboard";
+        return "redirect:/staff/dashboard";
     }
 
     @GetMapping("/topic-dashboard/{topicfId}")
@@ -209,7 +209,7 @@ public class StaffController {
         topicValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/topic-add/"+confId;
+            return "redirect:/staff/topic-add/"+confId;
         }
 
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
@@ -222,7 +222,7 @@ public class StaffController {
         dto.setSpeakerimg(fileService.uploadFile(file, uploadDir.getAbsolutePath()));
 
         topicService.save(dto);
-        return "redirect:/conference-page/" + dto.getConfId();
+        return "redirect:/staff/conference-page/" + dto.getConfId();
 
     }
 
@@ -232,7 +232,7 @@ public class StaffController {
         return "topic-edit";
     }
 
-    @GetMapping("/stafflist")
+    @GetMapping("/list")
     public String getStaffList() {
         return "stafflist";
     }
