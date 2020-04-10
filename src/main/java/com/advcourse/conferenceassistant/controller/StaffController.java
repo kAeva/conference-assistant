@@ -8,8 +8,7 @@ import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
-import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
-import com.advcourse.conferenceassistant.service.validator.dateDiffConf.TopicValidator;
+import com.advcourse.conferenceassistant.service.validator.DateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +30,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/staff")
 @Controller
 public class StaffController {
+
     @Autowired
     private StaffService service;
 
@@ -38,16 +38,14 @@ public class StaffController {
     private ConferenceServiceImpl coservice;
 
     @Autowired
-    ConferenceValidator conferenceValidator;
-
-    @Autowired
     TopicService topicService;
 
     @Autowired
     FileService fileService;
 
+
     @Autowired
-    TopicValidator topicValidator;
+    DateValidator dateValidator;
 
     @GetMapping("/registration")
     public String stafflogin(Model model) {
@@ -141,7 +139,7 @@ public class StaffController {
          * End or start date shouldn't be empty
          * End date should be greater than start date
          * */
-        conferenceValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "conference-add";
@@ -177,7 +175,7 @@ public class StaffController {
          * End or start date shouldn't be empty
          * End date should be greater than start date
          * */
-        conferenceValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
         if (bindingResult.hasErrors()) {
             return "conference-edit";
         }
@@ -206,10 +204,10 @@ public class StaffController {
                            @RequestParam("file") MultipartFile file, HttpServletRequest request
 
     ) {
-        topicValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/staff/topic-add/"+confId;
+            return "redirect:/staff/topic-add/" + confId;
         }
 
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");

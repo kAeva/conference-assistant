@@ -16,4 +16,6 @@ public interface StaffService {
 
     StaffDto update(Long id, StaffDto dto);
 
+    boolean isActiveUser(String email);
+
 }

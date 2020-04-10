@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
@@ -80,6 +81,13 @@ public class StaffServiceImpl implements StaffService {
         staffDto.setRoles(dto.getRoles());
 
         return StaffMapper.toDto(staffRepository.save(StaffMapper.fromDto(staffDto)));
+    }
+
+    @Transactional
+    @Override
+    public boolean isActiveUser(String email) {
+        Staff byEmail = staffRepository.findByEmail(email);
+        return byEmail != null;
     }
 
 
