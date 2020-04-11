@@ -51,15 +51,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
 //        TODO: add excpetion handling for no questions found
-        log.info("In getQuestionsByTopicId() method");
+        log.trace("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)
                 .get()
                 .getConference()
                 .getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
-        log.info("Current visitor " + visitor.getName());
-        log.info("List of questions expected: quanttity " + questionRepository.findByTopicId(topicId).size());
+        log.debug("Current visitor " + visitor.getName());
+        log.debug("List of questions expected: quanttity " + questionRepository.findByTopicId(topicId).size());
         return questionRepository
                 .findByTopicId(topicId)
                 .stream()

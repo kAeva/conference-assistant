@@ -36,28 +36,7 @@ public class VisitorController {
     private TopicService topicService;
 
     @GetMapping("/")
-    public void homePage() {
-       throw new NoSuchConferenceException();
-
-    }
-
-    /**
-     * page with form to input visitor email
-     */
-    @GetMapping("/liveconference/{confId}")
-    public String homePage(@PathVariable Long confId, Model model) {
-        log.info("New visitor in conference " + confId);
-        VisitorDto visitorDto = new VisitorDto();
-        visitorDto.setConfId(Set.of(confId));
-        log.info("Visitor has been attached to conferenceid " + visitorDto.getConfId());
-//        ConferenceDto conference = conferenceService.findById(confId);
-//        log.info("Adding new visitor to conference " + conference.getId());
-//        visitorDto.setConfId(Set.of(conference.getId()));
-
-//        model.addAttribute("conference", conference);
-        model.addAttribute("conference", conferenceService.findById(confId));
-        model.addAttribute("visitor", visitorDto);
-
+    public String homePage() {
         return "index";
     }
 

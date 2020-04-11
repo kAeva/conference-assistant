@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
+
 @RequestMapping("/liveconference")
 @Slf4j
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -34,9 +36,23 @@ public class ConferenceController {
     @Autowired
     private QuestionServiceImpl questionService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public void getError() {
         throw new NoSuchConferenceException();
+    }
+    /**
+     * page with form to input visitor email
+     */
+    @GetMapping("/{confId}")
+    public String homePage(@PathVariable Long confId, Model model) {
+        log.info("New visitor in conference " + confId);
+        VisitorDto visitorDto = new VisitorDto();
+        visitorDto.setConfId(Set.of(confId));
+        log.info("Visitor has been attached to conferenceid " + visitorDto.getConfId());
+        model.addAttribute("conference", conferenceService.findById(confId));
+        model.addAttribute("visitor", visitorDto);
+
+        return "visitor-registration";
     }
 // TODO: add checking conference active status
     @GetMapping("/now/{confId}")
@@ -46,6 +62,7 @@ public class ConferenceController {
             Model model) {
         log.info("Redirected to conference page with id " + confId);
 //        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
+//        TODO: handle null
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
         log.info("Active topic id: " + currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
