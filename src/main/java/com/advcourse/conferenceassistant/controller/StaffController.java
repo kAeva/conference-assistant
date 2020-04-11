@@ -189,7 +189,8 @@ public class StaffController {
 
     @GetMapping("/topic-add/{confId}")
     public String topicAddPage(@PathVariable long confId,
-                               Model model) {
+                               Model model, Authentication auth) {
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("topic", new TopicDto());
         return "topic-add";
     }
@@ -259,7 +260,13 @@ public class StaffController {
         topicService.update(topicId,dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
     }
-
+    @GetMapping("/topic-delete/{topicId}")
+    public String deleteTopic(@PathVariable Long topicId, Authentication auth) {
+        long confId = topicService.findById(topicId).getConfId();
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        topicService.deleteById(topicId);
+        return "redirect:/staff/conference-page/" + confId;
+    }
 
     @GetMapping("/list")
     public String getStaffList() {

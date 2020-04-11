@@ -44,7 +44,7 @@
             <div class="col-sm-8 mx-auto">
                 <h4 class="h4" th:text="${topic.getTheme()}">First topic name</h4>
                 <a class="btn btn-info btn-sm" th:href="@{'/staff/topic-edit/'+${topic.getId()}}">Edit</a>
-                <a class="btn btn-danger btn-sm mx-3" href="/staff/topic-delete" value="" name="">
+                <a class="btn btn-danger btn-sm mx-3" th:href="@{'/staff/topic-delete/'+${topic.getId()}}" value="" name="">
                     <i class="fas fa-skull-crossbones"></i></a>
                 <p class="py-2"
                    th:text="${topic.getStart().toLocalTime().toString()}+' - '+ ${topic.getEnd().toLocalTime().toString()}">
