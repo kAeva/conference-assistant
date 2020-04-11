@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Slf4j
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -45,18 +46,21 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicDto update(Long confId, TopicDto dto) {
-        TopicDto topic = findById(confId);
+    public TopicDto update(Long topicId, TopicDto dto) {
+        TopicDto topic = findById(topicId);
         topic.setDescription(dto.getDescription());
         topic.setEnd(dto.getEnd());
         topic.setSpeaker(dto.getSpeaker());
         topic.setSpeakerdesc(dto.getSpeakerdesc());
-        topic.setSpeakerimg(dto.getSpeakerimg());
+        if (dto.getSpeakerimg()!=null) {
+            topic.setSpeakerimg(dto.getSpeakerimg());
+        }
         topic.setStart(dto.getStart());
         topic.setTheme(dto.getTheme());
         topic.setConfId(dto.getConfId());
         return save(topic);
     }
+
     @Override
     public TopicDto findActiveTopicByConfId(long confId) {
         List<Topic> byConferenceId = topicRepository.findByConferenceId(confId);
@@ -67,7 +71,8 @@ public class TopicServiceImpl implements TopicService {
                 return t;
             }
 //            TODO: avoid this null returning if possible
-        } log.info("No active topic found");
+        }
+        log.info("No active topic found");
         return null;
     }
 

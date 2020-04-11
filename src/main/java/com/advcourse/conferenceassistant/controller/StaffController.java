@@ -110,7 +110,7 @@ public class StaffController {
 
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
-        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
@@ -154,18 +154,14 @@ public class StaffController {
     @GetMapping("/conference-edit/{confId}")
     public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
 
-        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("conference", coservice.findById(confId));
         return "conference-edit";
     }
 
-    private boolean isCurrentConfIdandStaffColabId(@PathVariable Long confId, Authentication auth) {
+    private boolean isStaffHasntConfId(@PathVariable Long confId, Authentication auth) {
         StaffDto staff = service.findByEmail(auth.getName());
-
-        if (staff.getColabs_id() != null && staff.getColabs_id().contains(confId)) {
-            return true;
-        }
-        return false;
+        return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
     }
 
     @PostMapping("/conference-edit/{confId}")
@@ -202,7 +198,7 @@ public class StaffController {
     public String topicAdd(@PathVariable long confId,
                            @ModelAttribute("topic") TopicDto dto,
                            BindingResult bindingResult,
-                           @RequestParam("file") MultipartFile file, HttpServletRequest request
+                           @RequestParam("file") MultipartFile file
 
     ) {
         dateValidator.validate(dto, bindingResult);
@@ -210,12 +206,12 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "topic-add";
         }
-//TODO set upload dir path in properties
+        //TODO set upload dir path in properties
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
         if (!uploadDir.exists()) {
             log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
             boolean mkdir = uploadDir.mkdirs();
-            log.info("Create dir {}", uploadDir);
+            log.info("Create dir {}", mkdir);
         }
 
         dto.setConfId(confId);
@@ -228,11 +224,42 @@ public class StaffController {
 
     }
 
-    @GetMapping("/topic-edit/{topicfId}")
-    public String topicEditPage() {
-
+    @GetMapping("/topic-edit/{topicId}")
+    public String topicEditPage(@PathVariable Long topicId, Model model, Authentication auth) {
+        TopicDto topic = topicService.findById(topicId);
+        long confId = topic.getConfId();
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        model.addAttribute("topic", topic);
         return "topic-edit";
     }
+
+    @PostMapping("/topic-edit/{topicId}")
+    public String postTopicEditPage(@PathVariable Long topicId,
+                                    @ModelAttribute("topic") TopicDto dto,
+                                    BindingResult bindingResult,
+                                    @RequestParam("file") MultipartFile file){
+        dateValidator.validate(dto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "topic-edit";
+        }
+        TopicDto topicById = topicService.findById(topicId);
+        dto.setId(topicId);
+        dto.setConfId(topicById.getConfId());
+        //TODO set upload dir path in properties
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
+        if (!uploadDir.exists()) {
+            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
+            boolean mkdir = uploadDir.mkdirs();
+            log.info("Create dir {}", mkdir);
+        }
+        if (!file.isEmpty()) {
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+        }
+        topicService.update(topicId,dto);
+        return "redirect:/staff/conference-page/" + dto.getConfId();
+    }
+
 
     @GetMapping("/list")
     public String getStaffList() {

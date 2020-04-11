@@ -15,13 +15,17 @@
         <div class="row py-3 flex-column">
             <h3 class="text-center h3 py-3 text-uppercase"><p th:text="${Confid.getTheme()}"></p><a
                     class="btn btn-sm btn-info mx-3" th:href="@{'/staff/conference-edit/'+${confId}}">Edit</a></h3>
-            <p class="text-center py-2"><b th:text="${Confid.getStart().toLocalDate().toString()}+ ${Confid.getStart().toLocalTime().toString()}+' - '"></b> <b th:text="${Confid.getEnd().toLocalDate().toString()}+' '+ ${Confid.getEnd().toLocalTime().toString()}"></b></p>
+            <p class="text-center py-2"><b
+                    th:text="${Confid.getStart().toLocalDate().toString()} + ' '+ ${Confid.getStart().toLocalTime().toString()}+' - '"></b>
+                <b th:text="${Confid.getEnd().toLocalDate().toString()}+' '+ ${Confid.getEnd().toLocalTime().toString()}"></b>
+            </p>
             <p class="px-5" th:text="${Confid.getDescription()}"></p>
         </div>
     </div>
     <hr>
     <div class="col-sm-8 mx-auto py-3">
-        <h2 class="h2 text-center py-3">List Of Topics <a class="btn btn-success" th:href="@{'/staff/topic-add/'+${confId}}">Add topic</a></h2>
+        <h2 class="h2 text-center py-3">List Of Topics <a class="btn btn-success"
+                                                          th:href="@{'/staff/topic-add/'+${confId}}">Add topic</a></h2>
 
         <div class="row py-3 topic" th:each="topic : ${allTopic}">
 
@@ -29,21 +33,26 @@
                 <figure class="figure">
                     <img src="../static/images/image-placeholder.png" th:src="@{'/images/'+${topic.getSpeakerimg()}}"
                          class="figure-img img-fluid rounded" height="350" width="350"/>
-                    <figcaption class="figure-caption" th:text="${topic.getSpeaker()}">Speaker picture above, the name and descr here</figcaption>
-                    <figcaption class="figure-caption" th:text="${topic.getSpeakerdesc()}">Speaker picture above, the name and descr here</figcaption>
+                    <figcaption class="figure-caption" th:text="${topic.getSpeaker()}">Speaker picture above, the name
+                        and descr here
+                    </figcaption>
+                    <figcaption class="figure-caption" th:text="${topic.getSpeakerdesc()}">Speaker picture above, the
+                        name and descr here
+                    </figcaption>
                 </figure>
             </div>
             <div class="col-sm-8 mx-auto">
                 <h4 class="h4" th:text="${topic.getTheme()}">First topic name</h4>
-                <a class="btn btn-info btn-sm" href="/staff/topic-edit">Edit</a><a class="btn btn-danger btn-sm mx-3"
-                                                                             href="/staff/topic-delete" value="" name=""><i
-                    class="fas fa-skull-crossbones"></i></a>
-                <p class="py-2" th:text="${topic.getStart().toLocalTime().toString()}+' - '+ ${topic.getEnd().toLocalTime().toString()}">Time: 11:00 - 11:45</p>
+                <a class="btn btn-info btn-sm" th:href="@{'/staff/topic-edit/'+${topic.getId()}}">Edit</a>
+                <a class="btn btn-danger btn-sm mx-3" href="/staff/topic-delete" value="" name="">
+                    <i class="fas fa-skull-crossbones"></i></a>
+                <p class="py-2"
+                   th:text="${topic.getStart().toLocalTime().toString()}+' - '+ ${topic.getEnd().toLocalTime().toString()}">
+                    Time: 11:00 - 11:45</p>
                 <p th:text="${topic.getDescription()}">Topic description </p>
             </div>
 
         </div>
-
 
 
     </div>

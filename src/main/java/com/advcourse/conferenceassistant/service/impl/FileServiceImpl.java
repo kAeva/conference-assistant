@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
@@ -26,10 +25,10 @@ public class FileServiceImpl implements FileService {
             Path copyLocation = Paths
                     .get(uploadDir + File.separator + UUID.randomUUID().toString() + "-" + StringUtils.cleanPath(file.getOriginalFilename()));
             Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
-           log.info(copyLocation.toString());
+            log.info("Save file {} to {}",file.getOriginalFilename(), copyLocation.toString());
             return copyLocation.getFileName().toString();
         } catch (Exception e) {
-          log.warn(e.getMessage(),e);
+            log.warn(e.getMessage(), e);
             throw new FileStorageException("Could not store file " + file.getOriginalFilename()
                     + ". Please try again!");
         }
