@@ -13,23 +13,17 @@
 
         <div class="">
             <h1>Welcome!</h1>
-            <h2 th:if="${conference!=null}" th:text="${conference.getTheme()}">CONFERENCE NAME is going right now</h2>
-            <p>(next closest event will take place at: 24 Apr)</p>
-            <h5><a href="" >click here to see all our events ></a></h5>
+            <p>find and scar QR-code to enter the conference you are visiting</p>
+
+
+            <div>
+                <h3>All planned conferences: </h3>
+
+            </div>
+
         </div>
 
-        <div class="col-md-10 d-flex justify-content-center mx-auto ">
 
-            <form action="#" th:action="@{'/registration-visitor/'+${confId}}"  th:object="${visitor}" method="POST"
-                  class="form-inline py-5 justify-content-center " style="width: 80%; margin-top: 20%">
-
-
-                <input type="email" th:field="*{email}" style="width: 60%;" class="form-control px-5 py-4 mr-2"
-                       id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
-                <button type="submit" class="btn btn-dark">Go</button>
-            </form>
-            </div>
     </div>
 </div>
 

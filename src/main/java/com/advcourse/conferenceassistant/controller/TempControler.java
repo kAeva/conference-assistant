@@ -12,5 +12,4 @@ public class TempControler {
         return "schedule";
     }
 
-
 }
