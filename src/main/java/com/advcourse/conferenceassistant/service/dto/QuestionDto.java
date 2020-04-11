@@ -18,4 +18,5 @@ public class QuestionDto {
     private LocalDateTime time;
     private Boolean isLikedByThisVisitor;
     private Integer likesQuantity;
+    private Boolean answerStatus;
 }

@@ -1,10 +1,9 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.FileService;
-import com.advcourse.conferenceassistant.service.StaffService;
-import com.advcourse.conferenceassistant.service.TopicService;
+import com.advcourse.conferenceassistant.service.*;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
+import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
@@ -31,26 +30,28 @@ import java.util.stream.Collectors;
 @RequestMapping("/staff")
 @Controller
 public class StaffController {
+
     @Autowired
     private StaffService service;
-
     @Autowired
-    private ConferenceServiceImpl coservice;
-
+    private ConferenceService coservice;
     @Autowired
-    ConferenceValidator conferenceValidator;
-
+    private ConferenceValidator conferenceValidator;
     @Autowired
-    TopicService topicService;
-
+    private TopicService topicService;
+    @Autowired
+    QuestionService questionService;
     @Autowired
     FileService fileService;
-
     @Autowired
     TopicValidator topicValidator;
 
+    @GetMapping("/")
+    public String staffEnter() {
+        return "forward:/dashboard";
+    }
     @GetMapping("/registration")
-    public String stafflogin(Model model) {
+    public String staffLogin(Model model) {
         Staff staff = new Staff();
         model.addAttribute(staff);
         return "staffreg";
@@ -184,10 +185,13 @@ public class StaffController {
         coservice.update(confId, dto);
         return "redirect:/staff/dashboard";
     }
-
-    @GetMapping("/topic-dashboard/{topicfId}")
-    public String topicDashPage() {
-
+// TODO: hide this from all users (now it's available without logging in)
+    @GetMapping("/topic-dashboard/{topicId}")
+    public String topicDashPage(@PathVariable long topicId,
+                                Model model) {
+        List<QuestionDto> questions = questionService.getQuestionsByTopicIdForStaff(topicId);
+        model.addAttribute("questions", questions);
+        model.addAttribute("topic", topicService.findById(topicId));
         return "topic-dashboard";
     }
 

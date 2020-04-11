@@ -10,7 +10,7 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="/dashboard"><i class="fas fa-crown"></i> Dashboard</a>
+    <a class="navbar-brand" href="/staff/dashboard"><i class="fas fa-crown"></i> Dashboard</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="">Manage Users</a>
+                <a class="nav-link" href="#">Manage Users</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Statistics</a>
@@ -33,15 +33,18 @@
 </nav>
 
 <div class="container-fluid mx-auto mt-5">
-    <h1 class="text-center">Deconstructing Deep Learning: LIVE Dashboard</h1>
+    <h1 class="text-center" th:text="${topic.getTheme()}"></h1>
+
+<!--    TODO: add topic start-end functions-->
     <div class="mx-auto col-sm-8">
     <a class="btn btn-success" href="/"><i class="far fa-play-circle"></i></a>
-    <a class="btn btn-danger" href="#" value="" name=""><i class="far fa-stop-circle"></i></a>
+    <a class="btn btn-danger" href="#" ><i class="far fa-stop-circle"></i></a>
     </div>
+
 </div>
 
 
-<div class="container mx-auto mt-5" style="">
+<div class="container mx-auto mt-5">
     <table class="table">
 
         <thead class="thead">
@@ -50,7 +53,6 @@
             <th scope="col">Question</th>
             <th scope="col">User</th>
             <th scope="col">Answered?</th>
-
             <th></th>
 
         </tr>
@@ -58,24 +60,26 @@
 
         <tbody>
 
-        <tr>
-            <th scope="row">15 <i class="fas fa-grin-hearts"></i></th>
-            <td>What is the biggest challenge you had in your practice?</td>
-            <td>imagenius</td>
-            <td><input type="checkbox" checked data-toggle="toggle"></td>
-
-        </tr>
-        <tr>
-            <th scope="row">11 <i class="fas fa-grin-hearts"></i></th>
-            <td>What should I do next, right after this lecture, to become an AI pro?</td>
-            <td>wikihowyouknow</td>
-            <td><input type="checkbox" aria-label="Checkbox for following text input"></td>
+        <tr th:each="q : ${questions}">
+            <th scope="row"><span th:text="${q.getLikesQuantity()}"></span> <i class="fas fa-grin-hearts"></i></th>
+            <td>
+                <div th:if="${q.getAnswerStatus()}"><del><span th:text="${q.getQuestion()}"></span></del></div>
+                <div th:if="${!q.getAnswerStatus()}"> <span th:text="${q.getQuestion()}"></span></div>
+            </td>
+            </td>
+            <td th:text="${q.getCreatorName()}"></td>
+            <td>
+                <div th:if="${q.getAnswerStatus()}">
+                    <input type="checkbox" checked>
+                </div>
+                <div th:if="${!q.getAnswerStatus()}">
+                    <a class="btn btn-success btn-small" th:href="'/question/answer/' + ${topicId}  + '/' + ${q.getId()}"><i class="fas fa-hourglass-start"></i> Answered</a>
+                </div>
+            </td>
 
         </tr>
         </tbody>
     </table>
-    <td><a class="btn btn-success float-right" href="/"><i class="fas fa-hourglass-start"></i> Save</a></td>
-
 </div>
 
 

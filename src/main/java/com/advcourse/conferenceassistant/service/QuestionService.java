@@ -10,4 +10,6 @@ public interface QuestionService {
     List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions);
     QuestionDto like(long questionId, long guestId);
     QuestionDto unlike(long questionId, long guestId);
+    List<QuestionDto> getQuestionsByTopicIdForStaff(long topicId);
+    void answerThisQuestion(long questionId);
 }

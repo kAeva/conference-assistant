@@ -1,7 +1,10 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
+import com.advcourse.conferenceassistant.service.ConferenceService;
+import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.TopicService;
+import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
@@ -28,13 +31,13 @@ import java.util.Set;
 public class ConferenceController {
 
     @Autowired
-    private VisitorServiceImpl visitorService;
+    private VisitorService visitorService;
     @Autowired
-    private ConferenceServiceImpl conferenceService;
+    private ConferenceService conferenceService;
     @Autowired
     private TopicService topicService;
     @Autowired
-    private QuestionServiceImpl questionService;
+    private QuestionService questionService;
 
     @GetMapping("")
     public void getError() {
@@ -77,6 +80,14 @@ public class ConferenceController {
         return "topicquestions";
     }
 
+    @GetMapping("/now/{confId}/schedule")
+    public String showSchedule(@PathVariable Long confId, Model model) {
+        log.debug("Adding a conference to model with id: " + conferenceService.findById(confId).getId());
+        model.addAttribute("conference", conferenceService.findById(confId));
+        log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
+        model.addAttribute("topics", topicService.findByConfId(confId));
+        return "schedule";
+    }
 
     /**
      * delete email from cookie
@@ -93,15 +104,6 @@ public class ConferenceController {
         response.addCookie(newCookie);
 
         return "forward:/liveconference/" + confId;
-    }
-
-    @GetMapping("/now/{confId}/schedule")
-    public String showSchedule(@PathVariable Long confId, Model model) {
-        log.debug("Adding a conference to model with id: " + conferenceService.findById(confId).getId());
-        model.addAttribute("conference", conferenceService.findById(confId));
-        log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
-        model.addAttribute("topics", topicService.findByConfId(confId));
-        return "schedule";
     }
 
 }

@@ -16,7 +16,7 @@ public class Question {
 
     private String question;
     private LocalDateTime time;
-    private boolean isAnswered;
+    private boolean answerStatus;
 
 
     @ManyToOne
