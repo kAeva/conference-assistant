@@ -2,9 +2,11 @@ package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
+import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
+import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
@@ -28,7 +30,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RequestMapping("/staff")
@@ -52,7 +53,7 @@ public class StaffController {
 
     @GetMapping("/")
     public String staffEnter() {
-        return "forward:/dashboard";
+        return "forward:/staff/dashboard";
     }
     @GetMapping("/registration")
     public String staffLogin(Model model) {
@@ -77,7 +78,7 @@ public class StaffController {
 
     @GetMapping("/login")
     public String getLoginPage() {
-        return "/stafflogin";
+        return "stafflogin";
     }
 
 
@@ -314,6 +315,16 @@ public class StaffController {
     ) {
         service.addConferences(staffId,dto.getColabs_id());
         return "redirect:/staff/add-privileges/" + staffId;
+    }
+    @GetMapping("/topic-start/{topicId}")
+    public String changeStartTime(@PathVariable Long topicId){
+      topicService.updateStartTime(topicId);
+        return "redirect:/staff/topic-dashboard/" + topicId;
+    }
+    @GetMapping("/topic-end/{topicId}")
+    public String changeEndTime(@PathVariable Long topicId){
+        topicService.updateEndTime(topicId);
+        return "redirect:/staff/topic-dashboard/" + topicId;
     }
 
 }

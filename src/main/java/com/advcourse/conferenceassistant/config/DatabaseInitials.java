@@ -58,8 +58,8 @@ public class DatabaseInitials {
             Staff staff2 = new Staff();
             staff2.setName("Darth");
             staff2.setSurname("Vader");
-            staff2.setEmail("dark_lord@sith.com");
-            staff2.setPass("darkforce");
+            staff2.setEmail("admin@admin.com");
+            staff2.setPass("admin");
             staff2.setRoles(rolesAll);
             staff2.setPass(passwordEncoder.encode(staff2.getPass()));
 

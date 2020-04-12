@@ -31,7 +31,7 @@
 
             <div class="col-sm-3 mx-auto">
                 <figure class="figure">
-                    <img src="../static/images/image-placeholder.png" th:src="@{'/images/'+${topic.getSpeakerimg()}}"
+                    <img src="../../../../resources/images/image-placeholder.png" th:src="@{'/images/'+${topic.getSpeakerimg()}}"
                          class="figure-img img-fluid rounded" height="350" width="350"/>
                     <figcaption class="figure-caption" th:text="${topic.getSpeaker()}">Speaker picture above, the name
                         and descr here
@@ -42,7 +42,7 @@
                 </figure>
             </div>
             <div class="col-sm-8 mx-auto">
-                <h4 class="h4" th:text="${topic.getTheme()}">First topic name</h4>
+                <a th:href="@{'/staff/topic-dashboard/'+${topic.getId()}}"><h4 class="h4" th:text="${topic.getTheme()}">First topic name</h4></a>
                 <a class="btn btn-info btn-sm" th:href="@{'/staff/topic-edit/'+${topic.getId()}}">Edit</a>
                 <a class="btn btn-danger btn-sm mx-3" th:href="@{'/staff/topic-delete/'+${topic.getId()}}" value="" name="">
                     <i class="fas fa-skull-crossbones"></i></a>

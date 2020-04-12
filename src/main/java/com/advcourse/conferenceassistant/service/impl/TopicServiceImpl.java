@@ -61,6 +61,18 @@ public class TopicServiceImpl implements TopicService {
         return save(topic);
     }
 
+    public TopicDto updateStartTime(Long topicId) {
+        TopicDto topic = findById(topicId);
+        topic.setStart(LocalDateTime.now());
+        return save(topic);
+    }
+
+    public TopicDto updateEndTime(Long topicId) {
+        TopicDto topic = findById(topicId);
+        topic.setEnd(LocalDateTime.now());
+        return save(topic);
+    }
+
     @Override
     public TopicDto findActiveTopicByConfId(long confId) {
         List<Topic> byConferenceId = topicRepository.findByConferenceId(confId);

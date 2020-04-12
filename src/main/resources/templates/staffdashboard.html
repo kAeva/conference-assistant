@@ -44,7 +44,7 @@
         <tr th:each="conf:${Conflist}">
             <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
             <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                scope="row"><a th:href="@{'/staff/conference-dashboard/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
+                scope="row"><a th:href="@{'/staff/conference-page/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
             </th>
             <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
                 th:text="${conf.getDescription()}"></td>
@@ -63,7 +63,7 @@
 
 
             <td th:if="${#lists.contains(colabs_id,conf.getId())}"><a class="btn btn-success btn-sm"
-                                                                      th:href="@{'/staff/conference-page/' + ${conf.getId()}}">Edit</a>
+                                                                      th:href="@{'/staff/conference-edit/' + ${conf.getId()}}">Edit</a>
             </td>
 
         </tr>

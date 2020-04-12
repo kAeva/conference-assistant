@@ -11,5 +11,7 @@ public interface TopicService {
     void deleteById(Long id);
     TopicDto save(TopicDto dto);
     TopicDto update(Long confId, TopicDto dto);
+    TopicDto updateStartTime(Long topicId);
+    TopicDto updateEndTime(Long topicId);
     TopicDto findActiveTopicByConfId(long confId);
  }
