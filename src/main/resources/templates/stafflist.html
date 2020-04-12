@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="UTF-8">
@@ -18,28 +19,41 @@
         <th id="roles">Roles</th>
         <th>Conferences</th>
         <th>Edit</th>
-        <th>Delete</th>
+        <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
+            <th>Delete</th>
+        </div>
     </tr>
     <tr th:each="staff : ${staffs}">
-        <td th:text="${staff.getId()}">Id</td>
-        <td th:text="${staff.getEmail()}">Email</td>
-        <td th:text="${staff.getName()}">Name</td>
-        <td headers="roles">
+        <td th:if="${#sets.contains(rolesAuth,'SUPERVISOR')} or ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} " th:text="${staff.getId()}">Id</td>
+        <td th:if="${#sets.contains(rolesAuth,'SUPERVISOR')} or ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} " th:text="${staff.getEmail()}">Email</td>
+        <td th:if="${#sets.contains(rolesAuth,'SUPERVISOR')} or ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} " th:text="${staff.getName()}">Name</td>
+        <td th:if="${#sets.contains(rolesAuth,'SUPERVISOR')} or ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} " headers="roles">
             <span th:each="a, role : ${staff.getRoles()}" th:text="${!role.last} ? ${a} + ' ,': ${a}"></span>
         </td>
-        <td class="form-group blu-margin">
-            <select class="form-control" id="dropOperator">
+        <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
+        <td  class="form-group blu-margin">
+            <select class="form-control" id="dropOperatorq">
                 <option th:each="conf : ${staff.getColabs_id()}"
                         th:text="${confService.findById(conf).getTheme()}"></option>
             </select>
         </td>
+        </div>
 
-        <td>
+
+        <td th:if="${#sets.contains(rolesAuth,'ADMIN')} and ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} " class="form-group blu-margin">
+            <select class="form-control" id="dropOperator" th:with="commonConfId=${staff.getColabs_id().retainAll(staffAuth.getColabs_id())}">
+                <option  th:each="conf : ${staff.getColabs_id()}"
+                        th:text="${confService.findById(conf).getTheme()}"></option>
+            </select>
+        </td>
+
+        <td th:if="${#sets.contains(rolesAuth,'SUPERVISOR')} or ${!T(java.util.Collections).disjoint(staffAuth.getColabs_id(),staff.getColabs_id())} ">
             <a class="btn btn-success btn-sm" th:href="@{'/staff/add-privileges/'+${staff.getId()}}">Edit</a>
         </td>
-        <td><a class="btn btn-danger btn-sm mx-3" th:href="@{'/staff/staff-delete/'+${staff.getId()}}">
-            <i class="fas fa-skull-crossbones"></i></a></td>
-
+        <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
+            <td><a class="btn btn-danger btn-sm mx-3" th:href="@{'/staff/staff-delete/'+${staff.getId()}}">
+                <i class="fas fa-skull-crossbones"></i></a></td>
+        </div>
     </tr>
 </table>
 

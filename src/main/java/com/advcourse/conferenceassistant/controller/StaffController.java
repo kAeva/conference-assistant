@@ -13,6 +13,7 @@ import com.advcourse.conferenceassistant.service.validator.DateValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RequestMapping("/staff")
@@ -272,8 +272,11 @@ public class StaffController {
     }
 
     @GetMapping("/list")
-    public String getStaffList(Model model) {
+    public String getStaffList(Model model, Authentication auth) {
+
+        model.addAttribute("staffAuth", service.findByEmail(auth.getName()));
         model.addAttribute("staffs", service.findAll());
+        model.addAttribute("rolesAuth", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         model.addAttribute("roles", List.of(Role.values()));
         model.addAttribute("confService", coservice);
         return "stafflist";
@@ -306,7 +309,7 @@ public class StaffController {
     public String addConferenceId(@PathVariable Long staffId,
                                   @ModelAttribute("staff") StaffDto dto
     ) {
-        service.addConferences(staffId,dto.getColabs_id());
+        service.addConferences(staffId, dto.getColabs_id());
         return "redirect:/staff/add-privileges/" + staffId;
     }
 
