@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <title>Add Previleges</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="fragments :: admin-header"></div>
+<div class="container-fluid mx-auto mt-5 col-sm-4">
+    <div>
+        <h4 class="fas" th:text="'Email : '+${staff.getEmail()}"></h4></div>
+    <div>
+        <h4 class="fas" th:text="'Name : '+${staff.getName()}"></h4></div>
+    <div>
+        <h4 class="fas" th:text="'Surname : '+${staff.getSurname()}"></h4></div>
+
+    <form th:action="@{'/staff/add-conferenceId/'+${staffId}}" th:object="${staff}" method="POST">
+        <div class="input-group-text" th:each="conf : ${conferences}">
+            <input type="checkbox" th:field="*{colabs_id}" th:value="${conf}"/>
+            <label th:for="${#ids.prev('colabs_id')}"
+                   th:text="'id='+${conf}+' '+${confService.findById(conf).getTheme()}">Conference Id</label>
+        </div>
+        <button type="submit" class="btn btn-dark">Edit</button>
+    </form>
+    <br>
+    <form th:action="@{'/staff/add-roles/'+${staffId}}" th:object="${staff}" method="POST">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text" th:each="role : ${roles}">
+                    <input type="checkbox" th:field="*{roles}" th:value="${role}"/>
+                    <label th:for="${#ids.prev('roles')}"
+                           th:text="${role}">Role</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-dark">Edit</button>
+    </form>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

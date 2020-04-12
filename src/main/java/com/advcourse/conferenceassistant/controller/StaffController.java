@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequestMapping("/staff")
@@ -239,7 +240,7 @@ public class StaffController {
     public String postTopicEditPage(@PathVariable Long topicId,
                                     @ModelAttribute("topic") TopicDto dto,
                                     BindingResult bindingResult,
-                                    @RequestParam("file") MultipartFile file){
+                                    @RequestParam("file") MultipartFile file) {
         dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -258,9 +259,10 @@ public class StaffController {
         if (!file.isEmpty()) {
             dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
         }
-        topicService.update(topicId,dto);
+        topicService.update(topicId, dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
     }
+
     @GetMapping("/topic-delete/{topicId}")
     public String deleteTopic(@PathVariable Long topicId, Authentication auth) {
         long confId = topicService.findById(topicId).getConfId();
@@ -271,11 +273,41 @@ public class StaffController {
 
     @GetMapping("/list")
     public String getStaffList(Model model) {
-        model.addAttribute("staffs",service.findAll());
+        model.addAttribute("staffs", service.findAll());
         model.addAttribute("roles", List.of(Role.values()));
         model.addAttribute("confService", coservice);
         return "stafflist";
     }
 
+    @GetMapping("/staff-delete/{staffId}")
+    public String deleteStaff(@PathVariable long staffId) {
+        service.deleteById(staffId);
+        return "redirect:/staff/list";
+    }
+
+    @GetMapping("add-privileges/{staffId}")
+    public String staffPrevileges(@PathVariable long staffId, Model model) {
+        model.addAttribute("staff", service.findById(staffId));
+        model.addAttribute("roles", Set.of(Role.values()));
+        model.addAttribute("conferences", coservice.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+        model.addAttribute("confService", coservice);
+        return "add-privileges";
+    }
+
+    @PostMapping("/add-roles/{staffId}")
+    public String addRole(@PathVariable Long staffId,
+                          @ModelAttribute("staff") StaffDto dto
+    ) {
+        service.addRoles(staffId, dto.getRoles());
+        return "redirect:/staff/add-privileges/" + staffId;
+    }
+
+    @PostMapping("/add-conferenceId/{staffId}")
+    public String addConferenceId(@PathVariable Long staffId,
+                                  @ModelAttribute("staff") StaffDto dto
+    ) {
+        service.addConferences(staffId,dto.getColabs_id());
+        return "redirect:/staff/add-privileges/" + staffId;
+    }
 
 }

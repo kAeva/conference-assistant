@@ -35,14 +35,14 @@
         </td>
 
         <td>
-            <a class="btn btn-success btn-sm" >Edit</a>
+            <a class="btn btn-success btn-sm" th:href="@{'/staff/add-privileges/'+${staff.getId()}}">Edit</a>
         </td>
-        <td><a class="btn btn-danger btn-sm mx-3">
+        <td><a class="btn btn-danger btn-sm mx-3" th:href="@{'/staff/staff-delete/'+${staff.getId()}}">
             <i class="fas fa-skull-crossbones"></i></a></td>
 
     </tr>
 </table>
 
-
+<div th:replace="fragments :: footer"></div>
 </body>
 </html>
