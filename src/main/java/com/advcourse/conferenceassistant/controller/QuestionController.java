@@ -55,4 +55,9 @@ public class QuestionController {
         log.debug("Liked by current user? - " + questionDto.getIsLikedByThisVisitor());
         return "redirect:/liveconference/now/" + topicService.findById(questionDto.getTopicId()).getConfId();
     }
+    @GetMapping("/answer/{topicId}/{questionId}")
+    public String answerQuestion(@PathVariable Long questionId) {
+        questionService.answerThisQuestion(questionId);
+        return "redirect:/staff/topic-dashboard/{topicId}";
+    }
 }

@@ -2,6 +2,7 @@ package com.advcourse.conferenceassistant.service;
 
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
+import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 
 import java.util.List;

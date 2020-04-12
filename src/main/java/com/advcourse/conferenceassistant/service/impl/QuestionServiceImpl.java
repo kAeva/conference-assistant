@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDto getQuestionById(long id, String email) {
-        Question q = questionRepository.findById(id).get();
+        Question q = questionRepository.findById(id);
         Long conf_id = q.getTopic().getConference().getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
 
@@ -51,15 +51,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
 //        TODO: add excpetion handling for no questions found
-        log.info("In getQuestionsByTopicId() method");
+        log.trace("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)
                 .get()
                 .getConference()
                 .getId();
         Visitor visitor = VisitorMapper.fromDto(visitorService.findByEmailAndVisit(email, conf_id));
-        log.info("Current visitor " + visitor.getName());
-        log.info("List of questions expected: quanttity " + questionRepository.findByTopicId(topicId).size());
+        log.debug("Current visitor " + visitor.getName());
+        log.debug("List of questions expected: quanttity " + questionRepository.findByTopicId(topicId).size());
         return questionRepository
                 .findByTopicId(topicId)
                 .stream()
@@ -72,6 +72,22 @@ public class QuestionServiceImpl implements QuestionService {
                 ).collect(Collectors.toList());
     }
     @Override
+    public List<QuestionDto> getQuestionsByTopicIdForStaff(long topicId) {
+        List<QuestionDto> allQuestions = questionRepository
+                .findByTopicId(topicId)
+                .stream()
+                .map((q) -> {
+                            Set<Visitor> likes = q.getLikes();
+                            QuestionDto questionDto = QuestionMapper.toDto(q, false, likes.size());
+                            log.info("Question to QuestionDto converted : " + questionDto);
+                            return questionDto;
+                        }
+                ).collect(Collectors.toList());
+        Comparator<QuestionDto> compareByLikes = Comparator.comparing(QuestionDto::getLikesQuantity);
+        Collections.sort(allQuestions, compareByLikes.reversed());
+        return allQuestions;
+    }
+    @Override
     public List<QuestionDto> getTopQuestionsByTopicId(List<QuestionDto> questions){
 //        TODO: add exceprion handling for no questions found
         log.debug("Questions: list before sorting " + questions);
@@ -82,7 +98,7 @@ public class QuestionServiceImpl implements QuestionService {
             log.debug("Questions list size is >= 3");
             return questions.subList(0, 3);
         }
-        log.debug("Qustions list is less than 3");
+        log.debug("Questions list is less than 3");
         return questions;
     }
 
@@ -91,6 +107,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto addQuestion(QuestionDto questionDto) {
         log.debug("In addQuestion() method");
         log.debug("Question DTO received: " + questionDto);
+        log.debug("Question received: " + QuestionMapper.fromDto(questionDto));
         Question question = QuestionMapper.fromDto(questionDto);
         log.debug("QuestionDTO converted to Question " + question);
         Visitor creator = visitorRepository.findById(questionDto.getCreatorId());
@@ -102,6 +119,7 @@ public class QuestionServiceImpl implements QuestionService {
         question.setLikes(likes);
         log.debug("Likes setted: " + likes);
         question.setTime(LocalDateTime.now());
+        question.setAnswerStatus(false);
         log.debug("Got time : " + question.getTime());
         log.debug("Received question: " + question);
         return QuestionMapper.toDto(questionRepository.save(question), true, likes.size());
@@ -111,15 +129,24 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDto like(long questionId, long guestId) {
         Visitor visitor = visitorRepository.findById(guestId);
-        Question question = questionRepository.findById(questionId).get();
+        Question question = questionRepository.findById(questionId);
         question.getLikes().add(visitor);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
     }
     @Override
     public QuestionDto unlike(long questionId, long guestId){
         Visitor visitor = visitorRepository.findById(guestId);
-        Question question = questionRepository.findById(questionId).get();
+        Question question = questionRepository.findById(questionId);
         question.getLikes().remove(visitor);
         return QuestionMapper.toDto(questionRepository.save(question), true, question.getLikes().size());
+    }
+    @Override
+    public void answerThisQuestion(long questionId) {
+        log.debug("In mark as answered method for question id: " + questionId);
+        Question question = questionRepository.findById(questionId);
+        question.setAnswerStatus(true);
+        log.debug("Status of this question: " + question.isAnswerStatus());
+        questionRepository.save(question);
+
     }
 }

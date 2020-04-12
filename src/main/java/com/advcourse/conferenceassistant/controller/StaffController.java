@@ -2,9 +2,11 @@ package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
+import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
+import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
@@ -42,17 +44,20 @@ public class StaffController {
     private ConferenceServiceImpl coservice;
 
     @Autowired
-    TopicService topicService;
-
+    private TopicService topicService;
+    @Autowired
+    QuestionService questionService;
     @Autowired
     FileServiceImpl fileServiceImpl;
-
-
     @Autowired
     DateValidator dateValidator;
 
+    @GetMapping("/")
+    public String staffEnter() {
+        return "forward:/staff/dashboard";
+    }
     @GetMapping("/registration")
-    public String stafflogin(Model model) {
+    public String staffLogin(Model model) {
         Staff staff = new Staff();
         model.addAttribute(staff);
         return "staffreg";
@@ -74,7 +79,7 @@ public class StaffController {
 
     @GetMapping("/login")
     public String getLoginPage() {
-        return "/stafflogin";
+        return "stafflogin";
     }
 
 
@@ -182,10 +187,13 @@ public class StaffController {
         coservice.update(confId, dto);
         return "redirect:/staff/dashboard";
     }
-
-    @GetMapping("/topic-dashboard/{topicfId}")
-    public String topicDashPage() {
-
+// TODO: hide this from all users (now it's available without logging in)
+    @GetMapping("/topic-dashboard/{topicId}")
+    public String topicDashPage(@PathVariable long topicId,
+                                Model model) {
+        List<QuestionDto> questions = questionService.getQuestionsByTopicIdForStaff(topicId);
+        model.addAttribute("questions", questions);
+        model.addAttribute("topic", topicService.findById(topicId));
         return "topic-dashboard";
     }
 
@@ -311,6 +319,16 @@ public class StaffController {
     ) {
         service.addConferences(staffId, dto.getColabs_id());
         return "redirect:/staff/add-privileges/" + staffId;
+    }
+    @GetMapping("/topic-start/{topicId}")
+    public String changeStartTime(@PathVariable Long topicId){
+      topicService.updateStartTime(topicId);
+        return "redirect:/staff/topic-dashboard/" + topicId;
+    }
+    @GetMapping("/topic-end/{topicId}")
+    public String changeEndTime(@PathVariable Long topicId){
+        topicService.updateEndTime(topicId);
+        return "redirect:/staff/topic-dashboard/" + topicId;
     }
 
 }

@@ -108,6 +108,7 @@
             <textarea class="form-control" th:name="question" rows="2" style="float: left; width: 80%;"></textarea>
             <input type="hidden" th:name="topicId" th:value="${topic.getId()}">
             <input type="hidden" th:name="creatorId" th:value="${visitor.getId()}">
+            <input type="hidden" th:name="answerStatus" th:value="false">
             <button type="submit" class="btn btn-success px-2 mx-1" style="height: 50px; width: 15%;"><i
                     class="fas fa-chevron-right"></i></button>
         </form>

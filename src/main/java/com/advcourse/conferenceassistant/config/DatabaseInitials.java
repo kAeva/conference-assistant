@@ -58,8 +58,8 @@ public class DatabaseInitials {
             Staff staff2 = new Staff();
             staff2.setName("Darth");
             staff2.setSurname("Vader");
-            staff2.setEmail("dark_lord@sith.com");
-            staff2.setPass("darkforce");
+            staff2.setEmail("admin@admin.com");
+            staff2.setPass("admin");
             staff2.setRoles(rolesAll);
             staff2.setPass(passwordEncoder.encode(staff2.getPass()));
 
@@ -163,7 +163,7 @@ public class DatabaseInitials {
 
             Topic topic1 = new Topic();
             topic1.setDescription("For difficult problems neural networks can sometimes lack robustness whereby they might fail to perform accurate predictions on under classified examples and edge cases. This can still be the case even if suitable architectures have been selected.");
-            topic1.setSpeakerdesc("description Mark West");
+            topic1.setSpeakerdesc("Bouvet Norge AS, Norway");
             topic1.setTheme("Deconstructing Deep Learning");
             topic1.setSpeaker("Mark West");
             topic1.setSpeakerimg("image-placeholder.png");
@@ -225,7 +225,7 @@ public class DatabaseInitials {
             Topic topic2 = new Topic();
             topic2.setTheme("Getting lost in the latest tech talk? Don’t know your AI from your ML? Then it’s time to learn how to talk AI like an expert.");
             topic2.setDescription("desc You can AI like");
-            topic2.setSpeakerdesc("desc Jon McLoone");
+            topic2.setSpeakerdesc("Wolfram Research Europe Ltd., UK");
             topic2.setSpeaker("Jon McLoone");
             topic2.setSpeakerimg("image-placeholder.png");
             topic2.setStart(LocalDateTime.of(2020, 5, 14, 11, 00));
@@ -245,7 +245,7 @@ public class DatabaseInitials {
             Topic topic3 = new Topic();
             topic3.setTheme("Deep Learning for Lazy People... Neural Architecture Search with Automated Machine Learning");
             topic3.setDescription("Meta-learning is all the rage in research these days. This is not unexpected, since such a capability essentially is way for the automation that we create to bootstrap their capabilities.");
-            topic3.setSpeakerdesc("descr Diego Hueltes");
+            topic3.setSpeakerdesc("RavenPack, Spain");
             topic3.setSpeaker("Diego Hueltes");
             topic3.setStart(LocalDateTime.of(2020, 5, 14, 13, 00));
             topic3.setEnd(LocalDateTime.of(2020, 5, 14, 14, 00));
@@ -289,7 +289,7 @@ public class DatabaseInitials {
             Topic topic4 = new Topic();
             topic4.setTheme("Predicting the Moment of Birth using Sensor Data in Dairy Cows");
             topic4.setDescription("On dairy farms, management of calving is important for the health of dairy cows and the survival rate of calves born.");
-            topic4.setSpeakerdesc("desc Miel Hostens");
+            topic4.setSpeakerdesc("Utrecht University, The Netherlands");
             topic4.setSpeaker("Miel Hostens");
             topic4.setStart(LocalDateTime.now());
             topic4.setEnd(LocalDateTime.now().plusHours(4));
@@ -307,7 +307,7 @@ public class DatabaseInitials {
             Topic topic5 = new Topic();
             topic5.setTheme("Knowledge and AI Powering Microsoft & Office 365 Products");
             topic5.setDescription("Using Azure's AI scanning capabilities, the system was able to return less than 1,300 images that were relevant in terms of potential human incursion, preventing the team from being overwhelmed by an influx of data.");
-            topic5.setSpeakerdesc("desc David Gorena Elizondo");
+            topic5.setSpeakerdesc("Microsoft, USA");
             topic5.setSpeaker("David Gorena Elizondo");
             topic5.setStart(LocalDateTime.now());
             topic5.setEnd(LocalDateTime.now().plusHours(1));
