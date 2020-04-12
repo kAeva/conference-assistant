@@ -1,14 +1,16 @@
 package com.advcourse.conferenceassistant.controller;
 
+import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.*;
+import com.advcourse.conferenceassistant.service.StaffService;
+import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
-import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
-import com.advcourse.conferenceassistant.service.validator.dateDiffConf.ConferenceValidator;
-import com.advcourse.conferenceassistant.service.validator.dateDiffConf.TopicValidator;
+import com.advcourse.conferenceassistant.service.impl.FileServiceImpl;
+import com.advcourse.conferenceassistant.service.validator.DateValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,25 +28,27 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 @RequestMapping("/staff")
 @Controller
 public class StaffController {
 
     @Autowired
     private StaffService service;
+
     @Autowired
-    private ConferenceService coservice;
-    @Autowired
-    private ConferenceValidator conferenceValidator;
+    private ConferenceServiceImpl coservice;
+
     @Autowired
     private TopicService topicService;
     @Autowired
     QuestionService questionService;
     @Autowired
-    FileService fileService;
+    FileServiceImpl fileServiceImpl;
     @Autowired
-    TopicValidator topicValidator;
+    DateValidator dateValidator;
 
     @GetMapping("/")
     public String staffEnter() {
@@ -111,7 +115,7 @@ public class StaffController {
 
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
-        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("Confid", coservice.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
@@ -142,7 +146,7 @@ public class StaffController {
          * End or start date shouldn't be empty
          * End date should be greater than start date
          * */
-        conferenceValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "conference-add";
@@ -155,18 +159,14 @@ public class StaffController {
     @GetMapping("/conference-edit/{confId}")
     public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
 
-        if (!isCurrentConfIdandStaffColabId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("conference", coservice.findById(confId));
         return "conference-edit";
     }
 
-    private boolean isCurrentConfIdandStaffColabId(@PathVariable Long confId, Authentication auth) {
+    private boolean isStaffHasntConfId(@PathVariable Long confId, Authentication auth) {
         StaffDto staff = service.findByEmail(auth.getName());
-
-        if (staff.getColabs_id() != null && staff.getColabs_id().contains(confId)) {
-            return true;
-        }
-        return false;
+        return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
     }
 
     @PostMapping("/conference-edit/{confId}")
@@ -178,7 +178,7 @@ public class StaffController {
          * End or start date shouldn't be empty
          * End date should be greater than start date
          * */
-        conferenceValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
         if (bindingResult.hasErrors()) {
             return "conference-edit";
         }
@@ -197,8 +197,8 @@ public class StaffController {
 
     @GetMapping("/topic-add/{confId}")
     public String topicAddPage(@PathVariable long confId,
-                               Model model) {
-
+                               Model model, Authentication auth) {
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
         model.addAttribute("topic", new TopicDto());
         return "topic-add";
     }
@@ -207,72 +207,113 @@ public class StaffController {
     public String topicAdd(@PathVariable long confId,
                            @ModelAttribute("topic") TopicDto dto,
                            BindingResult bindingResult,
-                           @RequestParam("file") MultipartFile file, HttpServletRequest request
+                           @RequestParam("file") MultipartFile file
 
     ) {
-        topicValidator.validate(dto, bindingResult);
+        dateValidator.validate(dto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "redirect:/staff/topic-add/"+confId;
+            return "topic-add";
         }
-
-        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
+        //TODO set upload dir path in properties
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
         if (!uploadDir.exists()) {
-            uploadDir.mkdir();
+            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
+            boolean mkdir = uploadDir.mkdirs();
+            log.info("Create dir {}", mkdir);
         }
 
         dto.setConfId(confId);
-
-        dto.setSpeakerimg(fileService.uploadFile(file, uploadDir.getAbsolutePath()));
+        if (!file.isEmpty()) {
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+        }
 
         topicService.save(dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
 
     }
 
-    @GetMapping("/topic-edit/{topicfId}")
-    public String topicEditPage() {
-
+    @GetMapping("/topic-edit/{topicId}")
+    public String topicEditPage(@PathVariable Long topicId, Model model, Authentication auth) {
+        TopicDto topic = topicService.findById(topicId);
+        long confId = topic.getConfId();
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        model.addAttribute("topic", topic);
         return "topic-edit";
     }
 
+    @PostMapping("/topic-edit/{topicId}")
+    public String postTopicEditPage(@PathVariable Long topicId,
+                                    @ModelAttribute("topic") TopicDto dto,
+                                    BindingResult bindingResult,
+                                    @RequestParam("file") MultipartFile file) {
+        dateValidator.validate(dto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "topic-edit";
+        }
+        TopicDto topicById = topicService.findById(topicId);
+        dto.setId(topicId);
+        dto.setConfId(topicById.getConfId());
+        //TODO set upload dir path in properties
+        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
+        if (!uploadDir.exists()) {
+            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
+            boolean mkdir = uploadDir.mkdirs();
+            log.info("Create dir {}", mkdir);
+        }
+        if (!file.isEmpty()) {
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+        }
+        topicService.update(topicId, dto);
+        return "redirect:/staff/conference-page/" + dto.getConfId();
+    }
+
+    @GetMapping("/topic-delete/{topicId}")
+    public String deleteTopic(@PathVariable Long topicId, Authentication auth) {
+        long confId = topicService.findById(topicId).getConfId();
+        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        topicService.deleteById(topicId);
+        return "redirect:/staff/conference-page/" + confId;
+    }
+
     @GetMapping("/list")
-    public String getStaffList() {
+    public String getStaffList(Model model) {
+        model.addAttribute("staffs", service.findAll());
+        model.addAttribute("roles", List.of(Role.values()));
+        model.addAttribute("confService", coservice);
         return "stafflist";
     }
 
-    private String findDir(File root, String name) {
-        if (root.getName().equals(name)) {
-            return root.getAbsolutePath();
-        }
+    @GetMapping("/staff-delete/{staffId}")
+    public String deleteStaff(@PathVariable long staffId) {
+        service.deleteById(staffId);
+        return "redirect:/staff/list";
+    }
 
-        File[] files = root.listFiles();
+    @GetMapping("add-privileges/{staffId}")
+    public String staffPrevileges(@PathVariable long staffId, Model model) {
+        model.addAttribute("staff", service.findById(staffId));
+        model.addAttribute("roles", Set.of(Role.values()));
+        model.addAttribute("conferences", coservice.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+        model.addAttribute("confService", coservice);
+        return "add-privileges";
+    }
 
-        if (files != null) {
-            for (File f : files) {
-                if (f.isDirectory()) {
-                    String myResult = findDir(f, name);
-                    //this just means this branch of the
-                    //recursion reached the end of the
-                    //directory tree without results, but
-                    //we don't want to cut it short here,
-                    //we still need to check the other
-                    //directories, so continue the for loop
-                    if (myResult == null) {
-                        continue;
-                    }
-                    //we found a result so return!
-                    else {
-                        return myResult;
-                    }
-                }
-            }
-        }
+    @PostMapping("/add-roles/{staffId}")
+    public String addRole(@PathVariable Long staffId,
+                          @ModelAttribute("staff") StaffDto dto
+    ) {
+        service.addRoles(staffId, dto.getRoles());
+        return "redirect:/staff/add-privileges/" + staffId;
+    }
 
-        //we don't actually need to change this. It just means we reached
-        //the end of the directory tree (there are no more sub-directories
-        //in this directory) and didn't find the result
-        return null;
+    @PostMapping("/add-conferenceId/{staffId}")
+    public String addConferenceId(@PathVariable Long staffId,
+                                  @ModelAttribute("staff") StaffDto dto
+    ) {
+        service.addConferences(staffId,dto.getColabs_id());
+        return "redirect:/staff/add-privileges/" + staffId;
     }
 
 }

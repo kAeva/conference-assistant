@@ -1,12 +1,11 @@
 package com.advcourse.conferenceassistant.service.dto.mapper;
 
 import com.advcourse.conferenceassistant.model.Conference;
-import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,5 +45,13 @@ public class StaffMapper {
         staff.setRoles(dto.getRoles());
 
         return staff;
+    }
+
+    public static List<StaffDto> toDto(List<Staff> dto) {
+        return dto.stream().map(e -> toDto(e)).collect(Collectors.toList());
+    }
+
+    public static List<Staff> fromDto(List<StaffDto> dto) {
+        return dto.stream().map(e -> fromDto(e)).collect(Collectors.toList());
     }
 }

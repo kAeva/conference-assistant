@@ -1,4 +1,6 @@
-package com.advcourse.conferenceassistant.service.validator;
+package com.advcourse.conferenceassistant.service.validator.annotation;
+
+import com.advcourse.conferenceassistant.service.validator.UniqueEmailValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

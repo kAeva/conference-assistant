@@ -8,16 +8,20 @@ import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.StaffMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
+@Slf4j
 @Repository
 @Scope(proxyMode = ScopedProxyMode.INTERFACES)
 @Service
@@ -80,6 +84,44 @@ public class StaffServiceImpl implements StaffService {
         staffDto.setRoles(dto.getRoles());
 
         return StaffMapper.toDto(staffRepository.save(StaffMapper.fromDto(staffDto)));
+    }
+
+    @Transactional
+    @Override
+    public boolean isActiveUser(String email) {
+        Staff byEmail = staffRepository.findByEmail(email);
+        return byEmail != null;
+    }
+
+    @Override
+    public List<StaffDto> findAll() {
+        return StaffMapper.toDto(staffRepository.findAll());
+    }
+
+    @Override
+    public void deleteById(long id) {
+        try{
+            staffRepository.deleteById(id);
+            log.info("Delete staff with id= {}",id);
+        }catch (EmptyResultDataAccessException e){
+                log.info("Staff with id={} doesn't exist",id);
+                // todo trow exception
+        }
+
+    }
+
+    @Override
+    public void addRoles(long staffId,Set<Role> roles) {
+        StaffDto staff = findById(staffId);
+        staff.setRoles(roles);
+        update(staffId,staff);
+    }
+
+    @Override
+    public void addConferences(long staffId, Set<Long> setConfId) {
+        StaffDto staff = findById(staffId);
+        staff.setColabs_id(setConfId);
+        update(staffId,staff);
     }
 
 

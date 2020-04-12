@@ -12,4 +12,4 @@ public interface TopicService {
     TopicDto save(TopicDto dto);
     TopicDto update(Long confId, TopicDto dto);
     TopicDto findActiveTopicByConfId(long confId);
-}
+ }

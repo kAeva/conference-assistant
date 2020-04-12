@@ -58,7 +58,7 @@ public class VisitorController {
         VisitorDto registered = visitorService.registerNewVisitorDtoAccount(accountVisitor);
         log.info("New user has been registered " + registered);
         //TODO:change cookie value name and check for usages
-        Cookie newCookie = new Cookie("testCookie", registered.getEmail());
+        Cookie newCookie = new Cookie("email", registered.getEmail());
         //without this method not working cookie!!!
         newCookie.setPath("/");
         // set how long cookie is valid in seconds

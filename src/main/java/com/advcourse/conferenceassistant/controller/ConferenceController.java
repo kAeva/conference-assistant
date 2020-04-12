@@ -60,15 +60,15 @@ public class ConferenceController {
 // TODO: add checking conference active status
     @GetMapping("/now/{confId}")
     public String getLive(
-            @CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
-                    String cookieValue, @PathVariable Long confId,
+            @CookieValue(value = "email", defaultValue = "defaultCookieValue")
+                    String email, @PathVariable Long confId,
             Model model) {
         log.info("Redirected to conference page with id " + confId);
 //        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
 //        TODO: handle null
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
         log.info("Active topic id: " + currentTopic.getId());
-        VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
+        VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
         log.info("Received list of questions with size: " + questions.size());
 
@@ -98,7 +98,7 @@ public class ConferenceController {
                    HttpServletResponse response) {
 
 
-        Cookie newCookie = new Cookie("testCookie", "no_cookie");
+        Cookie newCookie = new Cookie("email", "no_cookie");
         newCookie.setMaxAge(0);
         newCookie.setPath("/");
         response.addCookie(newCookie);
