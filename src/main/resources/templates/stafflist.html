@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
@@ -9,8 +10,39 @@
 </head>
 <body>
 <div th:replace="fragments :: admin-header"></div>
-  Staff list
-  <!-- TODO: create form for adding staff roles -->
-add roles to staff
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th id="roles">Roles</th>
+        <th>Conferences</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="staff : ${staffs}">
+        <td th:text="${staff.getId()}">Id</td>
+        <td th:text="${staff.getEmail()}">Email</td>
+        <td th:text="${staff.getName()}">Name</td>
+        <td headers="roles">
+            <span th:each="a, role : ${staff.getRoles()}" th:text="${!role.last} ? ${a} + ' ,': ${a}"></span>
+        </td>
+        <td class="form-group blu-margin">
+            <select class="form-control" id="dropOperator">
+                <option th:each="conf : ${staff.getColabs_id()}"
+                        th:text="${confService.findById(conf).getTheme()}"></option>
+            </select>
+        </td>
+
+        <td>
+            <a class="btn btn-success btn-sm" >Edit</a>
+        </td>
+        <td><a class="btn btn-danger btn-sm mx-3">
+            <i class="fas fa-skull-crossbones"></i></a></td>
+
+    </tr>
+</table>
+
+
 </body>
 </html>

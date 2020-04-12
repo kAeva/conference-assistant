@@ -1,8 +1,9 @@
 package com.advcourse.conferenceassistant.service;
 
-import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
+
+import java.util.List;
 
 public interface StaffService {
 
@@ -17,5 +18,8 @@ public interface StaffService {
     StaffDto update(Long id, StaffDto dto);
 
     boolean isActiveUser(String email);
+
+    List<StaffDto> findAll();
+
 
 }

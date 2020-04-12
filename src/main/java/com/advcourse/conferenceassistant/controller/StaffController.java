@@ -1,5 +1,6 @@
 package com.advcourse.conferenceassistant.controller;
 
+import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
 import com.advcourse.conferenceassistant.service.StaffService;
 import com.advcourse.conferenceassistant.service.TopicService;
@@ -269,7 +270,10 @@ public class StaffController {
     }
 
     @GetMapping("/list")
-    public String getStaffList() {
+    public String getStaffList(Model model) {
+        model.addAttribute("staffs",service.findAll());
+        model.addAttribute("roles", List.of(Role.values()));
+        model.addAttribute("confService", coservice);
         return "stafflist";
     }
 
