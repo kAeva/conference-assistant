@@ -36,9 +36,9 @@
     <h1 class="text-center" th:text="${topic.getTheme()}"></h1>
 
 <!--    TODO: add topic start-end functions-->
-    <div class="mx-auto col-sm-8">
-    <a class="btn btn-success" th:href="'/staff/topic-start/' + ${topicId}"><i class="far fa-play-circle"></i></a>
-    <a class="btn btn-danger" th:href="'/staff/topic-end/' + ${topicId}" ><i class="far fa-stop-circle"></i></a>
+    <div class="mx-auto col-sm-1">
+        <a class="btn btn-success" onclick="hideButton()"   id="myButton1" th:href="'/staff/topic-start/' + ${topicId}"><i class="far fa-play-circle"></i></a>
+        <a class="btn btn-danger" onclick="hideButton()"  id="myButton2" th:href="'/staff/topic-end/' + ${topicId}"><i class="far fa-stop-circle"></i></a>
     </div>
 
 </div>
@@ -80,6 +80,47 @@
         </tr>
         </tbody>
     </table>
+    <script>
+        if (localStorage) {
+            var firstButton = document.getElementById("myButton1");
+            var secondButton = document.getElementById("myButton2");
+            var clickValue = localStorage.getItem("click");
+            if (localStorage.getItem("click")) {
+                firstButton.style.display="block";
+                secondButton.style.display="none";
+            }
+            if (clickValue.toString()==="close"){
+                firstButton.style.display="none";
+                secondButton.style.display="block";
+            }else{
+                firstButton.style.display="block";
+                secondButton.style.display="none";
+            }
+        } else {
+            alert("Sorry, your browser do not support local storage.");
+        }
+    </script>
+    <script>
+        function hideButton() // no ';' here
+        {
+            if (localStorage) {
+                var firstButton = document.getElementById("myButton1");
+                var secondButton = document.getElementById("myButton2");
+
+                if (firstButton.style.display==="none") {
+                    firstButton.style.display="block";
+                    secondButton.style.display="none";
+                    localStorage.setItem("click", "open");
+                } else {
+                    firstButton.style.display="none";
+                    secondButton.style.display="block";
+                    localStorage.setItem("click", "close");
+                }
+            } else {
+                alert("Sorry, your browser do not support local storage.");
+            }
+        }
+    </script>
 </div>
 
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="UTF-8">
@@ -36,18 +37,20 @@
         <button type="submit" class="btn btn-dark">Edit</button>
     </form>
     <br>
-    <form th:action="@{'/staff/add-roles/'+${staffId}}" th:object="${staff}" method="POST">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text" th:each="role : ${roles}">
-                    <input type="checkbox" th:field="*{roles}" th:value="${role}"/>
-                    <label th:for="${#ids.prev('roles')}"
-                           th:text="${role}">Role</label>
+    <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
+        <form th:action="@{'/staff/add-roles/'+${staffId}}" th:object="${staff}" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" th:each="role : ${roles}">
+                        <input type="checkbox" th:field="*{roles}" th:value="${role}"/>
+                        <label th:for="${#ids.prev('roles')}"
+                               th:text="${role}">Role</label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-dark">Edit</button>
-    </form>
+            <button type="submit" class="btn btn-dark">Edit</button>
+        </form>
+    </div>
 </div>
 
 <div th:replace="fragments :: footer"></div>
