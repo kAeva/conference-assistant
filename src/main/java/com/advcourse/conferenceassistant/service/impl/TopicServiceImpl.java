@@ -8,6 +8,8 @@ import com.advcourse.conferenceassistant.service.dto.mapper.TopicMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -66,10 +68,12 @@ public class TopicServiceImpl implements TopicService {
         topic.setStart(LocalDateTime.now());
         return save(topic);
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public TopicDto updateEndTime(Long topicId) {
         TopicDto topic = findById(topicId);
         topic.setEnd(LocalDateTime.now());
+        topic.setEnded(true);
+        System.out.printf(String.valueOf(topic));
         return save(topic);
     }
 
