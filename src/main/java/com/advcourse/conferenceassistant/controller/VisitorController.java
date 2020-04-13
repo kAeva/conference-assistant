@@ -21,6 +21,7 @@ import org.thymeleaf.model.IModel;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 @Slf4j
 @Controller
@@ -36,7 +37,9 @@ public class VisitorController {
     private TopicService topicService;
 
     @GetMapping("/")
-    public String homePage() {
+    public String schPage(Model model) {
+        List<ConferenceDto> conferences = conferenceService.findAll();
+        model.addAttribute("conferences", conferences);
         return "index";
     }
 
