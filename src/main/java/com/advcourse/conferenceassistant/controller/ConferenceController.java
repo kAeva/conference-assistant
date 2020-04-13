@@ -77,14 +77,10 @@ public class ConferenceController {
     }
 
     @GetMapping("/now/{confId}/schedule")
-    public String showSchedule(@CookieValue(value = "testCookie", defaultValue = "defaultCookieValue")
-                                           String cookieValue, @PathVariable Long confId, Model model) {
-        VisitorDto visitorDto = visitorService.findByEmailAndVisit(cookieValue, confId);
-        log.debug("Adding a conference to model with id: " + conferenceService.findById(confId).getId());
+    public String showSchedule(@PathVariable Long confId, Model model) {
         model.addAttribute("conference", conferenceService.findById(confId));
         log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
         model.addAttribute("topics", topicService.findByConfId(confId));
-        model.addAttribute("visitor", visitorDto);
         return "schedule";
     }
 

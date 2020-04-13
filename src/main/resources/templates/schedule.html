@@ -9,7 +9,9 @@
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;" th:if="${visitor!=null}">
+<!--TODO: hide from users who are not visitors-->
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+
     <a class="navbar-brand" th:href="@{'/liveconference/now/'+ ${conference.getId()}}"> Back to live chat <i class="far fa-caret-square-right"></i></a>
     <a class="navbar-brand" href="#"><i class="far fa-sad-tear"></i> Leave</a>
 
