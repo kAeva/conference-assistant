@@ -21,11 +21,29 @@
 
             </div>
 
+            <div class="col-sm-8 mx-auto py-3" th:each="c : ${conferences}">
+                <div class="row py-5 px-3 topic border border-light" >
+                    <div class="col-sm-8 mx-auto text-left">
+
+                        <span><a th:href="${c.getId()}  + '/schedule'" class="text-decoration-none text-dark"><h4 class="h4" th:text="${c.getTheme()}"></h4></a></span>
+                        <p><b>Time:</b> <span th:text="${c.getStart()}">11:00</span> - <span th:text="${c.getEnd()}">11:45</span></p>
+                        <p th:text="${c.getDescription()}"></p>
+                        <p><b>Address:</b> <span th:text="${c.getAddress()}"></span></p>
+                    </div>
+                    <div class="col-sm-3 mx-auto">
+                        <figure class="figure">
+                            <img src="../static/images/image-placeholder.png" th:src="@{/images/image-placeholder.png}" class="figure-img img-fluid rounded" height="350" width="350"/>
+                        </figure>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
 
     </div>
 </div>
-
+<div th:replace="fragments :: footer"></div>
 </body>
 </html>
