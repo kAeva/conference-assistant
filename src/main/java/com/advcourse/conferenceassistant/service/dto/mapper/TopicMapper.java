@@ -21,7 +21,7 @@ public class TopicMapper {
                 topic.getSpeakerdesc(),
                 topic.getStart(),
                 topic.getEnd(),
-                topic.isEnded(),
+                topic.getEnded(),
                 topic.getConference().getId()
         );
     }

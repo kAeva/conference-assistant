@@ -10,7 +10,7 @@
 </head>
 <body>
 <!--TODO: hide from users who are not visitors-->
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;" >
 
     <a class="navbar-brand" th:href="@{'/liveconference/now/'+ ${conference.getId()}}"> Back to live chat <i class="far fa-caret-square-right"></i></a>
     <a class="navbar-brand" href="#"><i class="far fa-sad-tear"></i> Leave</a>
@@ -18,7 +18,8 @@
 </nav>
 <div class="container-fluid py-5">
     <div class="col-sm-8 mx-auto py-3">
-    <h3 class="text-center h3 py-3" th:text="${conference.getTheme()}">CONFERENCE NAME</h3>
+    <h3 class="text-center h3 py-3" th:text="${conference.getTheme()}"></h3>
+    <p class="text-center"><span th:text="${#temporals.format(conference.getStart(), 'HH:mm')}"></span> - <span th:text="${#temporals.format(conference.getEnd(), 'HH:mm')}"></span></p>
     <p class="px-3" th:text="${conference.getDescription()}"></p>
     </div>
 <hr>
@@ -33,7 +34,7 @@
                 <h4 class="h4" th:text="${t.getTheme()}"></h4>
             </div>
 <!--TODO: add LocalDateTime parser to show HH:MM time only-->
-            <p>Time: <span th:text="${t.getStart().getDayOfMonth()} + ' ' +  ${t.getStart().getMonth()} + ' ' + ${t.getStart().getHour()} + ':' + ${t.getStart().getMinute()}"></span> - <span th:text="${t.getEnd().getHour()} + ':' + ${t.getEnd().getMinute()}"></span></p>
+            <p>Time: <span th:text="${#temporals.format(t.getStart(), 'HH:mm')}"></span> - <span th:text="${#temporals.format(t.getEnd(), 'HH:mm')}"></span></p>
             <p th:text="${t.getDescription()}"></p>
         </div>
             <div class="col-sm-3 mx-auto">

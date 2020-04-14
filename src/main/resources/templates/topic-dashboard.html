@@ -34,6 +34,7 @@
 
 <div class="container-fluid mx-auto mt-5">
     <h1 class="text-center" th:text="${topic.getTheme()}"></h1>
+    <p class="text-center"><span th:text="${#temporals.format(topic.getStart(), 'HH:mm')}"></span> - <span th:text="${#temporals.format(topic.getEnd(), 'HH:mm')}"></span></p>
 
 <!--    TODO: add topic start-end functions-->
     <div class="mx-auto col-sm-1" th:if="${!topic.getEnded()}">

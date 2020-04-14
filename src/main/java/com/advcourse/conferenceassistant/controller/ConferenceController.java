@@ -48,14 +48,14 @@ public class ConferenceController {
     @GetMapping("/{confId}")
     public String homePage(@PathVariable Long confId, Model model) {
 
-        log.debug("New visitor in conference " + confId);
+        log.debug("New visitor in conference: {}", confId);
         ConferenceDto conf = conferenceService.findById(confId);
         if (!LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
             throw new NotActiveConferenceException();
         }
         VisitorDto visitorDto = new VisitorDto();
         visitorDto.setConfId(Set.of(confId));
-        log.debug("Visitor has been attached to conferenceid " + visitorDto.getConfId());
+        log.debug("Visitor has been attached to conferenceid: {}", visitorDto.getConfId());
         model.addAttribute("conference", conferenceService.findById(confId));
         model.addAttribute("visitor", visitorDto);
 
@@ -66,14 +66,14 @@ public class ConferenceController {
             @CookieValue(value = "email", defaultValue = "defaultCookieValue")
                     String email, @PathVariable Long confId,
             Model model) {
-        log.debug("Redirected to conference page with id " + confId);
+        log.debug("Redirected to conference page with id: {} ", confId);
 //        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
 //        TODO: handle null
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
-        log.debug("Active topic id: " + currentTopic.getId());
+        log.debug("Active topic id: {}", currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
-        log.debug("Received list of questions with size: " + questions.size());
+        log.debug("Received list of questions with size: {}", questions.size());
 
         model.addAttribute("visitor", visitorDto);
         model.addAttribute("topic", currentTopic);
@@ -86,7 +86,7 @@ public class ConferenceController {
     @GetMapping("/now/{confId}/schedule")
     public String showSchedule(@PathVariable Long confId, Model model) {
         model.addAttribute("conference", conferenceService.findById(confId));
-        log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
+        log.debug("Received topics in quantity of: {}", topicService.findByConfId(confId).size());
         model.addAttribute("topics", topicService.findByConfId(confId));
         model.addAttribute("currentTime", LocalDateTime.now());
         return "schedule";

@@ -55,7 +55,7 @@
                     </td>
                     <td th:text="${tq.getQuestion()}"></td>
                     <td th:text="${tq.getCreatorName()}"></td>
-                    <td th:text="${tq.getTime()}"></td>
+                    <td th:text="${#temporals.format(tq.getTime(), 'HH:mm:ss')} + ' ' + ${tq.getTime().getDayOfMonth()} + ' ' + ${tq.getTime().getMonth()}"></td>
                 </tr>
 
                 </tbody>
@@ -78,19 +78,18 @@
                     <th scope="col" style="width: 50%;">Question</th>
                     <th scope="col" style="width: 20%;">User</th>
                     <th scope="col" style="width: 20%;">Time</th>
-<!--                    TODO: add sorting bu time, likes and users-->
+<!--                    TODO: add sorting by time, likes and users-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="q : ${questions}">
                     <th scope="row" th:text="${q.getLikesQuantity()}"></th>
-<!--                    TODO: 1) finish /like/  -->
                     <td> <div th:if="${q.isLikedByThisVisitor}"><a style="color: darkred;" th:href="'/question/unlike/' + ${q.getId()}"><i class="fas fa-heart"></i></a></div>
                         <div th:if="${!q.isLikedByThisVisitor}"><a th:href="'/question/like/' + ${q.getId()}"><i class="far fa-heart"></i></a></div>
                     </td>
                     <td th:text="${q.getQuestion()}"></td>
                     <td th:text="${q.getCreatorName()}"></td>
-                    <td th:text="${q.getTime()}"></td>
+                    <td th:text="${#temporals.format(q.getTime(), 'HH:mm:ss')} + ' ' + ${q.getTime().getDayOfMonth()} + ' ' + ${q.getTime().getMonth()}"></td>
                 </tr>
                 </tbody>
             </table>
