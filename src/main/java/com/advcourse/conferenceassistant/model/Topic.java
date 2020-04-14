@@ -22,7 +22,7 @@ public class Topic {
     private String speakerdesc;
     private LocalDateTime start;
     private LocalDateTime end;
-    private boolean ended;
+    private Boolean ended = false;
 
 
     @ManyToOne

@@ -21,7 +21,7 @@ public class TopicMapper {
                 topic.getSpeakerdesc(),
                 topic.getStart(),
                 topic.getEnd(),
-                topic.isEnded(),
+                topic.getEnded(),
                 LocalDateTime.now().isAfter(topic.getStart()) & LocalDateTime.now().isBefore(topic.getEnd()),
                 topic.getConference().getId()     // getConf() - this good???
         );
@@ -37,6 +37,7 @@ public class TopicMapper {
         topic.setSpeakerdesc(dto.getSpeakerdesc());
         topic.setStart(dto.getStart());
         topic.setEnd(dto.getEnd());
+        topic.setEnded(dto.getEnded());
         Conference conference = new Conference();
         conference.setId(dto.getConfId());
         topic.setConference(conference);
@@ -57,7 +58,7 @@ public class TopicMapper {
                         e.getSpeakerdesc(),
                         e.getStart(),
                         e.getEnd(),
-                        e.isEnded(),
+                        e.getEnded(),
                         LocalDateTime.now().isAfter(e.getStart()) & LocalDateTime.now().isBefore(e.getEnd()),
                         e.getConference().getId()))
                 .collect(Collectors.toList());
