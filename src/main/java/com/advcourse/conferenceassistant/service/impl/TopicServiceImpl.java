@@ -73,7 +73,6 @@ public class TopicServiceImpl implements TopicService {
         TopicDto topic = findById(topicId);
         topic.setEnd(LocalDateTime.now());
         topic.setEnded(true);
-        System.out.printf(String.valueOf(topic));
         return save(topic);
     }
 
