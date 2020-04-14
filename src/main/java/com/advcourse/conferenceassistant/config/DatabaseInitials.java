@@ -75,8 +75,8 @@ public class DatabaseInitials {
             Conference conf2 = new Conference();
             conf2.setTheme("Small Data Conference");
             conf2.setDescription("Small Data Conference Europe is a three-day conference with technical talks in the fields of Small Data, High Load, Data Science, Machine Learning and AI.");
-            conf2.setStart(LocalDateTime.of(2020, 6, 14, 9, 30));
-            conf2.setEnd(LocalDateTime.of(2020, 6, 14, 15, 20));
+            conf2.setStart(LocalDateTime.now());
+            conf2.setEnd(LocalDateTime.now().plusHours(8));
             conf2.setAddress("1638  Conference Center Way, Leesburg, Virginia");
             conferenceRepository.save(conf2);
 
@@ -93,7 +93,7 @@ public class DatabaseInitials {
                     "European Union\n" +
                     "Finance, Heritage\n"
             );
-            conf3.setStart(LocalDateTime.of(2021, 3, 27, 9, 05));
+            conf3.setStart(LocalDateTime.of(2021, 3, 27, 9, 5));
             conf3.setEnd(LocalDateTime.of(2021, 3, 27, 15, 45));
             conf3.setAddress("University of Washington Rome Center, Rome, Italy");
             conferenceRepository.save(conf3);

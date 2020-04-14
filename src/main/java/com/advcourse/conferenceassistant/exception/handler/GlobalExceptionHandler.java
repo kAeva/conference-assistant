@@ -2,6 +2,7 @@ package com.advcourse.conferenceassistant.exception.handler;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
 import com.advcourse.conferenceassistant.exception.NoSuchVisitorException;
+import com.advcourse.conferenceassistant.exception.NotActiveConferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,5 +28,9 @@ public class GlobalExceptionHandler {
 
         return "badrequest-page";
     }
+    @ExceptionHandler(NotActiveConferenceException.class)
+    public String notActiveConfExceptionHandler() {
 
+        return "conferenceError";
+    }
 }

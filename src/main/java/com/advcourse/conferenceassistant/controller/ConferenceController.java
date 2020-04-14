@@ -1,10 +1,12 @@
 package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
+import com.advcourse.conferenceassistant.exception.NotActiveConferenceException;
 import com.advcourse.conferenceassistant.service.ConferenceService;
 import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
+import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -44,29 +47,32 @@ public class ConferenceController {
      */
     @GetMapping("/{confId}")
     public String homePage(@PathVariable Long confId, Model model) {
-        log.info("New visitor in conference " + confId);
-        VisitorDto visitorDto = new VisitorDto();
-        visitorDto.setConfId(Set.of(confId));
-        log.info("Visitor has been attached to conferenceid " + visitorDto.getConfId());
-        model.addAttribute("conference", conferenceService.findById(confId));
-        model.addAttribute("visitor", visitorDto);
 
-        return "visitor-registration";
+        log.debug("New visitor in conference " + confId);
+        ConferenceDto conf = conferenceService.findById(confId);
+        if (LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
+            VisitorDto visitorDto = new VisitorDto();
+            visitorDto.setConfId(Set.of(confId));
+            log.debug("Visitor has been attached to conferenceid " + visitorDto.getConfId());
+            model.addAttribute("conference", conferenceService.findById(confId));
+            model.addAttribute("visitor", visitorDto);
+
+            return "visitor-registration";
+        } throw new NotActiveConferenceException();
     }
-// TODO: add checking conference active status
     @GetMapping("/now/{confId}")
     public String getLive(
             @CookieValue(value = "email", defaultValue = "defaultCookieValue")
                     String email, @PathVariable Long confId,
             Model model) {
-        log.info("Redirected to conference page with id " + confId);
+        log.debug("Redirected to conference page with id " + confId);
 //        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
 //        TODO: handle null
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
-        log.info("Active topic id: " + currentTopic.getId());
+        log.debug("Active topic id: " + currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
-        log.info("Received list of questions with size: " + questions.size());
+        log.debug("Received list of questions with size: " + questions.size());
 
         model.addAttribute("visitor", visitorDto);
         model.addAttribute("topic", currentTopic);

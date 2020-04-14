@@ -26,7 +26,7 @@
                     <div class="col-sm-8 mx-auto text-left">
 
                         <span><a th:href="${c.getId()}  + '/schedule'" class="text-decoration-none text-dark"><h4 class="h4" th:text="${c.getTheme()}"></h4></a></span>
-                        <p><b>Time:</b> <span th:text="${c.getStart()}">11:00</span> - <span th:text="${c.getEnd()}">11:45</span></p>
+                        <p><b>Time:</b> <span th:text="${c.getStart().getDayOfMonth()} + ' ' +  ${c.getStart().getMonth()} + ' ' + ${c.getStart().getHour()} + ':' + ${c.getStart().getMinute()}"></span> - <span th:text="${c.getEnd().getHour()} + ':' + ${c.getEnd().getMinute()}"></span></p>
                         <p th:text="${c.getDescription()}"></p>
                         <p><b>Address:</b> <span th:text="${c.getAddress()}"></span></p>
                     </div>

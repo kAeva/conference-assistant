@@ -9,6 +9,7 @@ import com.advcourse.conferenceassistant.service.dto.mapper.ConferenceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import java.util.List;
@@ -57,5 +58,6 @@ public class ConferenceServiceImpl implements ConferenceService {
     public void deleteById(Long id) {
         conferenceRepository.deleteById(id);
     }
+
 
 }
