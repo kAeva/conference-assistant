@@ -36,6 +36,7 @@ public class TopicMapper {
         topic.setSpeakerdesc(dto.getSpeakerdesc());
         topic.setStart(dto.getStart());
         topic.setEnd(dto.getEnd());
+        topic.setEnded(dto.getEnded());
         Conference conference = new Conference();
         conference.setId(dto.getConfId());
         topic.setConference(conference);
@@ -56,7 +57,7 @@ public class TopicMapper {
                         e.getSpeakerdesc(),
                         e.getStart(),
                         e.getEnd(),
-                        e.isEnded(),
+                        e.getEnded(),
                         e.getConference().getId()))
                 .collect(Collectors.toList());
     }

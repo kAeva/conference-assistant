@@ -68,12 +68,11 @@ public class TopicServiceImpl implements TopicService {
         topic.setStart(LocalDateTime.now());
         return save(topic);
     }
-    @Transactional(propagation = Propagation.REQUIRED)
+
     public TopicDto updateEndTime(Long topicId) {
         TopicDto topic = findById(topicId);
         topic.setEnd(LocalDateTime.now());
-//        topic.setEnded(true);
-        System.out.printf(String.valueOf(topic));
+        topic.setEnded(true);
         return save(topic);
     }
 

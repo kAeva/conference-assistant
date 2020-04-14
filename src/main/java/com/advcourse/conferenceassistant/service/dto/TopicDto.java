@@ -22,6 +22,6 @@ public class TopicDto {
     private LocalDateTime start;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime end;
-    boolean ended;
-    private long confId;
+    private Boolean ended;
+    private Long confId;
 }
