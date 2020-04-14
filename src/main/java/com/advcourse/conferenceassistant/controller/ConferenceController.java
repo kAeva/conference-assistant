@@ -50,15 +50,16 @@ public class ConferenceController {
 
         log.debug("New visitor in conference " + confId);
         ConferenceDto conf = conferenceService.findById(confId);
-        if (LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
-            VisitorDto visitorDto = new VisitorDto();
-            visitorDto.setConfId(Set.of(confId));
-            log.debug("Visitor has been attached to conferenceid " + visitorDto.getConfId());
-            model.addAttribute("conference", conferenceService.findById(confId));
-            model.addAttribute("visitor", visitorDto);
+        if (!LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
+            throw new NotActiveConferenceException();
+        }
+        VisitorDto visitorDto = new VisitorDto();
+        visitorDto.setConfId(Set.of(confId));
+        log.debug("Visitor has been attached to conferenceid " + visitorDto.getConfId());
+        model.addAttribute("conference", conferenceService.findById(confId));
+        model.addAttribute("visitor", visitorDto);
 
-            return "visitor-registration";
-        } throw new NotActiveConferenceException();
+        return "visitor-registration";
     }
     @GetMapping("/now/{confId}")
     public String getLive(
@@ -87,6 +88,7 @@ public class ConferenceController {
         model.addAttribute("conference", conferenceService.findById(confId));
         log.debug("Received topics in quantity of: " + topicService.findByConfId(confId).size());
         model.addAttribute("topics", topicService.findByConfId(confId));
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "schedule";
     }
 

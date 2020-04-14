@@ -26,10 +26,10 @@
         <div class="row py-3 topic" th:each="t : ${topics}">
         <div class="col-sm-8 mx-auto">
 
-            <div th:if="${t.isActive()}">
+            <div th:if="${((currentTime.isAfter(t.getStart())) && (currentTime.isBefore(t.getEnd())))}">
             <span style="color: limegreen;">NOW: <h4 class="h4" th:text="${t.getTheme()}"></h4></span>
             </div>
-            <div th:if="${!t.isActive()}">
+            <div th:if="${!((currentTime.isAfter(t.getStart())) && (currentTime.isBefore(t.getEnd())))}">
                 <h4 class="h4" th:text="${t.getTheme()}"></h4>
             </div>
 <!--TODO: add LocalDateTime parser to show HH:MM time only-->

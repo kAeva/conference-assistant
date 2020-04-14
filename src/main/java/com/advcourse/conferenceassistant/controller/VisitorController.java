@@ -1,7 +1,6 @@
 package com.advcourse.conferenceassistant.controller;
 
-import com.advcourse.conferenceassistant.exception.NoSuchConferenceException;
-import com.advcourse.conferenceassistant.model.Topic;
+
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
@@ -16,13 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.thymeleaf.model.IModel;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
+
 @Slf4j
 @Controller
 public class VisitorController {
@@ -35,13 +33,6 @@ public class VisitorController {
 
     @Autowired
     private TopicService topicService;
-
-    @GetMapping("/")
-    public String schPage(Model model) {
-        List<ConferenceDto> conferences = conferenceService.findAll();
-        model.addAttribute("conferences", conferences);
-        return "index";
-    }
 
     /**
      * adding email to cookie
@@ -68,7 +59,6 @@ public class VisitorController {
         newCookie.setMaxAge(24 * 60 * 60);
         // adding cookie
         response.addCookie(newCookie);
-//        model.addAttribute("currentVisitor", registered.getConfId());
 
         return "redirect:/liveconference/now/" + confId;
 
