@@ -33,7 +33,7 @@
                 <h4 class="h4" th:text="${t.getTheme()}"></h4>
             </div>
 <!--TODO: add LocalDateTime parser to show HH:MM time only-->
-            <p>Time: <span th:text="${t.getStart()}">11:00</span> - <span th:text="${t.getEnd()}">11:45</span></p>
+            <p>Time: <span th:text="${t.getStart().getDayOfMonth()} + ' ' +  ${t.getStart().getMonth()} + ' ' + ${t.getStart().getHour()} + ':' + ${t.getStart().getMinute()}"></span> - <span th:text="${t.getEnd().getHour()} + ':' + ${t.getEnd().getMinute()}"></span></p>
             <p th:text="${t.getDescription()}"></p>
         </div>
             <div class="col-sm-3 mx-auto">
