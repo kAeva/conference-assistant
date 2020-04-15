@@ -119,10 +119,14 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void addRoles(long staffId, Set<Role> roles) {
         StaffDto staff = findById(staffId);
-        if (roles.contains(Role.SUPERVISOR)){
-            staff.setColabs_id(conferenceService.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+        if (roles.isEmpty()) {
+            staff.setRoles(Set.of(Role.MODERATOR));
+        } else {
+            if (roles.contains(Role.SUPERVISOR)) {
+                staff.setColabs_id(conferenceService.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+            }
+            staff.setRoles(roles);
         }
-        staff.setRoles(roles);
         update(staffId, staff);
     }
 

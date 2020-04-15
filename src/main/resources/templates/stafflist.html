@@ -24,30 +24,21 @@
         </div>
     </tr>
     <tr th:each="staff : ${staffs}">
-        <td  th:text="${staff.getId()}">Id</td>
-        <td  th:text="${staff.getEmail()}">Email</td>
-        <td  th:text="${staff.getName()}">Name</td>
-        <td  headers="roles">
+        <td th:text="${staff.getId()}">Id</td>
+        <td th:text="${staff.getEmail()}">Email</td>
+        <td th:text="${staff.getName()}">Name</td>
+        <td headers="roles">
             <span th:each="a, role : ${staff.getRoles()}" th:text="${!role.last} ? ${a} + ' ,': ${a}"></span>
         </td>
-        <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
-            <td  class="form-group blu-margin">
-                <select class="form-control" id="dropOperatorq">
-                    <option th:each="conf : ${staff.getColabs_id()}"
-                            th:text="${confService.findById(conf).getTheme()}"></option>
-                </select>
-            </td>
-        </div>
-
-
-        <td  class="form-group blu-margin">
-            <select class="form-control" id="dropOperator" th:with="commonConfId=${staff.getColabs_id().retainAll(staffAuth.getColabs_id())}">
-                <option  th:each="conf : ${staff.getColabs_id()}"
-                         th:text="${confService.findById(conf).getTheme()}"></option>
+        <td class="form-group blu-margin">
+            <select class="form-control" id="dropOperator"
+                    th:with="commonConfId=${staff.getColabs_id().retainAll(staffAuth.getColabs_id())}">
+                <option th:each="conf : ${staff.getColabs_id()}"
+                        th:text="${confService.findById(conf).getTheme()}"></option>
             </select>
         </td>
 
-        <td >
+        <td>
             <a class="btn btn-success btn-sm" th:href="@{'/staff/add-privileges/'+${staff.getId()}}">Edit</a>
         </td>
         <div sec:authorize="hasAnyAuthority('SUPERVISOR')">
