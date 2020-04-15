@@ -152,6 +152,7 @@ public class DatabaseInitials {
 
             staff1.setColab(Set.of(conf1,conf3));
             staff2.setColab(Set.of(conf1,conf2));
+            staff8.setColab(Set.of(conf1,conf2,conf3));
             staffRepository.save(staff1);
             staffRepository.save(staff2);
             staffRepository.save(staff3);
