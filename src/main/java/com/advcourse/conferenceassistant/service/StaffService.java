@@ -2,7 +2,6 @@ package com.advcourse.conferenceassistant.service;
 
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
-import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 
 import java.util.List;
@@ -26,9 +25,11 @@ public interface StaffService {
 
     void deleteById(long id);
 
-    void addRoles(long staffId,Set<Role> roles);
+    void addRoles(long staffId, Set<Role> roles);
 
-    void addConferences (long staffId, Set<Long> setConfId);
+    void addConferences(long staffId, Set<Long> setConfId);
 
     List<ConferenceDto> findConferenceByStaffEmail(String email);
+
+    List<StaffDto> findStaffByRoles(Role role);
 }

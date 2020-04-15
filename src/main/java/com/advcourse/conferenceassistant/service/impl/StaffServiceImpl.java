@@ -140,5 +140,10 @@ public class StaffServiceImpl implements StaffService {
 
     }
 
+    @Override
+    public List<StaffDto> findStaffByRoles(Role role) {
+        return StaffMapper.toDto(staffRepository.findStaffByRoles(role));
+    }
+
 
 }
