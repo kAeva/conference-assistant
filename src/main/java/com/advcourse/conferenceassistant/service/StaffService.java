@@ -30,4 +30,5 @@ public interface StaffService {
 
     void addConferences (long staffId, Set<Long> setConfId);
 
+    List<ConferenceDto> findConferenceByStaffEmail(String email);
 }

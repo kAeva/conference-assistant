@@ -41,7 +41,7 @@ public class StaffController {
     private StaffService service;
 
     @Autowired
-    private ConferenceServiceImpl coservice;
+    private ConferenceServiceImpl conferenceService;
 
     @Autowired
     private TopicService topicService;
@@ -95,13 +95,13 @@ public class StaffController {
 
     @GetMapping("/delete-conference/{confId}")
     public String deleteConf(@PathVariable Long confId) {
-        coservice.deleteById(confId);
+        conferenceService.deleteById(confId);
         return "redirect:/staff/dashboard";
     }
 
     @GetMapping("/dashboard")
     public String dashPage(Model model, Authentication auth) {
-        List<ConferenceDto> dtoList = coservice.findAll();
+        List<ConferenceDto> dtoList = conferenceService.findAll();
 
         Set<Long> colabs_id = service.findByEmail(auth.getName()).getColabs_id();
         List<String> roles = auth.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
@@ -118,7 +118,7 @@ public class StaffController {
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
         if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
-        model.addAttribute("Confid", coservice.findById(confId));
+        model.addAttribute("Confid", conferenceService.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
 
@@ -153,7 +153,7 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "conference-add";
         }
-        ConferenceDto conferenceDto = coservice.saveConference(dto);
+        ConferenceDto conferenceDto = conferenceService.saveConference(dto);
         service.addConference(auth.getName(), conferenceDto);
         return "redirect:/staff/dashboard";
     }
@@ -162,7 +162,7 @@ public class StaffController {
     public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
 
         if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
-        model.addAttribute("conference", coservice.findById(confId));
+        model.addAttribute("conference", conferenceService.findById(confId));
         return "conference-edit";
     }
 
@@ -184,7 +184,7 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "conference-edit";
         }
-        coservice.update(confId, dto);
+        conferenceService.update(confId, dto);
         return "redirect:/staff/dashboard";
     }
 // TODO: hide this from all users (now it's available without logging in)
@@ -286,7 +286,7 @@ public class StaffController {
         model.addAttribute("staffs", service.findAll());
         model.addAttribute("rolesAuth", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         model.addAttribute("roles", List.of(Role.values()));
-        model.addAttribute("confService", coservice);
+        model.addAttribute("confService", conferenceService);
         return "stafflist";
     }
 
@@ -297,11 +297,14 @@ public class StaffController {
     }
 
     @GetMapping("add-privileges/{staffId}")
-    public String staffPrevileges(@PathVariable long staffId, Model model) {
+    public String staffPrevileges(@PathVariable long staffId, Model model,Authentication auth) {
         model.addAttribute("staff", service.findById(staffId));
         model.addAttribute("roles", Set.of(Role.values()));
-        model.addAttribute("conferences", coservice.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
-        model.addAttribute("confService", coservice);
+
+        model.addAttribute("conferences", service.findConferenceByStaffEmail(auth.getName()).stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+        //model.addAttribute("conferences", conferenceService.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
+
+        model.addAttribute("confService", conferenceService);
         return "add-privileges";
     }
 

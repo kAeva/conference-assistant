@@ -18,9 +18,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Repository
 @Scope(proxyMode = ScopedProxyMode.INTERFACES)
@@ -32,6 +35,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ConferenceServiceImpl conferenceService;
 
     /**
      * adding staff to db
@@ -100,28 +106,38 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void deleteById(long id) {
-        try{
+        try {
             staffRepository.deleteById(id);
-            log.info("Delete staff with id= {}",id);
-        }catch (EmptyResultDataAccessException e){
-                log.info("Staff with id={} doesn't exist",id);
-                // todo trow exception
+            log.info("Delete staff with id= {}", id);
+        } catch (EmptyResultDataAccessException e) {
+            log.info("Staff with id={} doesn't exist", id);
+            // todo trow exception
         }
 
     }
 
     @Override
-    public void addRoles(long staffId,Set<Role> roles) {
+    public void addRoles(long staffId, Set<Role> roles) {
         StaffDto staff = findById(staffId);
         staff.setRoles(roles);
-        update(staffId,staff);
+        update(staffId, staff);
     }
 
     @Override
     public void addConferences(long staffId, Set<Long> setConfId) {
         StaffDto staff = findById(staffId);
         staff.setColabs_id(setConfId);
-        update(staffId,staff);
+        update(staffId, staff);
+    }
+
+    @Override
+    public List<ConferenceDto> findConferenceByStaffEmail(String email) {
+        StaffDto staff = findByEmail(email);
+        Set<Long> colabs_id = staff.getColabs_id();
+        Set<Long> allIdConferences = conferenceService.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet());
+        allIdConferences.retainAll(colabs_id);
+        return allIdConferences.stream().map(e -> conferenceService.findById(e)).collect(Collectors.toList());
+
     }
 
 
