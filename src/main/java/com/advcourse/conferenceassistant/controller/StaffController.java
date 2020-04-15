@@ -295,8 +295,12 @@ public class StaffController {
     }
 
     @GetMapping("/staff-delete/{staffId}")
-    public String deleteStaff(@PathVariable long staffId) {
-        service.deleteById(staffId);
+    public String deleteStaff(@PathVariable long staffId, Authentication auth) {
+        Long id = service.findByEmail(auth.getName()).getId();
+        if (id.equals(staffId)){
+            return "redirect:/staff/list";
+        }
+            service.deleteById(staffId);
         return "redirect:/staff/list";
     }
 
@@ -306,7 +310,6 @@ public class StaffController {
         model.addAttribute("roles", Set.of(Role.values()));
 
         model.addAttribute("conferences", service.findConferenceByStaffEmail(auth.getName()).stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
-        //model.addAttribute("conferences", conferenceService.findAll().stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
 
         model.addAttribute("confService", conferenceService);
         return "add-privileges";
