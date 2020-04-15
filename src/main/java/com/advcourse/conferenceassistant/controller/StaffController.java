@@ -48,9 +48,9 @@ public class StaffController {
     @Autowired
     QuestionService questionService;
     @Autowired
-    FileServiceImpl fileServiceImpl;
+    private FileServiceImpl fileServiceImpl;
     @Autowired
-    DateValidator dateValidator;
+    private DateValidator dateValidator;
 
     @GetMapping("/")
     public String staffEnter() {
@@ -95,7 +95,10 @@ public class StaffController {
     }
 
     @GetMapping("/delete-conference/{confId}")
-    public String deleteConf(@PathVariable Long confId) {
+    public String deleteConf(@PathVariable Long confId, Authentication auth) {
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         conferenceService.deleteById(confId);
         return "redirect:/staff/dashboard";
     }
@@ -105,7 +108,7 @@ public class StaffController {
         List<ConferenceDto> dtoList = conferenceService.findAll();
 
         Set<Long> colabs_id = service.findByEmail(auth.getName()).getColabs_id();
-        List<String> roles = auth.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
+        List<String> roles = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
 
         model.addAttribute("roles", roles);
@@ -118,18 +121,21 @@ public class StaffController {
 
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
-        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         model.addAttribute("Confid", conferenceService.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
         File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
-
         model.addAttribute("pathImg", uploadDir.getAbsolutePath() + File.separator);
         return "conference-page";
     }
 
     @GetMapping("/conference-dashboard/{confId}")
-    public String confDashPage(@PathVariable Long confId, Model model) {
-
+    public String confDashPage(@PathVariable Long confId, Model model, Authentication auth) {
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         return "conference-dashboard";
     }
 
@@ -156,6 +162,10 @@ public class StaffController {
         }
         ConferenceDto conferenceDto = conferenceService.saveConference(dto);
         service.addConference(auth.getName(), conferenceDto);
+
+        /**
+         * add all conferences to staffs, who have role SUPERVISOR
+         * */
         List<StaffDto> supervisor = service.findStaffByRoles(Role.SUPERVISOR);
         supervisor.forEach(e -> service.addConference(e.getEmail(), conferenceDto));
         return "redirect:/staff/dashboard";
@@ -164,14 +174,11 @@ public class StaffController {
     @GetMapping("/conference-edit/{confId}")
     public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
 
-        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         model.addAttribute("conference", conferenceService.findById(confId));
         return "conference-edit";
-    }
-
-    private boolean isStaffHasntConfId(@PathVariable Long confId, Authentication auth) {
-        StaffDto staff = service.findByEmail(auth.getName());
-        return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
     }
 
     @PostMapping("/conference-edit/{confId}")
@@ -191,7 +198,6 @@ public class StaffController {
         return "redirect:/staff/dashboard";
     }
 
-    // TODO: hide this from all users (now it's available without logging in)
     @GetMapping("/topic-dashboard/{topicId}")
     public String topicDashPage(@PathVariable long topicId,
                                 Model model) {
@@ -204,7 +210,9 @@ public class StaffController {
     @GetMapping("/topic-add/{confId}")
     public String topicAddPage(@PathVariable long confId,
                                Model model, Authentication auth) {
-        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         model.addAttribute("topic", new TopicDto());
         return "topic-add";
     }
@@ -242,8 +250,9 @@ public class StaffController {
     @GetMapping("/topic-edit/{topicId}")
     public String topicEditPage(@PathVariable Long topicId, Model model, Authentication auth) {
         TopicDto topic = topicService.findById(topicId);
-        long confId = topic.getConfId();
-        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(topic.getConfId(), auth)) {
+            return "redirect:/forbidden";
+        }
         model.addAttribute("topic", topic);
         return "topic-edit";
     }
@@ -278,7 +287,9 @@ public class StaffController {
     @GetMapping("/topic-delete/{topicId}")
     public String deleteTopic(@PathVariable Long topicId, Authentication auth) {
         long confId = topicService.findById(topicId).getConfId();
-        if (isStaffHasntConfId(confId, auth)) return "redirect:/forbidden";
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
         topicService.deleteById(topicId);
         return "redirect:/staff/conference-page/" + confId;
     }
@@ -288,8 +299,6 @@ public class StaffController {
 
         model.addAttribute("staffAuth", service.findByEmail(auth.getName()));
         model.addAttribute("staffs", service.findAll());
-        model.addAttribute("rolesAuth", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        model.addAttribute("roles", List.of(Role.values()));
         model.addAttribute("confService", conferenceService);
         return "stafflist";
     }
@@ -297,10 +306,10 @@ public class StaffController {
     @GetMapping("/staff-delete/{staffId}")
     public String deleteStaff(@PathVariable long staffId, Authentication auth) {
         Long id = service.findByEmail(auth.getName()).getId();
-        if (id.equals(staffId)){
+        if (id.equals(staffId)) {
             return "redirect:/staff/list";
         }
-            service.deleteById(staffId);
+        service.deleteById(staffId);
         return "redirect:/staff/list";
     }
 
@@ -308,9 +317,7 @@ public class StaffController {
     public String staffPrevileges(@PathVariable long staffId, Model model, Authentication auth) {
         model.addAttribute("staff", service.findById(staffId));
         model.addAttribute("roles", Set.of(Role.values()));
-
         model.addAttribute("conferences", service.findConferenceByStaffEmail(auth.getName()).stream().map(ConferenceDto::getId).collect(Collectors.toSet()));
-
         model.addAttribute("confService", conferenceService);
         return "add-privileges";
     }
@@ -341,6 +348,14 @@ public class StaffController {
     public String changeEndTime(@PathVariable Long topicId) {
         topicService.updateEndTime(topicId);
         return "redirect:/staff/topic-dashboard/" + topicId;
+    }
+
+    /**
+     * return true if current staff hasn't rights to this conference
+     */
+    private boolean isStaffHasntConfId(@PathVariable Long confId, Authentication auth) {
+        StaffDto staff = service.findByEmail(auth.getName());
+        return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
     }
 
 }
