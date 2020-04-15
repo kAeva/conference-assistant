@@ -56,6 +56,7 @@ public class StaffController {
     public String staffEnter() {
         return "forward:/staff/dashboard";
     }
+
     @GetMapping("/registration")
     public String staffLogin(Model model) {
         Staff staff = new Staff();
@@ -155,6 +156,8 @@ public class StaffController {
         }
         ConferenceDto conferenceDto = conferenceService.saveConference(dto);
         service.addConference(auth.getName(), conferenceDto);
+        List<StaffDto> supervisor = service.findStaffByRoles(Role.SUPERVISOR);
+        supervisor.forEach(e -> service.addConference(e.getEmail(), conferenceDto));
         return "redirect:/staff/dashboard";
     }
 
@@ -187,7 +190,8 @@ public class StaffController {
         conferenceService.update(confId, dto);
         return "redirect:/staff/dashboard";
     }
-// TODO: hide this from all users (now it's available without logging in)
+
+    // TODO: hide this from all users (now it's available without logging in)
     @GetMapping("/topic-dashboard/{topicId}")
     public String topicDashPage(@PathVariable long topicId,
                                 Model model) {
@@ -297,7 +301,7 @@ public class StaffController {
     }
 
     @GetMapping("add-privileges/{staffId}")
-    public String staffPrevileges(@PathVariable long staffId, Model model,Authentication auth) {
+    public String staffPrevileges(@PathVariable long staffId, Model model, Authentication auth) {
         model.addAttribute("staff", service.findById(staffId));
         model.addAttribute("roles", Set.of(Role.values()));
 
@@ -323,13 +327,15 @@ public class StaffController {
         service.addConferences(staffId, dto.getColabs_id());
         return "redirect:/staff/add-privileges/" + staffId;
     }
+
     @GetMapping("/topic-start/{topicId}")
-    public String changeStartTime(@PathVariable Long topicId){
-      topicService.updateStartTime(topicId);
+    public String changeStartTime(@PathVariable Long topicId) {
+        topicService.updateStartTime(topicId);
         return "redirect:/staff/topic-dashboard/" + topicId;
     }
+
     @GetMapping("/topic-end/{topicId}")
-    public String changeEndTime(@PathVariable Long topicId){
+    public String changeEndTime(@PathVariable Long topicId) {
         topicService.updateEndTime(topicId);
         return "redirect:/staff/topic-dashboard/" + topicId;
     }
