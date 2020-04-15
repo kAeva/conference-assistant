@@ -39,9 +39,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/staff/conference-add").hasAnyAuthority("ADMIN")
-                .antMatchers("/staff/topic-add/**", "/staff/dashboard", "/staff/conference-page/**", "/staff/conference-dashboard/**","/staff/topic-dashboard/**").hasAnyAuthority("ADMIN", "MODERATOR","SUPERVISOR")
-                .antMatchers("/staff/list").hasAnyAuthority("SUPERVISOR","ADMIN")
+
+                //.antMatchers("/staff/topic-add/**", "/staff/dashboard", "/staff/conference-page/**", "/staff/conference-dashboard/**","/staff/topic-dashboard/**").authenticated()
+                .antMatchers("/staff/conference-add","/staff/delete-conference/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/staff/staff-delete/**","/staff/add-roles/**").hasAnyAuthority("SUPERVISOR")
+                .antMatchers("/staff/list", "/staff/add-privileges/**", "/staff/add-conferenceId/**").hasAnyAuthority("SUPERVISOR","ADMIN")
+                .antMatchers("/staff/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

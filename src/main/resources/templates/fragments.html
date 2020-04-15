@@ -1,29 +1,37 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="headerfiles">
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 <body>
 <div th:fragment="admin-header">
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
         <a class="navbar-brand" href="/staff/dashboard"><i class="fas fa-crown"></i> Dashboard</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
+                aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/staff/list">Manage Users</a>
-                </li>
+                <div sec:authorize="hasAnyAuthority('SUPERVISOR','ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff/list">Manage Users</a>
+                    </li>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Statistics</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item">
-                    <a  class="nav-link" th:href="@{'/staff/logout_admin'}">Log out</a>
+                    <span class="nav-link" th:text="${#authentication.getName()}">Staff email</span>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/staff/logout_admin'}">Log out</a>
                 </li>
             </ul>
         </div>
