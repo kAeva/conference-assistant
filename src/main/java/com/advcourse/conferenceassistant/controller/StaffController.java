@@ -115,10 +115,8 @@ public class StaffController {
         if (isStaffHasntConfId(confId, auth)) {
             return "redirect:/forbidden";
         }
-        model.addAttribute("Confid", conferenceService.findById(confId));
+        model.addAttribute("conference", conferenceService.findById(confId));
         model.addAttribute("allTopic", topicService.findByConfId(confId));
-        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images");
-        model.addAttribute("pathImg", uploadDir.getAbsolutePath() + File.separator);
         return "conference-page";
     }
 
