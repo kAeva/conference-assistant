@@ -105,16 +105,7 @@ public class StaffController {
 
     @GetMapping("/dashboard")
     public String dashPage(Model model, Authentication auth) {
-        List<ConferenceDto> dtoList = conferenceService.findAll();
-
-        Set<Long> colabs_id = service.findByEmail(auth.getName()).getColabs_id();
-        List<String> roles = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-
-
-        model.addAttribute("roles", roles);
-        model.addAttribute("colabs_id", List.copyOf(colabs_id));
-        model.addAttribute("Conflist", dtoList);
-
+        model.addAttribute("conferences", service.findConferenceByStaffEmail(auth.getName()));
         return "staffdashboard";
     }
 

@@ -23,47 +23,49 @@
 
         <thead class="thead">
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Details</th>
-            <th scope="col">Topics</th>
-            <th scope="col">StartDate</th>
-            <th scope="col">EndDate</th>
+            <th scope="col" style="width: 17%">Theme</th>
+            <th scope="col" style="width: 38%">Description</th>
+            <th scope="col" style="width: 15%">Venue</th>
+            <th scope="col" style="width: 10%">Start Date</th>
+            <th scope="col" style="width: 10%">End Date</th>
 
-            <th></th>
+            <th style="width: 5%"></th>
 
             <!--See only 'ADMIN'-->
             <div sec:authorize="hasAnyAuthority('ADMIN')">
-                <th><a class="btn btn-primary btn-sm" href="/staff/conference-add">Add</a></th>
+                <th style="width: 5%"><a class="btn btn-primary btn-sm" href="/staff/conference-add" data-toggle="tooltip"
+                       title="Add new conference">Add</a></th>
             </div>
             <!---->
         </tr>
         </thead>
 
         <tbody>
-        <!--${colab_id} == ${conf.getId()}-->
-        <tr th:each="conf:${Conflist}">
+        <tr th:each="conf:${conferences}">
             <!--Link /conference-dashboard for staff to manage topics start/end and see questions-->
-            <th th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                scope="row"><a th:href="@{'/staff/conference-page/' + ${conf.getId()}}" th:text="${conf.getTheme()}"></a>
+
+            <th scope="row">
+                <a th:href="@{'/staff/conference-page/' + ${conf.getId()}}" th:text="${conf.getTheme()}"
+                   data-toggle="tooltip" title="View conferences topics"></a>
             </th>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                th:text="${conf.getDescription()}"></td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}">10</td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                th:text="${conf.getStart()}"></td>
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} or ${#lists.contains(roles,'SUPERVISOR')}"
-                th:text="${conf.getEnd()}"></td>
 
+            <td th:text="${conf.getDescription()}"></td>
+            <td th:text = "${conf.getAddress()}"></td>
+            <td th:text="${#temporals.format(conf.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${#temporals.format(conf.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
 
-            <td th:if="${#lists.contains(colabs_id,conf.getId())} and ${#lists.contains(roles,'ADMIN')}"><a class="btn btn-danger btn-sm"
-                                                                      th:href="@{'/staff/delete-conference/' + ${conf.getId()}}"
-                                                                      value=""
-                                                                      name=""><i
-                    class="fas fa-skull-crossbones"></i></a></td>
+            <div sec:authorize="hasAnyAuthority('ADMIN')">
+                <td>
+                    <a class="btn btn-danger btn-sm" th:href="@{'/staff/delete-conference/' + ${conf.getId()}}"
+                       data-toggle="tooltip" title="Delete conference">
+                        <i class="fas fa-skull-crossbones"></i>
+                    </a>
+                </td>
+            </div>
 
-
-            <td th:if="${#lists.contains(colabs_id,conf.getId())}"><a class="btn btn-success btn-sm"
-                                                                      th:href="@{'/staff/conference-edit/' + ${conf.getId()}}">Edit</a>
+            <td><a class="btn btn-success btn-sm"
+                   th:href="@{'/staff/conference-edit/' + ${conf.getId()}}" data-toggle="tooltip"
+                   title="Edit conference">Edit</a>
             </td>
 
         </tr>
