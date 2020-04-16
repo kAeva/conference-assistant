@@ -9,22 +9,18 @@
 </head>
 <body>
 <div th:replace="fragments :: admin-header"></div>
-<div class="container-fluid mx-auto mt-5">
-    <h1 class="text-center">Edit Topic</h1>
+<div class="container-fluid mx-auto mt-3">
+    <h4 class="text-center">Edit Topic</h4>
 </div>
 
-<div class="container-fluid mx-auto mt-5 col-sm-5">
+<div class="container-fluid mx-auto mt-3 col-sm-6">
 
-    <form form action="#" th:action="@{'/staff/topic-edit/'+${topicId}}" th:object="${topic}" method="POST" enctype="multipart/form-data">
+    <form form action="#" th:action="@{'/staff/topic-edit/'+${topicId}}" th:object="${topic}" method="POST"
+          enctype="multipart/form-data">
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Name</label>
+            <div class="form-group col-md-12">
+                <label for="inputEmail4">Theme</label>
                 <input type="text" th:field="*{theme}" class="form-control" id="inputEmail4" placeholder="Topic Name">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputSpeaker">Speaker</label>
-                <input type="text" th:field="*{speaker}"class="form-control" id="inputSpeaker" placeholder="Name, position">
-
             </div>
         </div>
         <div class="form-row">
@@ -40,29 +36,29 @@
                        name="meeting-time" value=""
                        min="2020-04-01T00:00" max="2025-09-14T00:00">
             </div>
-            <div th:if="${#fields.hasErrors('end')}" th:errors="*{end}" ></div>
-
+            <div th:if="${#fields.hasErrors('end')}" th:errors="*{end}"></div>
         </div>
         <div class="form-group">
             <label for="inputDescr">Description</label>
-            <textarea type="text" th:field="*{description}"class="form-control" id="inputDescr" placeholder="Apartment, studio, or floor"></textarea>
+            <textarea type="text" th:field="*{description}" class="form-control" id="inputDescr"
+                      placeholder="Apartment, studio, or floor"></textarea>
         </div>
         <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputSpeaker">Speaker</label>
+                <input type="text" th:field="*{speaker}" class="form-control" id="inputSpeaker"
+                       placeholder="Name, position">
+            </div>
             <div class="form-group col-md-6">
                 <label for="uploadImage">Upload speaker picture</label>
                 <input type="file" name="file" class="form-control-file" id="uploadImage">
             </div>
-            <div class="form-group">
-                <label for="inputDescrSpeaker">Description</label>
-                <textarea type="text" th:field="*{speakerdesc}"class="form-control" id="inputDescrSpeaker" placeholder="Apartment, studio, or floor"></textarea>
-            </div>
-            <div class="form-group col-md-4">
-
-            </div>
-
         </div>
-
-        <!--this button in case of success should do redirect to /conference-page -->
+        <div class="form-group">
+            <label for="inputDescrSpeaker">Speaker description</label>
+            <textarea type="text" th:field="*{speakerdesc}" class="form-control" id="inputDescrSpeaker"
+                      placeholder="Short description about speaker"></textarea>
+        </div>
         <button type="submit" class="btn btn-info">Save</button>
     </form>
 
