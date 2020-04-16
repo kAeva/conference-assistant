@@ -14,6 +14,7 @@ import com.advcourse.conferenceassistant.service.impl.FileServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.DateValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,6 +52,9 @@ public class StaffController {
     private FileServiceImpl fileServiceImpl;
     @Autowired
     private DateValidator dateValidator;
+
+    @Value("${upload.path}")
+    String path;
 
     @GetMapping("/")
     public String staffEnter() {
@@ -202,6 +206,7 @@ public class StaffController {
         if (isStaffHasntConfId(confId, auth)) {
             return "redirect:/forbidden";
         }
+
         model.addAttribute("topic", new TopicDto());
         return "topic-add";
     }
@@ -218,17 +223,10 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return "topic-add";
         }
-        //TODO set upload dir path in properties
-        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
-        if (!uploadDir.exists()) {
-            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
-            boolean mkdir = uploadDir.mkdirs();
-            log.info("Create dir {}", mkdir);
-        }
-
         dto.setConfId(confId);
+
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
         }
 
         topicService.save(dto);
@@ -259,15 +257,9 @@ public class StaffController {
         TopicDto topicById = topicService.findById(topicId);
         dto.setId(topicId);
         dto.setConfId(topicById.getConfId());
-        //TODO set upload dir path in properties
-        File uploadDir = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "images");
-        if (!uploadDir.exists()) {
-            log.info("Dir isn't exists : " + uploadDir.getAbsolutePath());
-            boolean mkdir = uploadDir.mkdirs();
-            log.info("Create dir {}", mkdir);
-        }
+
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, uploadDir.getAbsolutePath()));
+            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
         }
         topicService.update(topicId, dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
