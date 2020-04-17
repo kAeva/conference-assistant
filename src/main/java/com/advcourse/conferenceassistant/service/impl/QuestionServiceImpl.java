@@ -1,7 +1,6 @@
 package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.model.Question;
-import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.model.Visitor;
 import com.advcourse.conferenceassistant.repository.QuestionRepository;
 import com.advcourse.conferenceassistant.repository.TopicRepository;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +48,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDto> getQuestionsByTopicId(long topicId, String email) {
-//        TODO: add excpetion handling for no questions found
         log.trace("In getQuestionsByTopicId() method");
         Long conf_id = topicRepository
                 .findById(topicId)

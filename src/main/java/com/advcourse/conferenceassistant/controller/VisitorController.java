@@ -1,10 +1,8 @@
 package com.advcourse.conferenceassistant.controller;
 
 
-import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
-import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @Controller

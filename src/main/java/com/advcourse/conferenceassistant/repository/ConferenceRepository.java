@@ -9,10 +9,8 @@ import java.util.List;
 
 @Repository
 public interface ConferenceRepository extends JpaRepository<Conference, Long> {
- //  List<Conference> findByNameIsLike(String name);
     List<Conference> findAll();
     Conference findById(long id);
-
     @Override
     <S extends Conference> S saveAndFlush(S s);
 }

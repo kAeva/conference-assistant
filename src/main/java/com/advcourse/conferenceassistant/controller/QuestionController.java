@@ -4,7 +4,6 @@ import com.advcourse.conferenceassistant.service.QuestionService;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
-import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
