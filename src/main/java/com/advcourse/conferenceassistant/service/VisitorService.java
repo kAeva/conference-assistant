@@ -17,4 +17,6 @@ public interface VisitorService {
     VisitorDto findById(Long id);
 
     VisitorDto addConference(VisitorDto visitorDto, Set<Long> confIdSet);
+
+    boolean isVisitorHasConferenceId(String email, Long conf_id);
 }

@@ -22,12 +22,12 @@ public class GlobalExceptionHandler {
 
         return "visitorError";
     }
-    @ExceptionHandler(value = Exception.class)
+    /*@ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequest() {
 
         return "badrequest-page";
-    }
+    }*/
     @ExceptionHandler(NotActiveConferenceException.class)
     public String notActiveConfExceptionHandler() {
 

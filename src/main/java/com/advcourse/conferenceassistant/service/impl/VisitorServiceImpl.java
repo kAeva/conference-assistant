@@ -72,4 +72,12 @@ public class VisitorServiceImpl implements VisitorService {
         visitorDto.getConfId().addAll(confIDSet);
         return visitorDto;
     }
+
+    @Override
+    public boolean isVisitorHasConferenceId(String email, Long conf_id) {
+        Visitor visitor = visitorRepository.findByEmail(email);
+        return visitor != null && VisitorMapper.toDto(visitor).getConfId().contains(conf_id);
+
+
+    }
 }
