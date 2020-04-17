@@ -34,11 +34,15 @@
                     <div th:if="${((currentTime.isAfter(t.getStart())) && (currentTime.isBefore(t.getEnd())))}">
                         <span style="color: limegreen;">NOW: <h4 class="h4" th:text="${t.getTheme()}"></h4></span>
                     </div>
+
+                    <div th:if="${!((currentTime.isAfter(t.getStart())) && (currentTime.isBefore(t.getEnd())))}">
+                    <h4 class="h4" th:text="${t.getTheme()}"></h4>
+                    </div>
                 </div>
-                <div th:if="${!((currentTime.isAfter(t.getStart())) && (currentTime.isBefore(t.getEnd())))}">
+                <div th:if="${!isVisitorHasCurrentConference}">
                     <h4 class="h4" th:text="${t.getTheme()}"></h4>
                 </div>
-                <!--TODO: add LocalDateTime parser to show HH:MM time only-->
+
                 <p>Time: <span th:text="${#temporals.format(t.getStart(), 'HH:mm')}"></span> - <span
                         th:text="${#temporals.format(t.getEnd(), 'HH:mm')}"></span></p>
                 <p th:text="${t.getDescription()}"></p>

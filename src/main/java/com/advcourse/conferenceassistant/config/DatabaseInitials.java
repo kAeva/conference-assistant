@@ -225,7 +225,7 @@ public class DatabaseInitials {
 
             Topic topic2 = new Topic();
             topic2.setTheme("Getting lost in the latest tech talk? Don’t know your AI from your ML? Then it’s time to learn how to talk AI like an expert.");
-            topic2.setDescription("desc You can AI like");
+            topic2.setDescription("If you've ever reached out to a company via email, direct message, or a phone call, you've probably been met with some type of chatbot service.");
             topic2.setSpeakerdesc("Wolfram Research Europe Ltd., UK");
             topic2.setSpeaker("Jon McLoone");
             topic2.setSpeakerimg("image-placeholder.png");

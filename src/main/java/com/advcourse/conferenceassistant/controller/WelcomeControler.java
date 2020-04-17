@@ -42,7 +42,6 @@ public class WelcomeControler {
         model.addAttribute("conference", conferenceService.findById(confId));
         log.debug("Received topics in quantity of: {} ", topicService.findByConfId(confId).size());
         model.addAttribute("topics", topicService.findByConfId(confId));
-        model.addAttribute("currentTime", LocalDateTime.now());
         model.addAttribute("email", email);
         model.addAttribute("isVisitorHasCurrentConference",visitorService.isVisitorHasConferenceId(email,confId));
         return "schedule";
