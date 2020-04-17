@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class WelcomeControler {
+public class WelcomeController {
 
     @Autowired
     ConferenceService conferenceService;
