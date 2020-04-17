@@ -1,6 +1,7 @@
 package com.advcourse.conferenceassistant.controller;
 
 
+import com.advcourse.conferenceassistant.model.Conference;
 import com.advcourse.conferenceassistant.service.TopicService;
 import com.advcourse.conferenceassistant.service.VisitorService;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
@@ -41,12 +42,15 @@ public class VisitorController {
     @PostMapping("/registration-visitor/{confId}")
     public String registerUserAccount(
             @ModelAttribute("visitor") @Valid VisitorDto accountVisitor,
+
             BindingResult bindingResult,
             @PathVariable Long confId,
-            HttpServletResponse response, Model model
-    ) {
+            HttpServletResponse response,
+            Model model
+            ) {
+        model.addAttribute("conference",conferenceService.findById(confId));
         if (bindingResult.hasErrors()) {
-            return "index";
+            return "visitor-registration";
         }
 
         VisitorDto registered = visitorService.registerNewVisitorDtoAccount(accountVisitor);
