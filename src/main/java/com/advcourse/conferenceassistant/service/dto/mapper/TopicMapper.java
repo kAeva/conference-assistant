@@ -5,7 +5,6 @@ import com.advcourse.conferenceassistant.model.Topic;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 @Slf4j

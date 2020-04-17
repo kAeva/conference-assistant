@@ -43,14 +43,16 @@ public class ConferenceController {
         throw new NoSuchConferenceException();
     }
     /**
-     * page with form to input visitor email
+     * page with form to add visitor email
      */
     @GetMapping("/{confId}")
     public String homePage(@PathVariable Long confId, Model model) {
 
         log.debug("New visitor in conference: {}", confId);
         ConferenceDto conf = conferenceService.findById(confId);
+        final NotActiveConferenceException notActiveConferenceException = new NotActiveConferenceException();
         if (!LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
+            log.error("Conference is out of time", notActiveConferenceException);
             throw new NotActiveConferenceException();
         }
         VisitorDto visitorDto = new VisitorDto();
@@ -67,14 +69,11 @@ public class ConferenceController {
                     String email, @PathVariable Long confId,
             Model model) {
         log.debug("Redirected to conference page with id: {} ", confId);
-//        !!important USE spring.jpa.hibernate.ddl-auto=create-drop application property to have active topics in DB from DataBaseInitials
-//        TODO: handle null
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
         log.debug("Active topic id: {}", currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
         log.debug("Received list of questions with size: {}", questions.size());
-
         model.addAttribute("visitor", visitorDto);
         model.addAttribute("topic", currentTopic);
         model.addAttribute("questions", questions);
@@ -102,8 +101,6 @@ public class ConferenceController {
     @GetMapping("/logout/{confId}")
     public String signOut(@PathVariable Long confId,
                    HttpServletResponse response) {
-
-
         Cookie newCookie = new Cookie("email", "no_cookie");
         newCookie.setMaxAge(0);
         newCookie.setPath("/");
