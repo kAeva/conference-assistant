@@ -7,10 +7,10 @@ import com.advcourse.conferenceassistant.service.dto.TopicDto;
 import com.advcourse.conferenceassistant.service.dto.mapper.TopicMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +19,10 @@ import java.util.List;
 public class TopicServiceImpl implements TopicService {
 
     @Autowired
-    TopicRepository topicRepository;
+    private TopicRepository topicRepository;
+
+    @Value("${upload.path}")
+    private String path;
 
     @Override
     public TopicDto findById(long id) {
@@ -54,7 +57,22 @@ public class TopicServiceImpl implements TopicService {
         topic.setEnd(dto.getEnd());
         topic.setSpeaker(dto.getSpeaker());
         topic.setSpeakerdesc(dto.getSpeakerdesc());
-        if (dto.getSpeakerimg()!=null) {
+        if (dto.getSpeakerimg() != null) {
+            /**
+             * delete previous img
+             * */
+            if (topic.getSpeakerimg() != null) {
+                String absPath = path + "/" + topic.getSpeakerimg();
+                File file = new File(absPath);
+                if (file.delete()) {
+                    log.debug("File {} deleted", absPath);
+                } else {
+                    log.debug("Failed to delete the file {}", absPath);
+                }
+            }
+            /**
+             * set new speaker img
+             * */
             topic.setSpeakerimg(dto.getSpeakerimg());
         }
         topic.setStart(dto.getStart());
@@ -63,12 +81,14 @@ public class TopicServiceImpl implements TopicService {
         return save(topic);
     }
 
+    @Override
     public TopicDto updateStartTime(Long topicId) {
         TopicDto topic = findById(topicId);
         topic.setStart(LocalDateTime.now());
         return save(topic);
     }
 
+    @Override
     public TopicDto updateEndTime(Long topicId) {
         TopicDto topic = findById(topicId);
         topic.setEnd(LocalDateTime.now());
