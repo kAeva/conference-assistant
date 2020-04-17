@@ -44,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/staff/conference-add","/staff/delete-conference/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/staff/staff-delete/**","/staff/add-roles/**").hasAnyAuthority("SUPERVISOR")
                 .antMatchers("/staff/list", "/staff/add-privileges/**", "/staff/add-conferenceId/**").hasAnyAuthority("SUPERVISOR","ADMIN")
+                .antMatchers("/staff/registration").permitAll()
                 .antMatchers("/staff/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
