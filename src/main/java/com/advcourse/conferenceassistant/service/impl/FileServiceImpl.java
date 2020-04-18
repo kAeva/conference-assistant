@@ -2,16 +2,19 @@ package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.exception.FileStorageException;
 import com.advcourse.conferenceassistant.service.FileService;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.UUID;
 
 @Slf4j
@@ -40,5 +43,23 @@ public class FileServiceImpl implements FileService {
                     + ". Please try again!");
         }
 
+    }
+
+    @Override
+    public String generateQrCode(String text, String uploadPath) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = null;
+        Path path = FileSystems.getDefault().getPath(uploadPath);
+        try {
+            bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 350, 350);
+
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        } catch (WriterException e) {
+           log.error("Could not generate QR Code ",e);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+       return path.toString();
     }
 }
