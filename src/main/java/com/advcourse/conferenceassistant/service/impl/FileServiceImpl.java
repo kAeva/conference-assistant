@@ -2,6 +2,8 @@ package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.exception.FileStorageException;
 import com.advcourse.conferenceassistant.service.FileService;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -62,14 +64,33 @@ public class FileServiceImpl implements FileService {
 
         try {
             InputStream is = file.getInputStream();
-            String fileName = UUID.randomUUID().toString()+file.getOriginalFilename();
+            String fileName = UUID.randomUUID().toString() + file.getOriginalFilename();
             s3Client.putObject(new PutObjectRequest(bucket, fileName, is, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
             S3Object s3Object = s3Client.getObject(new GetObjectRequest(bucket, fileName));
             return s3Object.getObjectContent().getHttpRequest().getURI().toString();
         } catch (IOException e) {
             log.error("Could not upload file. Error", e);
-
+            return "";
         }
-        return "";
+
+    }
+
+    @Override
+    public boolean deleteFileFromAWS(String path) {
+        try {
+            String key = path.substring(path.lastIndexOf("amazonaws.com")+14);
+            s3Client.deleteObject(new DeleteObjectRequest(bucket, key));
+        } catch (AmazonServiceException e) {
+            // The call was transmitted successfully, but Amazon S3 couldn't process
+            // it, so it returned an error response.
+            log.info("Amazon couldn't delete file. Error {} ", e.getMessage());
+            return false;
+        } catch (SdkClientException e) {
+            // Amazon S3 couldn't be contacted for a response, or the client
+            // couldn't parse the response from Amazon S3.
+            log.info("Amazon couldn't delete file. Error {} ", e.getMessage());
+            return true;
+        }
+        return true;
     }
 }
