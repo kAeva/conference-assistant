@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -214,7 +215,6 @@ public class StaffController {
                            @ModelAttribute("topic") TopicDto dto,
                            BindingResult bindingResult,
                            @RequestParam("file") MultipartFile file
-
     ) {
         dateValidator.validate(dto, bindingResult);
 
@@ -224,7 +224,7 @@ public class StaffController {
         dto.setConfId(confId);
 
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
+            dto.setSpeakerimg(fileServiceImpl.uploadFileToAWS(file));
         }
         dto.setEnded(false);
         topicService.save(dto);
@@ -257,7 +257,7 @@ public class StaffController {
         dto.setConfId(topicById.getConfId());
 
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
+            dto.setSpeakerimg(fileServiceImpl.uploadFileToAWS(file));
         }
         topicService.update(topicId, dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
