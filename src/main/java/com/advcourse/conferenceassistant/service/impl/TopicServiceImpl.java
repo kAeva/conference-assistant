@@ -24,6 +24,9 @@ public class TopicServiceImpl implements TopicService {
     @Value("${upload.path}")
     private String path;
 
+    @Autowired
+    FileServiceImpl fileService;
+
     @Override
     public TopicDto findById(long id) {
 
@@ -62,12 +65,10 @@ public class TopicServiceImpl implements TopicService {
              * delete previous img
              * */
             if (topic.getSpeakerimg() != null) {
-                String absPath = path + "/" + topic.getSpeakerimg();
-                File file = new File(absPath);
-                if (file.delete()) {
-                    log.debug("File {} deleted", absPath);
+                if (fileService.deleteFileFromAWS(topic.getSpeakerimg())) {
+                    log.info("File {} deleted", topic.getSpeakerimg());
                 } else {
-                    log.debug("Failed to delete the file {}", absPath);
+                    log.info("Failed to delete the file {}", topic.getSpeakerimg());
                 }
             }
             /**
