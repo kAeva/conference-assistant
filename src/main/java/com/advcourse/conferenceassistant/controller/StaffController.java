@@ -226,7 +226,7 @@ public class StaffController {
         if (!file.isEmpty()) {
             dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
         }
-
+        dto.setEnded(false);
         topicService.save(dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
 
