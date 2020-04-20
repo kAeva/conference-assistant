@@ -42,41 +42,45 @@ public class ConferenceController {
     public void getError() {
         throw new NoSuchConferenceException();
     }
+
     /**
      * page with form to add visitor email
      */
     @GetMapping("/{confId}")
     public String homePage(@PathVariable Long confId, Model model) {
-
         log.debug("New visitor in conference: {}", confId);
+
         ConferenceDto conf = conferenceService.findById(confId);
-        final NotActiveConferenceException notActiveConferenceException = new NotActiveConferenceException();
-        if (!LocalDateTime.now().isAfter(conf.getStart()) & LocalDateTime.now().isBefore(conf.getEnd())) {
+        if (!LocalDateTime.now().isAfter(conf.getStart()) && LocalDateTime.now().isBefore(conf.getEnd())) {
+            NotActiveConferenceException notActiveConferenceException = new NotActiveConferenceException();
             log.error("Conference is out of time", notActiveConferenceException);
-            throw new NotActiveConferenceException();
+            throw notActiveConferenceException;
         }
+
         VisitorDto visitorDto = new VisitorDto();
         visitorDto.setConfId(Set.of(confId));
         log.debug("Visitor has been attached to conferenceid: {}", visitorDto.getConfId());
+
         model.addAttribute("conference", conferenceService.findById(confId));
         model.addAttribute("visitor", visitorDto);
 
         return "visitor-registration";
     }
+
     @GetMapping("/now/{confId}")
-    public String getLive(
-            @CookieValue(value = "email", defaultValue = "defaultCookieValue")
-                    String email, @PathVariable Long confId,
-            Model model) {
+    public String getLive(@CookieValue(value = "email", defaultValue = "defaultCookieValue") String email,
+                          @PathVariable Long confId, Model model) {
         log.debug("Redirected to conference page with id: {} ", confId);
+
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
-        if (currentTopic==null){
+        if (currentTopic == null) {
             return "conference-not-available";
         }
+
         log.debug("Active topic id: {}", currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());
-        log.debug("Received list of questions with size: {}", questions.size());
+
         model.addAttribute("visitor", visitorDto);
         model.addAttribute("topic", currentTopic);
         model.addAttribute("questions", questions);
@@ -86,14 +90,15 @@ public class ConferenceController {
     }
 
     @GetMapping("/now/{confId}/schedule")
-    public String showSchedule(@PathVariable Long confId, Model model,  @CookieValue(value = "email", defaultValue = "defaultCookieValue")
-            String email) {
-        model.addAttribute("conference", conferenceService.findById(confId));
+    public String showSchedule(@PathVariable Long confId, Model model,
+                               @CookieValue(value = "email", defaultValue = "defaultCookieValue") String email) {
         log.debug("Received topics in quantity of: {}", topicService.findByConfId(confId).size());
+
+        model.addAttribute("conference", conferenceService.findById(confId));
         model.addAttribute("topics", topicService.findByConfId(confId));
         model.addAttribute("currentTime", LocalDateTime.now());
         model.addAttribute("email", email);
-        model.addAttribute("isVisitorHasCurrentConference",visitorService.isVisitorHasConferenceId(email,confId));
+        model.addAttribute("isVisitorHasCurrentConference", visitorService.isVisitorHasConferenceId(email, confId));
         return "schedule";
     }
 
@@ -102,8 +107,7 @@ public class ConferenceController {
      * and return to page "/"
      */
     @GetMapping("/logout/{confId}")
-    public String signOut(@PathVariable Long confId,
-                   HttpServletResponse response) {
+    public String signOut(@PathVariable Long confId, HttpServletResponse response) {
         Cookie newCookie = new Cookie("email", "no_cookie");
         newCookie.setMaxAge(0);
         newCookie.setPath("/");
@@ -113,4 +117,3 @@ public class ConferenceController {
     }
 
 }
-

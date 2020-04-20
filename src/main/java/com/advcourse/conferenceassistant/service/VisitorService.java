@@ -1,7 +1,5 @@
 package com.advcourse.conferenceassistant.service;
 
-import com.advcourse.conferenceassistant.model.Conference;
-import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.VisitorDto;
 
 import java.util.Set;
