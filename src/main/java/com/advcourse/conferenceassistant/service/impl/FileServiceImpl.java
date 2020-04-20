@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.*;
 import java.util.UUID;
 
@@ -33,6 +33,9 @@ public class FileServiceImpl implements FileService {
 
     @Value("${jsa.s3.bucket}")
     String bucket;
+
+    @Value("${s3.qrcode.bucket}")
+    String qrCodeBucket;
 
     @Override
     public String uploadFile(MultipartFile file, String path) {
@@ -86,26 +89,52 @@ public class FileServiceImpl implements FileService {
             // Amazon S3 couldn't be contacted for a response, or the client
             // couldn't parse the response from Amazon S3.
             log.info("Amazon couldn't delete file. Error {} ", e.getMessage());
-            return true;
+            return false;
         }
         return true;
 
 
     }
 
-    public String generateQrCode(String text, String uploadPath) {
+    public String generateQrCode(String text, Long confId) {
+        try {
+            if (!s3Client.doesBucketExist(qrCodeBucket)) {
+                // Because the CreateBucketRequest object doesn't specify a region, the
+                // bucket is created in the region specified in the client.
+                s3Client.createBucket(new CreateBucketRequest(qrCodeBucket));
+            }
+
+        } catch (AmazonServiceException e) {
+            // The call was transmitted successfully, but Amazon S3 couldn't process
+            // it and returned an error response.
+            log.info("Amazon couldn't create new bucket. Error {} ", e.getMessage());
+        } catch (SdkClientException e) {
+            // Amazon S3 couldn't be contacted for a response, or the client
+            // couldn't parse the response from Amazon S3.
+            log.info("Amazon couldn't create new bucket. Error {} ", e.getMessage());
+        }
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = null;
-        Path path = FileSystems.getDefault().getPath(uploadPath);
+
         try {
             bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 350, 350);
-
-            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+            BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", os);
+            byte[] buffer = os.toByteArray();
+            String qrCodeFileName = "conferenceId=" + confId;
+            InputStream is = new ByteArrayInputStream(buffer);
+            s3Client.putObject(new PutObjectRequest(qrCodeBucket, qrCodeFileName, is, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
+            S3Object s3Object = s3Client.getObject(new GetObjectRequest(qrCodeBucket, qrCodeFileName));
+            return s3Object.getObjectContent().getHttpRequest().getURI().toString();
         } catch (WriterException e) {
             log.error("Could not generate QR Code ", e);
+            return "";
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Could not write img ", e);
+            return "";
         }
-        return path.toString();
+
+
     }
 }

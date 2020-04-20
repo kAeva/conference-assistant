@@ -9,6 +9,6 @@ public interface FileService {
 
     boolean deleteFileFromAWS(String path);
 
-    String generateQrCode(String text, String uploadDir);
+    String generateQrCode(String text, Long confId);
 
 }
