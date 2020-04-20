@@ -70,6 +70,9 @@ public class ConferenceController {
             Model model) {
         log.debug("Redirected to conference page with id: {} ", confId);
         TopicDto currentTopic = topicService.findActiveTopicByConfId(confId);
+        if (currentTopic==null){
+            return "conference-not-available";
+        }
         log.debug("Active topic id: {}", currentTopic.getId());
         VisitorDto visitorDto = visitorService.findByEmailAndVisit(email, confId);
         List<QuestionDto> questions = questionService.getQuestionsByTopicId(currentTopic.getId(), visitorDto.getEmail());

@@ -95,7 +95,6 @@ public class TopicServiceImpl implements TopicService {
         topic.setEnded(true);
         return save(topic);
     }
-
     @Override
     public TopicDto findActiveTopicByConfId(long confId) {
         List<Topic> byConferenceId = topicRepository.findByConferenceId(confId);

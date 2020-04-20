@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -41,10 +42,8 @@ public class WelcomeController {
         log.debug("Received topics in quantity of: {} ", topicService.findByConfId(confId).size());
         model.addAttribute("topics", topicService.findByConfId(confId));
         model.addAttribute("email", email);
+        model.addAttribute("currentTime", LocalDateTime.now());
         model.addAttribute("isVisitorHasCurrentConference",visitorService.isVisitorHasConferenceId(email,confId));
         return "schedule";
     }
-
-
-
 }
