@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private AmazonS3 s3Client;
 
-    @Value("${jsa.s3.bucket}")
+    @Value("${s3.img.speaker.bucket}")
     String bucket;
 
     @Value("${s3.qrcode.bucket}")
