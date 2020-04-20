@@ -4,13 +4,13 @@ import com.advcourse.conferenceassistant.exception.FileStorageException;
 import com.advcourse.conferenceassistant.service.FileService;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.UUID;
 
 @Slf4j
@@ -78,7 +75,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public boolean deleteFileFromAWS(String path) {
         try {
-            String key = path.substring(path.lastIndexOf("amazonaws.com")+14);
+            String key = path.substring(path.lastIndexOf("amazonaws.com") + 14);
             s3Client.deleteObject(new DeleteObjectRequest(bucket, key));
         } catch (AmazonServiceException e) {
             // The call was transmitted successfully, but Amazon S3 couldn't process
@@ -92,5 +89,23 @@ public class FileServiceImpl implements FileService {
             return true;
         }
         return true;
+
+
+    }
+
+    public String generateQrCode(String text, String uploadPath) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = null;
+        Path path = FileSystems.getDefault().getPath(uploadPath);
+        try {
+            bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 350, 350);
+
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        } catch (WriterException e) {
+            log.error("Could not generate QR Code ", e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path.toString();
     }
 }

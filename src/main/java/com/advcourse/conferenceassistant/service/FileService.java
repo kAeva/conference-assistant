@@ -8,4 +8,7 @@ public interface FileService {
     String uploadFileToAWS(MultipartFile file);
 
     boolean deleteFileFromAWS(String path);
+
+    String generateQrCode(String text, String uploadDir);
+
 }
