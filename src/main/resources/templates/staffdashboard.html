@@ -37,6 +37,7 @@
                        title="Add new conference">Add</a></th>
             </div>
             <!---->
+            <th></th>
         </tr>
         </thead>
 
@@ -66,6 +67,11 @@
             <td><a class="btn btn-success btn-sm"
                    th:href="@{'/staff/conference-edit/' + ${conf.getId()}}" data-toggle="tooltip"
                    title="Edit conference">Edit</a>
+            </td>
+            <td>
+                <a class="btn btn-info btn-sm"
+                   th:href="@{'/staff/generate-qr-code/' + ${conf.getId()}}" data-toggle="tooltip"
+                   title="Generate QR-code for this conference">QR</a>
             </td>
 
         </tr>
