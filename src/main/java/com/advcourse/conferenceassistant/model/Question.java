@@ -18,7 +18,6 @@ public class Question {
     private LocalDateTime time;
     private boolean answerStatus;
 
-
     @ManyToOne
     private Visitor author;
 

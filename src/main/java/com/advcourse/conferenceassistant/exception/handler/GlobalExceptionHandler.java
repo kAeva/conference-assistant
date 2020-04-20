@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchConferenceException.class)
     public String noSuchConfExceptionHandler() {
 
-        return "conferenceError";
+        return "conference-not-available";
     }
 
     @ExceptionHandler(NoSuchVisitorException.class)
