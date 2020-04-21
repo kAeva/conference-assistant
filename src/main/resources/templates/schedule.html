@@ -50,7 +50,7 @@
             <div class="col-sm-3 mx-auto">
                 <figure class="figure">
                     <img src="../../../../resources/images/image-placeholder.png"
-                         th:src="@{'/images/'+${t.getSpeakerimg()}}" class=" figure-img img-fluid rounded" height="350"
+                         th:src="@{${t.getSpeakerimg()}}" class=" figure-img img-fluid rounded" height="350"
                     width="350"/>
                     <figcaption class="figure-caption"
                                 th:text="${t.getSpeaker()} + ', '+ ${t.getSpeakerdesc()}"></figcaption>
