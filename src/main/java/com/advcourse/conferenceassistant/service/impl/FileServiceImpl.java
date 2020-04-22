@@ -2,23 +2,40 @@ package com.advcourse.conferenceassistant.service.impl;
 
 import com.advcourse.conferenceassistant.exception.FileStorageException;
 import com.advcourse.conferenceassistant.service.FileService;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.*;
 import java.util.UUID;
 
 @Slf4j
 @Service
 public class FileServiceImpl implements FileService {
 
+    @Autowired
+    private AmazonS3 s3Client;
 
+    @Value("${s3.img.speaker.bucket}")
+    String bucket;
+
+    @Value("${s3.qrcode.bucket}")
+    String qrCodeBucket;
 
     @Override
     public String uploadFile(MultipartFile file, String path) {
@@ -39,6 +56,85 @@ public class FileServiceImpl implements FileService {
             throw new FileStorageException("Could not store file " + file.getOriginalFilename()
                     + ". Please try again!");
         }
+
+    }
+
+    @Override
+    public String uploadFileToAWS(MultipartFile file) {
+
+        try {
+            InputStream is = file.getInputStream();
+            String fileName = UUID.randomUUID().toString() + file.getOriginalFilename();
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, is, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
+            S3Object s3Object = s3Client.getObject(new GetObjectRequest(bucket, fileName));
+            return s3Object.getObjectContent().getHttpRequest().getURI().toString();
+        } catch (IOException e) {
+            log.error("Could not upload file. Error", e);
+            return "";
+        }
+
+    }
+
+    @Override
+    public boolean deleteFileFromAWS(String path) {
+        try {
+            String key = path.substring(path.lastIndexOf("amazonaws.com") + 14);
+            s3Client.deleteObject(new DeleteObjectRequest(bucket, key));
+        } catch (AmazonServiceException e) {
+            // The call was transmitted successfully, but Amazon S3 couldn't process
+            // it, so it returned an error response.
+            log.info("Amazon couldn't delete file. Error {} ", e.getMessage());
+            return false;
+        } catch (SdkClientException e) {
+            // Amazon S3 couldn't be contacted for a response, or the client
+            // couldn't parse the response from Amazon S3.
+            log.info("Amazon couldn't delete file. Error {} ", e.getMessage());
+            return false;
+        }
+        return true;
+
+
+    }
+
+    public String generateQrCode(String text, Long confId) {
+        try {
+            if (!s3Client.doesBucketExist(qrCodeBucket)) {
+                // Because the CreateBucketRequest object doesn't specify a region, the
+                // bucket is created in the region specified in the client.
+                s3Client.createBucket(new CreateBucketRequest(qrCodeBucket));
+            }
+
+        } catch (AmazonServiceException e) {
+            // The call was transmitted successfully, but Amazon S3 couldn't process
+            // it and returned an error response.
+            log.info("Amazon couldn't create new bucket. Error {} ", e.getMessage());
+        } catch (SdkClientException e) {
+            // Amazon S3 couldn't be contacted for a response, or the client
+            // couldn't parse the response from Amazon S3.
+            log.info("Amazon couldn't create new bucket. Error {} ", e.getMessage());
+        }
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = null;
+
+        try {
+            bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 350, 350);
+            BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", os);
+            byte[] buffer = os.toByteArray();
+            String qrCodeFileName = "conferenceId=" + confId;
+            InputStream is = new ByteArrayInputStream(buffer);
+            s3Client.putObject(new PutObjectRequest(qrCodeBucket, qrCodeFileName, is, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
+            S3Object s3Object = s3Client.getObject(new GetObjectRequest(qrCodeBucket, qrCodeFileName));
+            return s3Object.getObjectContent().getHttpRequest().getURI().toString();
+        } catch (WriterException e) {
+            log.error("Could not generate QR Code ", e);
+            return "";
+        } catch (IOException e) {
+            log.error("Could not write img ", e);
+            return "";
+        }
+
 
     }
 }

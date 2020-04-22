@@ -23,10 +23,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -214,7 +217,6 @@ public class StaffController {
                            @ModelAttribute("topic") TopicDto dto,
                            BindingResult bindingResult,
                            @RequestParam("file") MultipartFile file
-
     ) {
         dateValidator.validate(dto, bindingResult);
 
@@ -224,7 +226,7 @@ public class StaffController {
         dto.setConfId(confId);
 
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
+            dto.setSpeakerimg(fileServiceImpl.uploadFileToAWS(file));
         }
         dto.setEnded(false);
         topicService.save(dto);
@@ -257,7 +259,7 @@ public class StaffController {
         dto.setConfId(topicById.getConfId());
 
         if (!file.isEmpty()) {
-            dto.setSpeakerimg(fileServiceImpl.uploadFile(file, path));
+            dto.setSpeakerimg(fileServiceImpl.uploadFileToAWS(file));
         }
         topicService.update(topicId, dto);
         return "redirect:/staff/conference-page/" + dto.getConfId();
@@ -335,6 +337,18 @@ public class StaffController {
     private boolean isStaffHasntConfId(@PathVariable Long confId, Authentication auth) {
         StaffDto staff = service.findByEmail(auth.getName());
         return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
+    }
+
+    @GetMapping("/generate-qr-code/{confId}")
+    String generateQrCode( Model model, @PathVariable Long confId, HttpServletRequest request, Authentication auth) {
+        if (isStaffHasntConfId(confId, auth)) {
+            return "redirect:/forbidden";
+        }
+        String path = request.getRequestURL().toString().substring(0, request.getRequestURL().toString().indexOf("/staff/generate-qr-code/"));
+        model.addAttribute("conference", conferenceService.findById(confId));
+        String absPathToImgInAwsS3 = fileServiceImpl.generateQrCode(path + "/liveconference/" + confId, confId);
+        model.addAttribute("imgPath", absPathToImgInAwsS3);
+        return "qr-code";
     }
 
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/css/all.css" rel="stylesheet" th:href="@{/css/all.css}">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <title>QR-code</title>
+</head>
+<body>
+
+<div th:replace="fragments :: admin-header"></div>
+
+<div class="container-fluid py-5">
+
+    <div>
+        <h3 class="text-center" th:text="${conference.getTheme()}"></h3>
+        <h4 class="text-center" th:text="${conference.getAddress()}"></h4>
+        <p class="text-center"><span th:text="${#temporals.format(conference.getStart(), 'dd-MM-yyyy HH:mm')}"></span> -
+            <span
+                    th:text="${#temporals.format(conference.getEnd(), 'dd-MM-yyyy HH:mm')}"></span></p>
+    </div>
+    <div class="text-center">
+        <img th:src="@{${imgPath}}" class="img-thumbnail"  height="200"
+             width="200">
+    </div>
+</div>
+
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>
