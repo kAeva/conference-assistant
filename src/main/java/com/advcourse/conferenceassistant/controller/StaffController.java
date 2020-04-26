@@ -2,15 +2,11 @@ package com.advcourse.conferenceassistant.controller;
 
 import com.advcourse.conferenceassistant.model.Role;
 import com.advcourse.conferenceassistant.model.Staff;
-import com.advcourse.conferenceassistant.service.QuestionService;
-import com.advcourse.conferenceassistant.service.StaffService;
-import com.advcourse.conferenceassistant.service.TopicService;
+import com.advcourse.conferenceassistant.service.*;
 import com.advcourse.conferenceassistant.service.dto.ConferenceDto;
 import com.advcourse.conferenceassistant.service.dto.QuestionDto;
 import com.advcourse.conferenceassistant.service.dto.StaffDto;
 import com.advcourse.conferenceassistant.service.dto.TopicDto;
-import com.advcourse.conferenceassistant.service.impl.ConferenceServiceImpl;
-import com.advcourse.conferenceassistant.service.impl.FileServiceImpl;
 import com.advcourse.conferenceassistant.service.validator.DateValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,14 +36,14 @@ public class StaffController {
     private StaffService service;
 
     @Autowired
-    private ConferenceServiceImpl conferenceService;
+    private ConferenceService conferenceService;
 
     @Autowired
     private TopicService topicService;
     @Autowired
     QuestionService questionService;
     @Autowired
-    private FileServiceImpl fileServiceImpl;
+    private FileService fileServiceImpl;
     @Autowired
     private DateValidator dateValidator;
 
@@ -99,6 +92,7 @@ public class StaffController {
         return "redirect:/staff/login?logout";
     }
 
+    //deleting conference
     @GetMapping("/delete-conference/{confId}")
     public String deleteConf(@PathVariable Long confId, Authentication auth) {
         if (isStaffHasntConfId(confId, auth)) {
@@ -108,13 +102,14 @@ public class StaffController {
         return "redirect:/staff/dashboard";
     }
 
+    //view with list of conferences
     @GetMapping("/dashboard")
     public String dashPage(Model model, Authentication auth) {
         model.addAttribute("conferences", service.findConferenceByStaffEmail(auth.getName()));
         return "staffdashboard";
     }
 
-
+    //view with list of topics for this conference
     @GetMapping("/conference-page/{confId}")
     public String confPage(@PathVariable Long confId, Model model, Authentication auth) {
         if (isStaffHasntConfId(confId, auth)) {
@@ -133,6 +128,7 @@ public class StaffController {
         return "conference-dashboard";
     }
 
+    //view with conference add form
     @GetMapping("/conference-add")
     public String addConf(Model model) {
         ConferenceDto dto = new ConferenceDto();
@@ -140,6 +136,7 @@ public class StaffController {
         return "conference-add";
     }
 
+    //add new conference
     @PostMapping("/conference-add")
     public String addConf(
             @ModelAttribute("conference") ConferenceDto dto,
@@ -165,6 +162,7 @@ public class StaffController {
         return "redirect:/staff/dashboard";
     }
 
+    //view with conference edit form
     @GetMapping("/conference-edit/{confId}")
     public String confEditPage(@PathVariable Long confId, Model model, Authentication auth) {
 
@@ -175,6 +173,7 @@ public class StaffController {
         return "conference-edit";
     }
 
+    //conference edit
     @PostMapping("/conference-edit/{confId}")
     public String editConf(@PathVariable Long confId,
                            @ModelAttribute("conference") ConferenceDto dto,
@@ -201,6 +200,7 @@ public class StaffController {
         return "topic-dashboard";
     }
 
+    //view with topic add form
     @GetMapping("/topic-add/{confId}")
     public String topicAddPage(@PathVariable long confId,
                                Model model, Authentication auth) {
@@ -212,6 +212,7 @@ public class StaffController {
         return "topic-add";
     }
 
+    //add new topic
     @PostMapping("/topic-add/{confId}")
     public String topicAdd(@PathVariable long confId,
                            @ModelAttribute("topic") TopicDto dto,
@@ -234,6 +235,7 @@ public class StaffController {
 
     }
 
+    //view with topic edit form
     @GetMapping("/topic-edit/{topicId}")
     public String topicEditPage(@PathVariable Long topicId, Model model, Authentication auth) {
         TopicDto topic = topicService.findById(topicId);
@@ -244,6 +246,7 @@ public class StaffController {
         return "topic-edit";
     }
 
+    //edit topic
     @PostMapping("/topic-edit/{topicId}")
     public String postTopicEditPage(@PathVariable Long topicId,
                                     @ModelAttribute("topic") TopicDto dto,
@@ -265,6 +268,7 @@ public class StaffController {
         return "redirect:/staff/conference-page/" + dto.getConfId();
     }
 
+    //deleting topic
     @GetMapping("/topic-delete/{topicId}")
     public String deleteTopic(@PathVariable Long topicId, Authentication auth) {
         long confId = topicService.findById(topicId).getConfId();
@@ -275,6 +279,7 @@ public class StaffController {
         return "redirect:/staff/conference-page/" + confId;
     }
 
+    //view with staff list table(Manage Users link in the header)
     @GetMapping("/list")
     public String getStaffList(Model model, Authentication auth) {
 
@@ -284,6 +289,7 @@ public class StaffController {
         return "stafflist";
     }
 
+    //deleting staff
     @GetMapping("/staff-delete/{staffId}")
     public String deleteStaff(@PathVariable long staffId, Authentication auth) {
         Long id = service.findByEmail(auth.getName()).getId();
@@ -294,6 +300,7 @@ public class StaffController {
         return "redirect:/staff/list";
     }
 
+    //view with two forms with staff roles and conference ID (those conferences that staff has access)
     @GetMapping("add-privileges/{staffId}")
     public String staffPrevileges(@PathVariable long staffId, Model model, Authentication auth) {
         model.addAttribute("staff", service.findById(staffId));
@@ -303,6 +310,7 @@ public class StaffController {
         return "add-privileges";
     }
 
+    //add roles to Staff
     @PostMapping("/add-roles/{staffId}")
     public String addRole(@PathVariable Long staffId,
                           @ModelAttribute("staff") StaffDto dto
@@ -311,6 +319,7 @@ public class StaffController {
         return "redirect:/staff/add-privileges/" + staffId;
     }
 
+    //add conference ID to Staff
     @PostMapping("/add-conferenceId/{staffId}")
     public String addConferenceId(@PathVariable Long staffId,
                                   @ModelAttribute("staff") StaffDto dto
@@ -339,13 +348,20 @@ public class StaffController {
         return staff.getColabs_id() == null || !staff.getColabs_id().contains(confId);
     }
 
+    //generate QRCode
     @GetMapping("/generate-qr-code/{confId}")
-    String generateQrCode( Model model, @PathVariable Long confId, HttpServletRequest request, Authentication auth) {
+    String generateQrCode(Model model, @PathVariable Long confId, HttpServletRequest request, Authentication auth) {
         if (isStaffHasntConfId(confId, auth)) {
             return "redirect:/forbidden";
         }
+        /**
+         * get real application path
+         * */
         String path = request.getRequestURL().toString().substring(0, request.getRequestURL().toString().indexOf("/staff/generate-qr-code/"));
         model.addAttribute("conference", conferenceService.findById(confId));
+        /**
+         * get absolute path to generated QRCode image
+         * */
         String absPathToImgInAwsS3 = fileServiceImpl.generateQrCode(path + "/liveconference/" + confId, confId);
         model.addAttribute("imgPath", absPathToImgInAwsS3);
         return "qr-code";
