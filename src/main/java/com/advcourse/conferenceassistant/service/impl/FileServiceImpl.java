@@ -37,6 +37,14 @@ public class FileServiceImpl implements FileService {
     @Value("${s3.qrcode.bucket}")
     String qrCodeBucket;
 
+    /**
+     * Upload file and save it in the specified location.
+     * The path argument is location where needed save file.
+     *
+     * @param file the file which need to upload
+     * @param path A pathname string
+     * @return file name.
+     */
     @Override
     public String uploadFile(MultipartFile file, String path) {
         File uploadDir = new File(path);
@@ -58,7 +66,12 @@ public class FileServiceImpl implements FileService {
         }
 
     }
-
+    /**
+     * Upload file into the Amazon AWS S3 Bucket. Where bucket name is "nomic-speaker-bucket".
+     *
+     * @param file the file which need to upload
+     * @return absolute path to saved image.
+     */
     @Override
     public String uploadFileToAWS(MultipartFile file) {
 
@@ -75,6 +88,12 @@ public class FileServiceImpl implements FileService {
 
     }
 
+    /**
+     * Delete file from Amazon AWS S3 Bucket. Where bucket name is "nomic-speaker-bucket".
+     *
+     * @param path A pathname string
+     * @return true if the file has deleted.
+     */
     @Override
     public boolean deleteFileFromAWS(String path) {
         try {
@@ -96,6 +115,16 @@ public class FileServiceImpl implements FileService {
 
     }
 
+    /**
+     * Method writes the QRCode image into Amazon AWS S3 Bucket, where bucket name is "nomic-qrcode-bucket".
+     * This method takes the text to be encoded, the width and height of the QR Code are 350 px,
+     * and returns the absolute path to saved image. The name of saved image consist
+     * "conferenceId=" and confId argument.
+     *
+     * @param text   the text to be encoded
+     * @param confId the conference ID
+     * @return absolute path to saved image.
+     */
     public String generateQrCode(String text, Long confId) {
         try {
             if (!s3Client.doesBucketExist(qrCodeBucket)) {
