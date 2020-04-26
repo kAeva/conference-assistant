@@ -91,7 +91,7 @@ public class FileServiceImpl implements FileService {
     /**
      * Delete file from Amazon AWS S3 Bucket. Where bucket name is "nomic-speaker-bucket".
      *
-     * @param path A pathname string
+     * @param path absolute path to image.
      * @return true if the file has deleted.
      */
     @Override
@@ -118,7 +118,7 @@ public class FileServiceImpl implements FileService {
     /**
      * Method writes the QRCode image into Amazon AWS S3 Bucket, where bucket name is "nomic-qrcode-bucket".
      * This method takes the text to be encoded, the width and height of the QR Code are 350 px,
-     * and returns the absolute path to saved image. The name of saved image consist
+     * and returns the absolute path to saved image. The name of saved image consist with
      * "conferenceId=" and confId argument.
      *
      * @param text   the text to be encoded

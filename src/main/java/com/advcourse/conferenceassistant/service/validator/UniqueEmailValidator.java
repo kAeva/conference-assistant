@@ -15,11 +15,14 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
     private StaffService staffService;
 
     /**
-     * if return true then -> "bindingResult.hasErrors() = true"
-     * */
+     *Checks whether or not a given Staff email exists in the database
+     *
+     * @param email The email to check for
+     * @return true if Staff with this email not exists in the database
+     */
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value != null && !staffService.isActiveUser(value);
+    public boolean isValid(String email, ConstraintValidatorContext context) {
+        return email != null && !staffService.isActiveUser(email);
     }
 
 }

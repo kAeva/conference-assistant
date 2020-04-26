@@ -8,7 +8,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
+/**
+ * UniqueEmailValidator.class is implementing the constraint for validation.
+ * Annotation will be available after the runtime.
+ * Annotation can be applied, i.e. on a field.
+ * */
 @Constraint(validatedBy = UniqueEmailValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })
