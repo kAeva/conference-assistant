@@ -1,6 +1,7 @@
 # Conference Assistant Application
 
 Problem: It’s always complicated to build good communication between speaker and audience on big events. Some people are too shy, some topics are too interesting and there are often too many people that want to ask something. We don’t have enough microphones for staff. And it takes a lot of time. Some questions are have nothing in common with the current topic.
+
 Solution: 
 We’ve built an interactive application that will make asking questions comfortable for everyone in conferences. Visitors are able to see other questions and vote for the most interesting ones. So the conference staff could choose and read only the most relevant questions.
 
@@ -12,20 +13,20 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 Tools to install:
-Java EE
-Java 11
-MySQL 
-Maven 4.0
-Spring Framework 5.0:
-- Spring Context 
-- Spring Web Module
-- Spring Boot
-- Spring MVC
-- Spring Security
-Lombok 
-Thymeleaf 3.0
-HTML5, CSS3, JavaScript
-ZXing Decoder 3.3.0
+- Java EE
+- Java 11
+- MySQL 
+- Maven 4.0
+- Spring Framework 5.0:
+-- Spring Context 
+-- Spring Web Module
+-- Spring Boot
+-- Spring MVC
+-- Spring Security
+- Lombok 
+- Thymeleaf 3.0
+- HTML5, CSS3, JavaScript
+- ZXing Decoder 3.3.0
 
 
 
@@ -60,8 +61,6 @@ We haven't used any tool for versioning yet.
 * **Danylo Zvarych** - *Initial work* - [Danyloz100](https://github.com/Danyloz100)
 * **Ksenia Hlukhaniuk** - *Initial work* - [kAeva](https://github.com/kAeva)
 
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
